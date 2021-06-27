@@ -42,6 +42,11 @@ const QrGen = styled.div`
         text-align: center;
         margin-bottom: 1.2rem;
       }
+      .time{
+        text-align: center;
+        font-size: 1rem;
+        color: orange;
+      }
       p {
         margin: 0.6rem 0;
       }

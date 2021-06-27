@@ -5,8 +5,10 @@ import React, { useState, useEffect } from 'react'
 import StyledQrGen from './style'
 
 function QrGenerator() {
-  const [user, setUser] = useState('No Id')
+  const [user, setUser] = useState('No Id');
   const [error, setError] = useState(null);
+  const [timer, setTimer] = useState(15);
+  const [isChecked, setChecked] = useState(true);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -25,6 +27,20 @@ function QrGenerator() {
     fetchUsers();
   }, []);
 
+  useEffect(() => {
+    const countdown = setInterval(() => {
+      if (parseInt(timer) > 0) {
+        setChecked(true)
+        setTimer(parseInt(timer) - 1);
+      }
+      if (parseInt(timer) === 0) {
+        setChecked(false)
+        setTimer(15)
+      }
+    }, 1000);
+    return () => clearInterval(countdown);
+  }, [timer]);
+
   return (
     <StyledQrGen>
       <div className="box">
@@ -33,11 +49,13 @@ function QrGenerator() {
           {/* <IoIosCall className="phone-icon" /> */}
         </div>
         <div className="qrcode">
-          <QR value={user}/>
-        {/* <QR value="www.naver.com"/> */}
+          <QR value={user+isChecked}/>
         </div>
         <div className="desc">
           <p className="info">{`"김동용"님의 출석 QR Code`}</p>
+          <p className="time">
+              {timer}
+          </p>
         </div>
       </div>
       <div className="print">해당 QR Code를 스캐너에 보여주세요.</div>
