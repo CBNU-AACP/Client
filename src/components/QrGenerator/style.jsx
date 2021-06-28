@@ -28,7 +28,7 @@ const QrGen = styled.div`
       }
     }
     .qrcode {
-      margin-top: 30px;
+      margin-top: 67px;
       canvas {
         height: 160px !important;
         width: 160px !important;
@@ -37,19 +37,31 @@ const QrGen = styled.div`
     .desc {
       margin-top: 15px;
       font-size: 0.75rem;
+      text-align: center;
       .info {
         font-size: 1rem;
         text-align: center;
         margin-bottom: 1.2rem;
       }
-      .time{
+      .time_clock{
+        font-size: 1.1rem;
+        vertical-align: middle;
+      }
+      .time1, .time2{
+        display: inline;
         text-align: center;
         font-size: 1rem;
+      }
+      .time2{
         color: orange;
       }
       p {
         margin: 0.6rem 0;
       }
+    }
+    .reload{
+      font-size: 1.5rem;
+      margin-top: 1rem;
     }
   }
   .print {
