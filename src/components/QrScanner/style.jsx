@@ -14,25 +14,13 @@ const QrScan = styled.div`
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     align-items: center;
     border-radius: 20px;
-    .name {
-      font-size: 1.7rem;
-      font-weight: bold;
-      margin-top: 43px;
-    }
-    .number {
-      margin: 10px 0;
-      display: flex;
-      .phone-icon {
-        margin-top: -2px;
-        margin-right: 1px;
-      }
-    }
-    .qrcode {
+    
+    .qrscan {
       margin-top: 30px;
-      canvas {
-        height: 160px !important;
-        width: 160px !important;
-      }
+      // canvas {
+      //   height: 160px !important;
+      //   width: 160px !important;
+      // }
     }
     .desc {
       margin-top: 15px;
