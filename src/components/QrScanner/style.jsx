@@ -17,10 +17,20 @@ const QrScan = styled.div`
     
     .qrscan {
       margin-top: 30px;
-      // canvas {
-      //   height: 160px !important;
-      //   width: 160px !important;
-      // }
+      canvas {
+        height: 160px !important;
+        width: 160px !important;
+      }
+    }
+    .scan{
+      
+      div{
+        border-radius: 20px;
+        box-sizing:border-box !important;
+        border: 50px solid rgba(0,0,0,0.3) !important;
+        box-shadow: orange 0px 0px 0px 5px inset !important;
+      }
+
     }
     .desc {
       margin-top: 15px;

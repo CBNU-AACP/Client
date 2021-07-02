@@ -14,7 +14,7 @@ function QrGenerator() {
     try {
       setError(null);
       await axios.patch(
-        'http://5ba74d5a0619.ngrok.io/v1',
+        'http://localhost::3001/v1',
         {
             ValidNum: ValidNum
         }
@@ -35,7 +35,7 @@ function QrGenerator() {
       try {
         setError(null);
         const response = await axios.get(
-          'http://5ba74d5a0619.ngrok.io/v1'
+          'http://localhost::3001/v1'
         );
         setUser(response.data);
       } catch (e) {
@@ -69,7 +69,7 @@ function QrGenerator() {
           <QR value={`{"UserName": "${user}", "ValidNum": "${ValidNum}"}`}/>
         </div>
         <div className="desc">
-          <p className="info">{`"${user}" 님의 출석 QR 코드`}</p>
+          <p className="info">{`"2017038064" 님의 출석 QR 코드`}</p>
           <p className="time1"><AiOutlineClockCircle className="time_clock"/>남은 시간 </p>
           <p className="time2">{timer < 10 ? `0${timer}`: timer}초</p>
         </div>
