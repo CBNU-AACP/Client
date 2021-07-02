@@ -7,15 +7,20 @@ import StyedLogin from './style'
 export default function App() {
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
   const [error, setError] = useState(null);
-  var login;
+  const [login, setLogin] =useState("");
+
   const sendInfo = async (data)=>{
     try {
+        console.log(data)
         setError(null);
         const response = await axios.post(
-          'http://localhost:3001/v1/users/login',
-          {data}
+          'http://6f30e35bfe80.ngrok.io/v1/users/login',
+            data
         );
-        login = response.data
+        console.log(response.data)
+        console.log(typeof(login));
+        setLogin(response.data.message);
+        console.log(login);
       } catch (e) {
         setError(e);
       }
@@ -26,18 +31,18 @@ export default function App() {
       sendInfo(data);
   }
 
-  console.log(watch("example"));
 
   return (
     <StyedLogin>
       <form onSubmit={handleSubmit(onSubmit)}>
         <label>로그인</label>
-        <input type="text" placeholder="아이디" {...register("userId")} />
-        {errors.id && <span>아이디를 입력해주세요.</span>}
-        <input type="password" placeholder="비밀번호" {...register("userPassword", { required: true })} />
-        {errors.password && <span>비밀번호를 입력해주세요.</span>}
-        {login==="success"?(<Link to="/QrGen"><input type="submit" value="로그인"/></Link>)
-             : (<input type="submit" value="로그인"/>)
+        <input id="id" type="text" placeholder="아이디" {...register("userId", { required: true })} />
+        {errors.userId && <span>아이디를 입력해주세요.</span>}
+        <input id="password" type="password" placeholder="비밀번호" {...register("userPassword", { required: true })} />
+        {errors.userPassword && <span>비밀번호를 입력해주세요.</span>}
+        {String(login)==="success"?
+            <Link to="/QrGen"><input type="submit" value="로그인"/></Link>
+             : <Link to="/QrGen"><input type="submit" value="로그인"/></Link>
         }
       </form>
     </StyedLogin>
