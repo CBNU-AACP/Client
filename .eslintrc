@@ -1,0 +1,65 @@
+{
+    "env": {
+      "browser": true,
+      "es6": true,
+      "node": true,
+      "jest": true
+    },
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "project": "tsconfig.json",
+      "sourceType": "module"
+    },
+    "plugins": ["@typescript-eslint"],
+    "extends": ["airbnb-typescript", "prettier"],
+    "rules": {
+      "@typescript-eslint/semi": "off",
+      "@typescript-eslint/naming-convention": [
+        "error",
+        {
+          "selector": "variable",
+          "format": ["camelCase", "UPPER_CASE", "PascalCase"],
+          "leadingUnderscore": "allow"
+        }
+      ],
+  
+      "@typescript-eslint/no-use-before-define": "warn",
+      "@typescript-eslint/no-shadow": "warn",
+      "@typescript-eslint/no-unused-vars": "off",
+      "jsx-a11y/anchor-is-valid": "off",
+      "jsx-a11y/click-events-have-key-events": "off",
+      "jsx-a11y/no-static-element-interactions": "off",
+      "react/jsx-closing-bracket-location": "off",
+      "react/jsx-one-expression-per-line": "off",
+      "react/no-danger": "off",
+      "react/no-array-index-key": "warn",
+      "react/react-in-jsx-scope": "off",
+      "react/jsx-props-no-spreading": "off",
+      "react/self-closing-comp": "off",
+      "import/order": "off",
+      "no-unneeded-ternary": "warn",
+      "no-empty": "off",
+      "no-nested-ternary": "off",
+      "prefer-destructuring": "off",
+  
+      // tslint.json 에서 수동 mig
+      "object-curly-spacing": ["error", "always"],
+      "strict-boolean-expressions": "off",
+  
+      "comma-dangle": [
+        "error",
+        {
+          "arrays": "always-multiline",
+          "exports": "always-multiline",
+          "functions": "only-multiline",
+          "imports": "always-multiline",
+          "objects": "always-multiline"
+        }
+      ],
+  
+      "react/require-default-props": "off",
+      "import/prefer-default-export": "off",
+      "max-classes-per-file": "off",
+      "class-methods-use-this": "off"
+    }
+  }
