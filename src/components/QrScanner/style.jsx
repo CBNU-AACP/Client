@@ -14,7 +14,7 @@ const QrScan = styled.div`
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     align-items: center;
     border-radius: 20px;
-    
+
     .qrscan {
       margin-top: 30px;
       canvas {
@@ -22,15 +22,13 @@ const QrScan = styled.div`
         width: 160px !important;
       }
     }
-    .scan{
-      
-      div{
+    .scan {
+      div {
         border-radius: 20px;
-        box-sizing:border-box !important;
-        border: 50px solid rgba(0,0,0,0.3) !important;
+        box-sizing: border-box !important;
+        border: 50px solid rgba(0, 0, 0, 0.3) !important;
         box-shadow: orange 0px 0px 0px 5px inset !important;
       }
-
     }
     .desc {
       margin-top: 15px;

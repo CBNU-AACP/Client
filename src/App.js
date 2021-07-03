@@ -14,7 +14,7 @@ function App() {
         <Route exact path="/QrScan" component={QrScanner} />
       </Switch>
     </BrowserRouter>
-  );
+  )
 }
 
-export default App;
+export default App

@@ -43,23 +43,24 @@ const QrGen = styled.div`
         text-align: center;
         margin-bottom: 1.2rem;
       }
-      .time_clock{
+      .time_clock {
         font-size: 1.1rem;
         vertical-align: middle;
       }
-      .time1, .time2{
+      .time1,
+      .time2 {
         display: inline;
         text-align: center;
         font-size: 1rem;
       }
-      .time2{
+      .time2 {
         color: orange;
       }
       p {
         margin: 0.6rem 0;
       }
     }
-    .reload{
+    .reload {
       font-size: 1.5rem;
       margin-top: 1rem;
     }

@@ -1,4 +1,4 @@
-import * as yup from 'yup';
+import * as yup from 'yup'
 
 export const schema = yup.object({
   userId: yup
@@ -19,6 +19,6 @@ export const schema = yup.object({
   password2: yup
     .string()
     .oneOf([yup.ref('password'), null], '비밀번호가 일치하지 않습니다.')
-    .matches([yup.ref('password'),yup.ref('password2'), null], '비밀번호가 일치합니다.'),
+    .matches([yup.ref('password'), yup.ref('password2'), null], '비밀번호가 일치합니다.'),
   term: yup.boolean().oneOf([true], '약관에 동의해주세요.'),
-});
+})

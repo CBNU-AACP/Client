@@ -10,34 +10,34 @@ const Login = styled.div`
     padding-bottom: 10px;
     border-bottom: 1px solid rgb(79, 98, 148);
   }
-  
+
   .form {
     background: #0e101c;
     max-width: 400px;
     margin: 0 auto;
   }
-  
+
   p {
     color: #bf1650;
   }
-  
+
   p::before {
     display: inline;
-    content: "⚠ ";
+    content: '⚠ ';
   }
-  
+
   input {
     display: block;
     box-sizing: border-box;
     width: 100%;
     border-radius: 4px;
     border: none;
-    background-color:#c8c8c8;
+    background-color: #c8c8c8;
     padding: 10px 15px;
     margin-bottom: 10px;
     font-size: 14px;
   }
-  
+
   label {
     line-height: 2;
     text-align: left;
@@ -48,9 +48,9 @@ const Login = styled.div`
     font-size: 14px;
     font-weight: 200;
   }
-  
-  button[type="submit"],
-  input[type="submit"] {
+
+  button[type='submit'],
+  input[type='submit'] {
     background: #ec5990;
     color: white;
     text-transform: uppercase;
@@ -61,41 +61,41 @@ const Login = styled.div`
     font-weight: 100;
     letter-spacing: 10px;
   }
-  
-  button[type="submit"]:hover,
-  input[type="submit"]:hover {
+
+  button[type='submit']:hover,
+  input[type='submit']:hover {
     background: #bf1650;
   }
-  
-  button[type="submit"]:active,
-  input[type="button"]:active,
-  input[type="submit"]:active {
+
+  button[type='submit']:active,
+  input[type='button']:active,
+  input[type='submit']:active {
     transition: 0.3s all;
     transform: translateY(3px);
     border: 1px solid transparent;
     opacity: 0.8;
   }
-  
+
   input:disabled {
     opacity: 0.4;
   }
-  
-  input[type="button"]:hover {
+
+  input[type='button']:hover {
     transition: 0.3s all;
   }
-  
-  button[type="submit"],
-  input[type="button"],
-  input[type="submit"] {
+
+  button[type='submit'],
+  input[type='button'],
+  input[type='submit'] {
     -webkit-appearance: none;
   }
-  
+
   .App {
     max-width: 600px;
     margin: 0 auto;
   }
-  
-  button[type="button"] {
+
+  button[type='button'] {
     display: block;
     appearance: none;
     background: #333;
@@ -105,11 +105,11 @@ const Login = styled.div`
     padding: 10px 20px;
     border-radius: 4px;
   }
-  
+
   hr {
     margin-top: 30px;
   }
-  
+
   button {
     display: block;
     appearance: none;
@@ -120,7 +120,6 @@ const Login = styled.div`
     padding: 10px 20px;
     border-radius: 4px;
   }
-  
 `
 
 export default Login
