@@ -6,9 +6,8 @@ import { createCourse } from '../../../actions/courses'
 const AddCourse = () => {
   const initialCourseState = {
     id: null,
-    title: '',
+    name: '',
     description: '',
-    published: false,
   }
   const [course, setCourse] = useState(initialCourseState)
   const [submitted, setSubmitted] = useState(false)
@@ -21,15 +20,13 @@ const AddCourse = () => {
   }
 
   const saveCourse = () => {
-    const { title, description } = course
-
-    dispatch(createCourse(title, description))
+    const { name, description } = course
+    dispatch(createCourse(name, description))
       .then(data => {
         setCourse({
           id: data.id,
-          title: data.title,
+          name: data.name,
           description: data.description,
-          published: data.published,
         })
         setSubmitted(true)
 
@@ -57,15 +54,15 @@ const AddCourse = () => {
       ) : (
         <div>
           <div className="form-group">
-            <label htmlFor="title">강좌명</label>
+            <label htmlFor="name">강좌명</label>
             <input
               type="text"
               className="form-control"
-              id="title"
+              id="name"
               required
-              value={course.title}
+              value={course.name}
               onChange={handleInputChange}
-              name="title"
+              name="name"
             />
           </div>
 

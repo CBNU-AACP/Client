@@ -2,13 +2,14 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
-import { retrieveCourses, findCoursesByTitle, deleteAllCourses } from '../../../actions/courses'
+import { Link, useRouteMatch } from 'react-router-dom'
+import { retrieveCourses, findCoursesByName, deleteAllCourses } from '../../../actions/courses'
 
 const CoursesList = () => {
+  const { url } = useRouteMatch()
   const [currentCourse, setCurrentCourse] = useState(null)
   const [currentIndex, setCurrentIndex] = useState(-1)
-  const [searchTitle, setSearchTitle] = useState('')
+  const [searchName, setSearchName] = useState('')
 
   const courses = useSelector(state => state.courses)
   const dispatch = useDispatch()
@@ -17,9 +18,9 @@ const CoursesList = () => {
     dispatch(retrieveCourses())
   }, [])
 
-  const onChangeSearchTitle = e => {
-    const searchTitle = e.target.value
-    setSearchTitle(searchTitle)
+  const onChangeSearchName = e => {
+    const search = e.target.value
+    setSearchName(search)
   }
 
   const refreshData = () => {
@@ -43,9 +44,9 @@ const CoursesList = () => {
       })
   }
 
-  const findByTitle = () => {
+  const findByName = () => {
     refreshData()
-    dispatch(findCoursesByTitle(searchTitle))
+    dispatch(findCoursesByName(searchName))
   }
 
   return (
@@ -56,11 +57,11 @@ const CoursesList = () => {
             type="text"
             className="form-control"
             placeholder="강좌명으로 강좌 찾기"
-            value={searchTitle}
-            onChange={onChangeSearchTitle}
+            value={searchName}
+            onChange={onChangeSearchName}
           />
           <div className="input-group-append">
-            <button className="btn btn-outline-secondary" type="button" onClick={findByTitle}>
+            <button className="btn btn-outline-secondary" type="button" onClick={findByName}>
               검색
             </button>
           </div>
@@ -76,7 +77,7 @@ const CoursesList = () => {
                 className={`list-group-item ${index === currentIndex ? 'active' : ''}`}
                 onClick={() => setActiveCourse(course, index)}
                 key={index}>
-                {course.title}
+                {course.name}
               </li>
             ))}
         </ul>
@@ -92,7 +93,7 @@ const CoursesList = () => {
               <label>
                 <strong>강좌명:</strong>
               </label>{' '}
-              {currentCourse.title}
+              {currentCourse.name}
             </div>
             <div>
               <label>
@@ -100,14 +101,8 @@ const CoursesList = () => {
               </label>{' '}
               {currentCourse.description}
             </div>
-            <div>
-              <label>
-                <strong>상태:</strong>
-              </label>{' '}
-              {currentCourse.published ? 'Published' : 'Pending'}
-            </div>
 
-            <Link to={`/courses/${currentCourse.id}`} className="badge badge-warning">
+            <Link to={`${url}/${currentCourse.courseId}`} className="badge-warning">
               편집
             </Link>
           </div>

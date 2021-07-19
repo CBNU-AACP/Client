@@ -1,18 +1,18 @@
 import http from '../http-common'
 
-const getAll = () => http.get('/Courses')
+const getAll = () => http.get('v1/courses/multiple/test12')
 
-const get = id => http.get(`/Courses/${id}`)
+const get = id => http.get(`v1/courses/single/${id}`)
 
-const create = data => http.post('/Courses', data)
+const create = data => http.post('v1/courses/test12', data)
 
-const update = (id, data) => http.put(`/Courses/${id}`, data)
+const update = (id, data) => http.put(`v1/courses/${id}`, data)
 
-const remove = id => http.delete(`/Courses/${id}`)
+const remove = id => http.delete(`v1/courses/single/${id}`)
 
-const removeAll = () => http.delete(`/Courses`)
+const removeAll = () => http.delete(`v1/courses/multiple/test12`)
 
-const findByTitle = title => http.get(`/Courses?title=${title}`)
+const findByName = name => http.get(`v1/courses/search/test12?value=${encodeURIComponent(name)}`)
 
 const CourseService = {
   getAll,
@@ -21,7 +21,7 @@ const CourseService = {
   update,
   remove,
   removeAll,
-  findByTitle,
+  findByName,
 }
 
 export default CourseService

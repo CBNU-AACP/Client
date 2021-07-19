@@ -8,18 +8,19 @@ import CourseDataService from '../../../../services/CourseService'
 
 const Course = props => {
   Course.propTypes = {
-    history: PropTypes.shape.isRequired,
+    history: PropTypes.shape({
+      push: PropTypes.func.isRequired,
+    }).isRequired,
     match: PropTypes.shape({
       params: PropTypes.shape({
-        id: PropTypes.number.isRequired,
+        id: PropTypes.string.isRequired,
       }),
     }),
   }
   const initialCourseState = {
     id: null,
-    title: '',
+    name: '',
     description: '',
-    published: false,
   }
   const [currentCourse, setCurrentCourse] = useState(initialCourseState)
   const [message, setMessage] = useState('')
@@ -46,28 +47,8 @@ const Course = props => {
     setCurrentCourse({ ...currentCourse, [name]: value })
   }
 
-  const updateStatus = status => {
-    const data = {
-      id: currentCourse.id,
-      title: currentCourse.title,
-      description: currentCourse.description,
-      published: status,
-    }
-
-    dispatch(updateCourse(currentCourse.id, data))
-      .then(response => {
-        console.log(response)
-
-        setCurrentCourse({ ...currentCourse, published: status })
-        setMessage('상태가 성공적으로 업데이트되었습니다!')
-      })
-      .catch(e => {
-        console.log(e)
-      })
-  }
-
   const updateContent = () => {
-    dispatch(updateCourse(currentCourse.id, currentCourse))
+    dispatch(updateCourse(currentCourse.courseId, currentCourse))
       .then(response => {
         console.log(response)
 
@@ -79,9 +60,9 @@ const Course = props => {
   }
 
   const removeCourse = () => {
-    dispatch(deleteCourse(currentCourse.id))
+    dispatch(deleteCourse(currentCourse.courseId))
       .then(() => {
-        props.history.push('/courses')
+        props.history.push('/Course')
       })
       .catch(e => {
         console.log(e)
@@ -92,16 +73,15 @@ const Course = props => {
     <div>
       {currentCourse ? (
         <div className="edit-form">
-          <h4>강좌</h4>
           <form>
             <div className="form-group">
-              <label htmlFor="title">강좌명</label>
+              <label htmlFor="name">강좌명</label>
               <input
                 type="text"
                 className="form-control"
-                id="title"
-                name="title"
-                value={currentCourse.title}
+                id="name"
+                name="name"
+                value={currentCourse.name}
                 onChange={handleInputChange}
               />
             </div>
@@ -116,31 +96,14 @@ const Course = props => {
                 onChange={handleInputChange}
               />
             </div>
-
-            <div className="form-group">
-              <label>
-                <strong>상태:</strong>
-              </label>
-              {currentCourse.published ? 'Published' : 'Pending'}
-            </div>
           </form>
 
-          {currentCourse.published ? (
-            <button type="button" className="badge badge-primary mr-2" onClick={() => updateStatus(false)}>
-              UnPublish
-            </button>
-          ) : (
-            <button type="button" className="badge badge-primary mr-2" onClick={() => updateStatus(true)}>
-              Publish
-            </button>
-          )}
-
-          <button type="button" className="badge badge-danger mr-2" onClick={removeCourse}>
-            Delete
+          <button type="button" className="" onClick={removeCourse}>
+            삭제
           </button>
 
-          <button type="submit" className="badge badge-success" onClick={updateContent}>
-            Update
+          <button type="submit" className="" onClick={updateContent}>
+            수정
           </button>
           <p>{message}</p>
         </div>
