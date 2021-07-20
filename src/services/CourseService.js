@@ -1,4 +1,4 @@
-import http from '../http-common'
+import http from '../http'
 
 const getAll = () => http.get('v1/courses/multiple/test12')
 
