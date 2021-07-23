@@ -1,13 +1,17 @@
-import { FiMinusSquare, FiCheckSquare, FiPenTool } from 'react-icons/fi'
+import { FiMinusSquare, FiCheckSquare } from 'react-icons/fi'
 import { BsPencilSquare } from 'react-icons/bs'
 import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import StyledMember from './style'
+import PropTypes from 'prop-types'
 
-function Member() {
+const Member = ({ id, mem }) => {
+  Member.propTypes = {
+    id: PropTypes.func.isRequired,
+    mem: PropTypes.func.isRequired,
+  }
   const [member, setMember] = useState({
-    memberId: '',
-    memberName: '',
+    userId: '',
   })
   const [submit, setSubmit] = useState(false)
   const [plus, setPlus] = useState(false)
@@ -23,16 +27,23 @@ function Member() {
 
   const handleSubmit = e => {
     if (!submit) {
-      if (member.memberId === '' || member.memberName === '') {
+      if (member.userId === '') {
         setSubmit(false)
-      } else setSubmit(true)
+      } else {
+        setSubmit(true)
+        mem(member)
+      }
     } else {
       setSubmit(false)
     }
   }
 
   const handleMinus = e => {
-    if (!minus) setMinus(true)
+    if (!minus) {
+      id(id)
+      setMember(``)
+      setMinus(true)
+    }
   }
 
   return (
@@ -43,18 +54,10 @@ function Member() {
             <input
               type="text"
               onChange={handleChange}
-              name="memberId"
+              name="userId"
               className="id"
-              value={member.memberId}
-              placeholder="학번"
-            />
-            <input
-              type="text"
-              onChange={handleChange}
-              name="memberName"
-              className="name"
-              value={member.memberName}
-              placeholder="이름"
+              value={member.userId}
+              placeholder="학생의 아이디"
             />
             <button type="button">
               <FiCheckSquare className="check" onClick={handleSubmit}></FiCheckSquare>
@@ -63,11 +66,8 @@ function Member() {
           </div>
         ) : (
           <div className="add">
-            <p id="memberId" className="submitted_id">
-              {member.memberId}
-            </p>
-            <p id="userName" className="submitted_name">
-              {member.memberName}
+            <p id="userId" className="submitted_id">
+              {member.userId}
             </p>
             <button type="button">
               <BsPencilSquare className="modify" onClick={handleSubmit}></BsPencilSquare>
