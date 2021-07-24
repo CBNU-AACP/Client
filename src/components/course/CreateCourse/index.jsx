@@ -2,6 +2,8 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { createCourse } from '../../../actions/courses'
+import AddMember from '../../AddMember'
+import MemberList from '../../AddMember/memberList'
 
 const AddCourse = () => {
   const initialCourseState = {
@@ -10,6 +12,7 @@ const AddCourse = () => {
     description: '',
   }
   const [course, setCourse] = useState(initialCourseState)
+  const [memberdata, setMemberdata] = useState([])
   const [submitted, setSubmitted] = useState(false)
 
   const dispatch = useDispatch()
@@ -35,6 +38,11 @@ const AddCourse = () => {
       .catch(e => {
         console.log(e)
       })
+  }
+
+  const updateMember = data => {
+    setMemberdata(data)
+    // console.log(data)
   }
 
   const newCourse = () => {
@@ -78,7 +86,10 @@ const AddCourse = () => {
               name="description"
             />
           </div>
-
+          <br />
+          {/* <AddMember></AddMember><br /> */}
+          <MemberList memberdata={updateMember}></MemberList>
+          <br />
           <button type="submit" onClick={saveCourse} className="btn btn-success">
             등록
           </button>

@@ -1,35 +1,60 @@
+/* eslint-disable prefer-const */
 import { FiPlusSquare } from 'react-icons/fi'
 import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import StyledAddMember from './style'
 import Member from './member'
+import PropTypes from 'prop-types'
 
-function MemberList() {
+const users = []
+function MemberList({ memberdata }) {
+  MemberList.propTypes = {
+    memberdata: PropTypes.func.isRequired,
+  }
   const [member, setMember] = useState([])
-  const [userId, setUserId] = useState('')
   //   const [add, setAdd] = useState({
   //     members: [`${userId}`],
   //   })
-  const [add, setAdd] = useState([])
-  const [id, setId] = useState(0)
-  const [test, setTest] = useState('')
 
-  const updateId = data => {
+  const [add, setAdd] = useState(users)
+  const [minus, setMinus] = useState(0)
+
+  const updateMinus = data => {
     if (data) {
+      console.log(data)
+      if (data.userId === '') {
+        console.log(add)
+      } else {
+        const idx = users.indexOf(data.userId)
+        users.splice(idx, 1)
+        setAdd(users)
+        memberdata(add)
+        console.log(add)
+      }
     }
-    setId(id + 1)
+    setMinus(minus + 1)
   }
   const updateMember = data => {
-    console.log(data.userId)
-    setAdd({ members: [...userId, data.userId] })
-    // setAdd([...add,data.userId])
-    setTest(data.userId)
+    users.push(data.userId)
+    setAdd(users)
+    memberdata(add)
     console.log(add)
-    console.log(test)
+  }
+
+  const Update = (data) => {
+    console.log(data)
+    const idx = users.indexOf(data.userId)
+    users.splice(idx, 1, data.userId)
+    setAdd(users)
+    console.log(add)
   }
 
   const addmember = () => {
-    setMember([...member, <Member id={updateId} mem={updateMember}></Member>])
+    setMember([...member, <Member id={updateMinus} mem={updateMember} update={Update}></Member>])
+  }
+
+  const ad = () => {
+    console.log(add)
   }
   return (
     <StyledAddMember>

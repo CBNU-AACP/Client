@@ -5,33 +5,40 @@ import React, { useState, useEffect } from 'react'
 import StyledMember from './style'
 import PropTypes from 'prop-types'
 
-const Member = ({ id, mem }) => {
+const Member = ({ id, mem, update }) => {
   Member.propTypes = {
     id: PropTypes.func.isRequired,
     mem: PropTypes.func.isRequired,
+    update: PropTypes.func.isRequired,
   }
   const [member, setMember] = useState({
     userId: '',
   })
   const [submit, setSubmit] = useState(false)
-  const [plus, setPlus] = useState(false)
+  const [alreadysub, setAlreadySub] = useState(false)
   const [minus, setMinus] = useState(false)
 
   const handleChange = e => {
     const { name, value } = e.target
+
     setMember({
       ...member,
       [name]: value,
     })
   }
-
   const handleSubmit = e => {
     if (!submit) {
       if (member.userId === '') {
         setSubmit(false)
       } else {
+        if (!alreadysub) {
+          mem(member)
+          setAlreadySub(true)
+        } else if (alreadysub) {
+          update(member)
+          // update(member.userId)
+        }
         setSubmit(true)
-        mem(member)
       }
     } else {
       setSubmit(false)
@@ -40,7 +47,13 @@ const Member = ({ id, mem }) => {
 
   const handleMinus = e => {
     if (!minus) {
-      id(id)
+      if (alreadysub && member.userId !== '' && submit) {
+        console.log(member)
+        id(member)
+      } else if (alreadysub && member.userId !== '' && !submit) {
+        console.log(member)
+        id(member)
+      }
       setMember(``)
       setMinus(true)
     }
