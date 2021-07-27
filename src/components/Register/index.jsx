@@ -68,12 +68,12 @@ function RegisterForm() {
   const handleRegister = data => {
     setSuccessful(false)
     // const { userId, userName, email, passWord } = Register
-    console.log(data.userId, data.userName, data.email, data.passWord)
-    dispatch(register(data.userId, data.userName, data.email, data.passWord))
+    console.log(data.userId, data.userName, data.memberId, data.email, data.passWord)
+    dispatch(register(data.userId, data.userName, data.memberId, data.email, data.passWord))
       .then(() => {
         setSuccessful(true)
       })
-      .catch((e) => {
+      .catch(e => {
         console.log(e)
         setSuccessful(false)
       })
@@ -112,19 +112,38 @@ function RegisterForm() {
               render={({ field }) => <Input type="text" {...field} />}
             />
             {errors.userName && <FormErrorMessage className="error" Message={errors.userName.message} />}
-            <div className="element">
-              <label htmlFor="email">이메일</label>
-              <Controller
-                name="email"
-                control={control}
-                placeholder="이메일을 입력해주세요."
-                // value={Register.email}
-                // onChange={onChangeEmail}
-                render={({ field }) => <Input type="text" {...field} />}
-              />
-              {errors.email && <FormErrorMessage className="error" Message={errors.email.message} />}
-            </div>
           </div>
+          <div className="element">
+            <label htmlFor="memberId">학번</label>
+            <Controller
+              name="memberId"
+              control={control}
+              placeholder="학번을 입력해주세요."
+              // value={Register.userId}
+
+              render={({ field }) => (
+                <Input
+                  type="text"
+                  // onChange={onChangeUserid}
+                  {...field}
+                />
+              )}
+            />
+            {errors.memberId && <FormErrorMessage className="error" Message={errors.memberId.message} />}
+          </div>
+          <div className="element">
+            <label htmlFor="email">이메일</label>
+            <Controller
+              name="email"
+              control={control}
+              placeholder="이메일을 입력해주세요."
+              // value={Register.email}
+              // onChange={onChangeEmail}
+              render={({ field }) => <Input type="text" {...field} />}
+            />
+            {errors.email && <FormErrorMessage className="error" Message={errors.email.message} />}
+          </div>
+
           <div className="element">
             <label htmlFor="passWord">비밀번호</label>
             <Controller
