@@ -2,8 +2,7 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { createCourse } from '../../../actions/courses'
-import AddMember from '../../AddMember'
-import MemberList from '../../AddMember/memberList'
+import MemberList from '../../memberList'
 
 const AddCourse = () => {
   const initialCourseState = {
@@ -87,8 +86,8 @@ const AddCourse = () => {
             />
           </div>
           <br />
-          {/* <AddMember></AddMember><br /> */}
           <MemberList memberdata={updateMember}></MemberList>
+
           <br />
           <button type="submit" onClick={saveCourse} className="btn btn-success">
             등록
@@ -99,4 +98,4 @@ const AddCourse = () => {
   )
 }
 
-export default AddCourse
+export default React.memo(AddCourse)
