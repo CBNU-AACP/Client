@@ -5,94 +5,66 @@ import React, { useState, useEffect } from 'react'
 import StyledMember from './style'
 import PropTypes from 'prop-types'
 
-const Member = ({ id, mem, update }) => {
+const Member = ({ member, updateMember, removeMember }) => {
   Member.propTypes = {
-    id: PropTypes.func.isRequired,
-    mem: PropTypes.func.isRequired,
-    update: PropTypes.func.isRequired,
+    member: PropTypes.func.isRequired,
+    updateMember: PropTypes.func.isRequired,
+    removeMember: PropTypes.func.isRequired,
   }
-  const [member, setMember] = useState({
-    userId: '',
-  })
-  const [submit, setSubmit] = useState(false)
-  const [alreadysub, setAlreadySub] = useState(false)
-  const [minus, setMinus] = useState(false)
+
+  const [userId, setUserId] = useState(member.userId)
+  const [editMode, setEditMode] = useState(true)
 
   const handleChange = e => {
-    const { name, value } = e.target
-
-    setMember({
-      ...member,
-      [name]: value,
-    })
+    setUserId(e.target.value)
   }
+
   const handleSubmit = e => {
-    if (!submit) {
-      if (member.userId === '') {
-        setSubmit(false)
-      } else {
-        if (!alreadysub) {
-          mem(member)
-          setAlreadySub(true)
-        } else if (alreadysub) {
-          update(member)
-          // update(member.userId)
-        }
-        setSubmit(true)
-      }
-    } else {
-      setSubmit(false)
-    }
+    updateMember({
+      ...member,
+      userId,
+    })
+    setEditMode(false)
   }
 
-  const handleMinus = e => {
-    if (!minus) {
-      if (alreadysub && member.userId !== '' && submit) {
-        console.log(member)
-        id(member)
-      } else if (alreadysub && member.userId !== '' && !submit) {
-        console.log(member)
-        id(member)
-      }
-      setMember(``)
-      setMinus(true)
-    }
+  const handleMinus = () => {
+    removeMember(member.id)
+  }
+
+  const activeEditMode = () => {
+    setEditMode(true)
   }
 
   return (
     <StyledMember>
-      {!minus ? (
-        !submit ? (
-          <div className="add">
-            <input
-              type="text"
-              onChange={handleChange}
-              name="userId"
-              className="id"
-              value={member.userId}
-              placeholder="학생의 아이디"
-            />
-            <button type="button">
-              <FiCheckSquare className="check" onClick={handleSubmit}></FiCheckSquare>
-              <FiMinusSquare className="minus" onClick={handleMinus}></FiMinusSquare>
-            </button>
-          </div>
-        ) : (
-          <div className="add">
-            <p id="userId" className="submitted_id">
-              {member.userId}
-            </p>
-            <button type="button">
-              <BsPencilSquare className="modify" onClick={handleSubmit}></BsPencilSquare>
-              <FiMinusSquare className="minus" onClick={handleMinus}></FiMinusSquare>
-            </button>
-          </div>
-        )
+      {editMode ? (
+        <div className="add">
+          <input
+            type="text"
+            onChange={handleChange}
+            name="userId"
+            className="id"
+            value={userId}
+            placeholder="학생의 아이디"
+          />
+          <button type="button">
+            <FiCheckSquare className="check" onClick={handleSubmit}></FiCheckSquare>
+            <FiMinusSquare className="minus" onClick={handleMinus}></FiMinusSquare>
+          </button>
+        </div>
       ) : (
-        ``
+        <div className="add">
+          <p id="userId" className="submitted_id">
+            {userId}
+          </p>
+          <button type="button">
+            <BsPencilSquare className="modify" onClick={activeEditMode}></BsPencilSquare>
+            <FiMinusSquare className="minus" onClick={handleMinus}></FiMinusSquare>
+          </button>
+        </div>
       )}
     </StyledMember>
   )
 }
 
-export default Member
+export default React.memo(Member)

@@ -1,73 +1,54 @@
-/* eslint-disable prefer-const */
 import { FiPlusSquare } from 'react-icons/fi'
 import axios from 'axios'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import StyledAddMember from './style'
 import Member from './member'
 import PropTypes from 'prop-types'
 
-const users = []
 function MemberList({ memberdata }) {
   MemberList.propTypes = {
     memberdata: PropTypes.func.isRequired,
   }
-  const [member, setMember] = useState([])
-  //   const [add, setAdd] = useState({
-  //     members: [`${userId}`],
-  //   })
 
-  const [add, setAdd] = useState(users)
-  const [minus, setMinus] = useState(0)
+  const [memberList, setMemberList] = useState([])
+  const nextId = useRef(0)
 
-  const updateMinus = data => {
-    if (data) {
-      console.log(data)
-      if (data.userId === '') {
-        console.log(add)
-      } else {
-        const idx = users.indexOf(data.userId)
-        users.splice(idx, 1)
-        setAdd(users)
-        memberdata(add)
-        console.log(add)
-      }
-    }
-    setMinus(minus + 1)
-  }
-  const updateMember = data => {
-    users.push(data.userId)
-    setAdd(users)
-    memberdata(add)
-    console.log(add)
+  useEffect(() => {
+    console.log(memberList)
+  }, [memberList])
+
+  const addMember = () => {
+    setMemberList([...memberList, { id: nextId.current, userId: '' }])
+    nextId.current += 1
   }
 
-  const Update = (data) => {
-    console.log(data)
-    const idx = users.indexOf(data.userId)
-    users.splice(idx, 1, data.userId)
-    setAdd(users)
-    console.log(add)
+  const updateMember = member => {
+    const target = memberList.find(m => m.id === member.id)
+    target.userId = member.userId
+    setMemberList([...memberList])
   }
 
-  const addmember = () => {
-    setMember([...member, <Member id={updateMinus} mem={updateMember} update={Update}></Member>])
+  const removeMember = remove => {
+    console.log(remove)
+    setMemberList(memberList.filter(member => member.id !== remove))
   }
 
-  const ad = () => {
-    console.log(add)
-  }
   return (
     <StyledAddMember>
       <div className="plusdiv">
-        <button type="button" className="plusbutton" onClick={addmember}>
+        <button type="button" className="plusbutton" onClick={addMember}>
           <FiPlusSquare className="plus"></FiPlusSquare>
         </button>
         <p className="plustext">학생을 추가하려면 버튼을 눌러주세요.</p>
       </div>
 
-      <div className="member">{member}</div>
+      <div className="member">
+        {memberList.map(member => (
+          <Member key={member.id} member={member} updateMember={updateMember} removeMember={removeMember} />
+        ))}
+      </div>
     </StyledAddMember>
   )
 }
 
-export default MemberList
+export default React.memo(MemberList)
