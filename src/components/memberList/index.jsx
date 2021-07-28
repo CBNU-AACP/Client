@@ -15,6 +15,7 @@ function MemberList({ memberdata }) {
 
   useEffect(() => {
     console.log(memberList)
+    memberdata(memberList)
   }, [memberList])
 
   const addMember = () => {

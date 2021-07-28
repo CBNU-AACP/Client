@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { createCourse } from '../../../actions/courses'
 import MemberList from '../../memberList'
@@ -15,6 +15,10 @@ const AddCourse = () => {
   const [submitted, setSubmitted] = useState(false)
 
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    console.log(memberdata)
+  }, [memberdata])
 
   const handleInputChange = event => {
     const { name, value } = event.target
@@ -40,8 +44,12 @@ const AddCourse = () => {
   }
 
   const updateMember = data => {
-    setMemberdata(data)
-    // console.log(data)
+    setMemberdata(
+      data.reduce((acc, obj) => {
+        acc.push(obj.userId)
+        return acc
+      }, []),
+    )
   }
 
   const newCourse = () => {
