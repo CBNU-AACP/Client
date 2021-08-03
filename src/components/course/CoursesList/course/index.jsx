@@ -30,14 +30,21 @@ const Course = props => {
   const getCourse = id => {
     CourseDataService.get(id)
       .then(response => {
-        setCurrentCourse(response.data)
-        console.log(response.data)
+        setCurrentCourse(response.data.data)
+        console.log(response.data.data)
       })
       .catch(e => {
         console.log(e)
       })
   }
 
+  useEffect(() => {
+    console.log('컴포넌트가 화면에 나타남');
+    return () => {
+      console.log('컴포넌트가 화면에서 사라짐');
+    };
+  }, []);
+  
   useEffect(() => {
     getCourse(props.match.params.id)
   }, [props.match.params.id])
