@@ -46,7 +46,7 @@ function App() {
       <div>
         <nav className="navbar navbar-expand navbar-dark bg-dark">
           <Link to="/" className="navbar-brand">
-            히어(Here)
+            체크메이트(CHECKMATE)
           </Link>
           <div className="navbar-nav mr-auto">
             <li className="nav-item">

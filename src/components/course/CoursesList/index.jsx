@@ -103,7 +103,11 @@ const CoursesList = () => {
             </div>
 
             <Link to={`${url}/${currentCourse.courseId}`} className="badge-warning">
-              편집
+              강좌 편집
+            </Link>
+
+            <Link to={`${url}/${currentCourse.courseId}/memberlist`} className="badge-warning">
+              멤버 등록 및 수정
             </Link>
           </div>
         ) : (
