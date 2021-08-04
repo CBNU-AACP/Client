@@ -1,7 +1,7 @@
 import { FiMinusSquare, FiCheckSquare } from 'react-icons/fi'
 import { BsPencilSquare } from 'react-icons/bs'
 import axios from 'axios'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import StyledMember from './style'
 import PropTypes from 'prop-types'
 

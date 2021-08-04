@@ -3,6 +3,7 @@ import { FiPlusSquare } from 'react-icons/fi'
 import { useDispatch } from 'react-redux'
 import axios from 'axios'
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
+import { withRouter } from 'react-router-dom'
 import StyledAddMember from './style'
 import PropTypes from 'prop-types'
 
@@ -50,12 +51,12 @@ function MemberList(props) {
       acc.push(obj.userId)
       return acc
     }, [])
-    dispatch(createMemberlist(members))
+    dispatch(createMemberlist(members, currentCourse.courseId))
       .then(data => {
         setMemberData({
-          memberlist: data.member,
+          memberlist: data,
         })
-        console.log(data.data)
+        console.log(data)
       })
       .catch(e => {
         console.log(e)
@@ -89,6 +90,7 @@ function MemberList(props) {
   return (
     <StyledAddMember>
       <div>
+        <p>강좌id: {currentCourse.courseId}</p>
         <p>강좌명: {currentCourse.name}</p>
         <p>설명: {currentCourse.description}</p>
       </div>
@@ -112,4 +114,4 @@ function MemberList(props) {
   )
 }
 
-export default React.memo(MemberList)
+export default React.memo(withRouter(MemberList))
