@@ -5,13 +5,13 @@ import CourseDataService from '../services/CourseService'
 export const createCourse = (name, description) => async dispatch => {
   try {
     const res = await CourseDataService.create({ name, description })
-    console.log(res.data)
+    console.log(res.data.data)
     dispatch({
       type: CREATE_COURSE,
-      payload: res.data,
+      payload: res.data.data,
     })
 
-    return Promise.resolve(res.data)
+    return Promise.resolve(res.data.data)
   } catch (err) {
     return Promise.reject(err)
   }
@@ -20,10 +20,10 @@ export const createCourse = (name, description) => async dispatch => {
 export const retrieveCourses = () => async dispatch => {
   try {
     const res = await CourseDataService.getAll()
-    console.log(res.data)
+    console.log(res.data.data)
     dispatch({
       type: RETRIEVE_COURSES,
-      payload: res.data,
+      payload: res.data.data,
     })
   } catch (err) {
     console.log(err)
@@ -33,13 +33,13 @@ export const retrieveCourses = () => async dispatch => {
 export const updateCourse = (id, data) => async dispatch => {
   try {
     const res = await CourseDataService.update(id, data)
-    console.log(res.data)
+    console.log(res.data.data)
     dispatch({
       type: UPDATE_COURSE,
       payload: data,
     })
 
-    return Promise.resolve(res.data)
+    return Promise.resolve(res.data.data)
   } catch (err) {
     return Promise.reject(err)
   }
@@ -60,13 +60,13 @@ export const deleteCourse = id => async dispatch => {
 export const deleteAllCourses = () => async dispatch => {
   try {
     const res = await CourseDataService.removeAll()
-    console.log(res.data)
+    console.log(res.data.data)
     dispatch({
       type: DELETE_ALL_COURSES,
-      payload: res.data,
+      payload: res.data.data,
     })
 
-    return Promise.resolve(res.data)
+    return Promise.resolve(res.data.data)
   } catch (err) {
     return Promise.reject(err)
   }
@@ -75,10 +75,10 @@ export const deleteAllCourses = () => async dispatch => {
 export const findCoursesByName = name => async dispatch => {
   try {
     const res = await CourseDataService.findByName(name)
-    console.log(res.data)
+    console.log(res.data.data)
     dispatch({
       type: RETRIEVE_COURSES,
-      payload: res.data,
+      payload: res.data.data,
     })
   } catch (err) {
     console.log(err)
