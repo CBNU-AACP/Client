@@ -1,7 +1,6 @@
 /* eslint-disable react/destructuring-assignment */
 import { FiPlusSquare } from 'react-icons/fi'
-import { useDispatch } from 'react-redux'
-import axios from 'axios'
+import { useDispatch, useSelector } from 'react-redux'
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { withRouter } from 'react-router-dom'
 import StyledAddMember from './style'
@@ -35,6 +34,10 @@ function MemberList(props) {
 
   const dispatch = useDispatch()
 
+  // const list = useSelector(state => state.memberlist)
+  const list = ['1', '2', '3']
+  // list.reduce((acc, cur) => cur, { id: nextId.current, userId: cur })
+
   const getCourse = id => {
     CourseDataService.get(id)
       .then(response => {
@@ -44,6 +47,15 @@ function MemberList(props) {
       .catch(e => {
         console.log(e)
       })
+  }
+
+  function listdataGenerator(items) {
+    let index = 0
+    return function getNextData() {
+      const item = items[index % items.length]
+      index += 1
+      return { id: index, userId: item }
+    }
   }
 
   const saveMemberList = () => {
@@ -71,6 +83,11 @@ function MemberList(props) {
     console.log(memberList)
   }, [memberList])
 
+  useEffect(() => {
+    console.log(list)
+    setMemberList(listdataGenerator(list))
+  }, [list])
+
   const addMember = () => {
     setMemberList([...memberList, { id: nextId.current, userId: '' }])
     nextId.current += 1
@@ -89,27 +106,55 @@ function MemberList(props) {
 
   return (
     <StyledAddMember>
-      <div>
-        <p>강좌id: {currentCourse.courseId}</p>
-        <p>강좌명: {currentCourse.name}</p>
-        <p>설명: {currentCourse.description}</p>
-      </div>
-      <div className="plusdiv">
-        <button type="button" className="plusbutton" onClick={addMember}>
-          <FiPlusSquare className="plus"></FiPlusSquare>
-        </button>
-        <p className="plustext">학생을 추가하려면 버튼을 눌러주세요.</p>
-      </div>
+      {list === '' ? (
+        <div>
+          <div>
+            <p>강좌id: {currentCourse.courseId}</p>
+            <p>강좌명: {currentCourse.name}</p>
+            <p>설명: {currentCourse.description}</p>
+          </div>
+          <div className="plusdiv">
+            <button type="button" className="plusbutton" onClick={addMember}>
+              <FiPlusSquare className="plus"></FiPlusSquare>
+            </button>
+            <p className="plustext">학생을 추가하려면 버튼을 눌러주세요.</p>
+          </div>
 
-      <div className="member">
-        {memberList.map(member => (
-          <Member key={member.id} member={member} updateMember={updateMember} removeMember={removeMember} />
-        ))}
-      </div>
+          <div className="member">
+            {memberList.map(member => (
+              <Member key={member.id} member={member} updateMember={updateMember} removeMember={removeMember} />
+            ))}
+          </div>
 
-      <button type="submit" onClick={saveMemberList} className="btn btn-success">
-        멤버 등록
-      </button>
+          <button type="submit" onClick={saveMemberList} className="btn btn-success">
+            멤버 등록
+          </button>
+        </div>
+      ) : (
+        <div>
+          <div>
+            <p>강좌id: {currentCourse.courseId}</p>
+            <p>강좌명: {currentCourse.name}</p>
+            <p>설명: {currentCourse.description}</p>
+          </div>
+          <div className="plusdiv">
+            <button type="button" className="plusbutton" onClick={addMember}>
+              <FiPlusSquare className="plus"></FiPlusSquare>
+            </button>
+            <p className="plustext">학생을 추가하려면 버튼을 눌러주세요.</p>
+          </div>
+
+          <div className="member">
+            {list.map(member => (
+              <Member key={member.id} member={member} updateMember={updateMember} removeMember={removeMember} />
+            ))}
+          </div>
+
+          <button type="submit" onClick={saveMemberList} className="btn btn-warning">
+            멤버 수정
+          </button>
+        </div>
+      )}
     </StyledAddMember>
   )
 }
