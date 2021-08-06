@@ -8,36 +8,35 @@ import {
 
 const initialState = []
 
-function memberReducer(list = initialState, action) {
-  const { type, memberlist } = action
-  console.log(memberlist)
+function memberReducer(memberlist = initialState, action) {
+  const { type, payload } = action
 
   switch (type) {
     case CREATE_MEMBERLIST:
-      return memberlist
+      return [...memberlist, ...payload]
 
     case RETRIEVE_MEMBERLIST:
       return memberlist
 
     case EDIT_MEMBERLIST:
-      return list.map(member => {
+      return memberlist.map(member => {
         if (member.id === memberlist.id) {
           return {
             ...member,
-            ...memberlist,
+            ...payload,
           }
         }
         return member
       })
 
     case DELETE_MEMBER:
-      return list.filter(({ id }) => id !== memberlist.id)
+      return memberlist.filter(({ id }) => id !== memberlist.id)
 
     case DELETE_MEMBERLIST:
       return []
 
     default:
-      return list
+      return memberlist
   }
 }
 
