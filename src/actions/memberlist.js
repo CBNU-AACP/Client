@@ -9,7 +9,7 @@ export const createMemberlist = (members, courseId) => async dispatch => {
     console.log(res.data.data)
     dispatch({
       type: CREATE_MEMBERLIST,
-      memberlist: res.data.data,
+      payload: res.data.data,
     })
     return Promise.resolve(res.data.data)
   } catch (err) {
@@ -23,7 +23,7 @@ export const retrieveMemberlist = () => async dispatch => {
     console.log(res.data.data)
     dispatch({
       type: RETRIEVE_MEMBERLIST,
-      memberlist: res.data.data.member,
+      payload: res.data.data.member,
     })
   } catch (err) {
     console.log(err)
@@ -63,7 +63,7 @@ export const deleteMemberlist = () => async dispatch => {
     console.log(res.data.data)
     dispatch({
       type: DELETE_MEMBERLIST,
-      memberlist: res.data.data.member,
+      payload: res.data.data.member,
     })
 
     return Promise.resolve(res.data.data)

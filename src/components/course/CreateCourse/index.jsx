@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { createCourse } from '../../../actions/courses'
-import MemberList from '../../memberList'
+import MemberList from '../../memberList/index'
 
 const AddCourse = () => {
   const initialCourseState = {
@@ -15,10 +15,6 @@ const AddCourse = () => {
   const [submitted, setSubmitted] = useState(false)
 
   const dispatch = useDispatch()
-
-  useEffect(() => {
-    console.log(memberdata)
-  }, [memberdata])
 
   const handleInputChange = event => {
     const { name, value } = event.target
@@ -36,20 +32,11 @@ const AddCourse = () => {
         })
         setSubmitted(true)
 
-        console.log(data)
+        console.log(data.data)
       })
       .catch(e => {
         console.log(e)
       })
-  }
-
-  const updateMember = data => {
-    setMemberdata(
-      data.reduce((acc, obj) => {
-        acc.push(obj.userId)
-        return acc
-      }, []),
-    )
   }
 
   const newCourse = () => {
@@ -93,13 +80,11 @@ const AddCourse = () => {
               name="description"
             />
           </div>
-          <br />
-          <MemberList memberdata={updateMember}></MemberList>
 
-          <br />
           <button type="submit" onClick={saveCourse} className="btn btn-success">
             등록
           </button>
+          {/* <MemberList></MemberList> */}
         </div>
       )}
     </div>

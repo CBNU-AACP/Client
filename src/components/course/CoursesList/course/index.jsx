@@ -3,6 +3,7 @@
 import PropTypes from 'prop-types'
 import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import { updateCourse, deleteCourse } from '../../../../actions/courses'
 import CourseDataService from '../../../../services/CourseService'
 
@@ -44,7 +45,7 @@ const Course = props => {
       console.log('컴포넌트가 화면에서 사라짐');
     };
   }, []);
-  
+
   useEffect(() => {
     getCourse(props.match.params.id)
   }, [props.match.params.id])
@@ -124,4 +125,4 @@ const Course = props => {
   )
 }
 
-export default Course
+export default withRouter(Course)

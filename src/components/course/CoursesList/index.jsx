@@ -2,8 +2,11 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useRouteMatch } from 'react-router-dom'
+import { Route, Link, Switch, useRouteMatch } from 'react-router-dom'
+
 import { retrieveCourses, findCoursesByName, deleteAllCourses } from '../../../actions/courses'
+import Course from './course'
+import MemberList from '../../memberList'
 
 const CoursesList = () => {
   const { url } = useRouteMatch()
@@ -102,13 +105,21 @@ const CoursesList = () => {
               {currentCourse.description}
             </div>
 
-            <Link to={`${url}/${currentCourse.courseId}`} className="badge-warning">
-              강좌 편집
-            </Link>
+            <div>
+              <Link to={`${url}/${currentCourse.courseId}`} className="badge-warning">
+                강좌 편집
+              </Link>
 
-            <Link to={`${url}/${currentCourse.courseId}/memberlist`} className="badge-warning">
-              멤버 등록 및 수정
-            </Link>
+              <Link to={`${url}/${currentCourse.courseId}/memberlist`} className="badge-warning">
+                멤버 등록 및 수정
+              </Link>
+            </div>
+            <div>
+              <Switch>
+                <Route exact path={`${url}/:id/memberlist`} component={MemberList} />
+                <Route exact path={`${url}/:id`} component={Course} />
+              </Switch>
+            </div>
           </div>
         ) : (
           <div>
