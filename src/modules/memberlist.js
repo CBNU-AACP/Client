@@ -6,14 +6,14 @@ import {
   DELETE_MEMBERLIST,
 } from '../actions/types'
 
-const initialState = []
+const initialState = [{ courseId: '', members: [] }]
 
 function memberReducer(memberlist = initialState, action) {
-  const { type, payload } = action
+  const { type, courseId, payload } = action
 
   switch (type) {
     case CREATE_MEMBERLIST:
-      return [...memberlist, ...payload]
+      return [...memberlist, { courseId, members: [...payload] }]
 
     case RETRIEVE_MEMBERLIST:
       return memberlist
