@@ -110,13 +110,14 @@ const CoursesList = () => {
                 강좌 편집
               </Link>
 
-              <Link to={`${url}/${currentCourse.courseId}/memberlist`} className="badge-warning">
-                멤버 등록 및 수정
+              <Link to={`${url}/${currentCourse.courseId}/genmember`} className="badge-warning">
+                멤버 등록
               </Link>
             </div>
             <div>
               <Switch>
-                <Route exact path={`${url}/:id/memberlist`} component={MemberList} />
+                <Route exact path={`${url}/:id/genmember`} component={MemberList} />
+                <Route exact path={`${url}/:id/modmember`} component={MemberList} />
                 <Route exact path={`${url}/:id`} component={Course} />
               </Switch>
             </div>

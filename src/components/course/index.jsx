@@ -47,7 +47,8 @@ function Courses() {
         <Switch>
           <Route exact path={[path, `${path}/courses`]} component={CoursesList} />
           <Route exact path={`${path}/add`} component={AddCourse} />
-          <Route exact path={`${path}/courses/:id/memberlist`} component={MemberList} />
+          <Route exact path={`${path}/courses/:id/genmember`} component={MemberList} />
+          <Route exact path={`${path}/courses/:id/modmember`} component={MemberList} />
           <Route exact path={`${path}/courses/:id`} component={Course} />
         </Switch>
       </div>
