@@ -9,6 +9,7 @@ export const createMemberlist = (members, courseId) => async dispatch => {
     console.log(res.data.data)
     dispatch({
       type: CREATE_MEMBERLIST,
+      courseId,
       payload: res.data.data,
     })
     return Promise.resolve(res.data.data)
@@ -69,5 +70,18 @@ export const deleteMemberlist = () => async dispatch => {
     return Promise.resolve(res.data.data)
   } catch (err) {
     return Promise.reject(err)
+  }
+}
+
+export const findMemberByName = name => async dispatch => {
+  try {
+    const res = await MemberService.findByName(name)
+    console.log(res.data.data)
+    dispatch({
+      type: RETRIEVE_MEMBERLIST,
+      payload: res.data.data,
+    })
+  } catch (err) {
+    console.log(err)
   }
 }
