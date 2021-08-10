@@ -9,6 +9,7 @@ import PropTypes from 'prop-types'
 import StyledAddmemberModal from './style'
 
 import { createMemberlist, findMemberByName } from '../../../actions/memberlist'
+import UserService from '../../../services/UserService'
 
 function rand() {
   return Math.round(Math.random() * 20) - 10
@@ -30,7 +31,7 @@ const useStyles = makeStyles(theme => ({
     position: 'absolute',
     width: '80vw',
     max_width: '100%',
-    height: '40vh',
+    height: '42vh',
     backgroundColor: theme.palette.background.paper,
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
@@ -45,7 +46,7 @@ const columns = [
     // width: '20rem',
   },
   {
-    field: 'userName',
+    field: 'name',
     headerName: '이름',
     // width: '20rem',
   },
@@ -57,27 +58,34 @@ const columns = [
 ]
 
 const rows = [
-  { id: 1, studentId: '2017038064', userName: '김동용', userId: 'test1' },
-  { id: 2, studentId: '2019038044', userName: '신주영', userId: 'test4' },
-  { id: 3, studentId: '2017038063', userName: '박성진', userId: 'test2' },
-  { id: 4, studentId: '2017038069', userName: '이동우', userId: 'test3' },
-  { id: 5, studentId: '2017038064', userName: '차재현', userId: 'test5' },
-  { id: 6, studentId: '2017038064', userName: '몰라유', userId: 'tes6' },
-  { id: 7, studentId: '2017038064', userName: '몰라', userId: 'test7' },
-  { id: 8, studentId: '2017038064', userName: '피자', userId: 'test8' },
-  { id: 9, studentId: '2017038064', userName: '치킨', userId: 'test9' },
+  { id: 1, studentId: '2017038064', name: '김동용', userId: 'test1' },
+  { id: 2, studentId: '2019038044', name: '신주영', userId: 'test4' },
+  { id: 3, studentId: '2017038063', name: '박성진', userId: 'test2' },
+  { id: 4, studentId: '2017038069', name: '이동우', userId: 'test3' },
+  { id: 5, studentId: '2017038064', name: '차재현', userId: 'test5' },
+  { id: 6, studentId: '2017038064', name: '몰라유', userId: 'tes6' },
+  { id: 7, studentId: '2017038064', name: '몰라', userId: 'test7' },
+  { id: 8, studentId: '2017038064', name: '피자', userId: 'test8' },
+  { id: 9, studentId: '2017038064', name: '치킨', userId: 'test9' },
 ]
 
 export default function AddmemberModal({ courseId }) {
   AddmemberModal.propTypes = {
-    courseId: PropTypes.func.isRequired,
+    courseId: PropTypes.string.isRequired,
   }
 
-  const [memberList, setMemberList] = useState([])
+  const initinalColumns = []
+  const [column, setColumns] = useState([]) // 서버로부터 모든 유저들의 정보를 담을 상태변수
+  const [memberList, setMemberList] = useState([]) // 멤버리스트 서버에 보낸 후 모달 밖의 컴포넌트에 보낼 멤버리스트 id배열
 
   useEffect(() => {
     console.log(memberList)
   }, [memberList])
+
+  useEffect(() => {
+    console.log(column)
+    console.log(rows)
+  }, [column])
 
   const classes = useStyles()
   const [modalStyle] = useState(getModalStyle)
@@ -100,10 +108,21 @@ export default function AddmemberModal({ courseId }) {
   }
 
   const handleOpen = () => {
+    // 모달 열기
+    // UserService.getAll()
+    //   .then(response => {
+    //     setColumns(response.data.data)
+    //     console.log(response.data.data)
+    //   })
+    //   .catch(e => {
+    //     console.log(e)
+    //   })
+    setColumns([...rows])
     setOpen(true)
   }
 
   const handleClose = () => {
+    // 모달 닫기
     setOpen(false)
   }
 
@@ -157,7 +176,7 @@ export default function AddmemberModal({ courseId }) {
       </div>
       <div style={{ height: '30vh', width: '100%' }}>
         <DataGrid
-          rows={rows}
+          rows={column}
           columns={columns.map(column => ({
             ...column,
             sortable: false,
