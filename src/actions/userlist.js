@@ -18,7 +18,7 @@ export const retrieveUsers = () => async dispatch => {
 
 export const findUserByName = name => async dispatch => {
   try {
-    const res = await UserService.findByName(name)
+    const res = await UserService.findName(name)
     console.log(res.data.data)
     dispatch({
       type: RETRIEVE_USERS,

@@ -72,7 +72,13 @@ export default function AddmemberModal({ courseId }) {
   const [modalStyle] = useState(getModalStyle)
   const [open, setOpen] = useState(false)
 
-  useEffect(() => { // 체크박스에서 체크해서 멤버리스트 구성
+  const dispatch = useDispatch()
+
+  const [pageSize, setPageSize] = useState(10) // 페이지 사이즈 상태변수
+  const [searchMember, setSearchMember] = useState('') // 검색어 저장 상태변수
+
+  useEffect(() => {
+    // 체크박스에서 체크해서 멤버리스트 구성
     console.log(memberList, courseId)
   }, [memberList])
 
@@ -95,13 +101,9 @@ export default function AddmemberModal({ courseId }) {
           console.log(e)
         })
     }
+    setSearchMember('')
     userList()
   }, [open]) // open상태가 변할 때마다 반복
-
-  const [pageSize, setPageSize] = useState(10)
-  const [searchMember, setSearchMember] = useState('')
-
-  const dispatch = useDispatch()
 
   const saveMemberList = () => {
     // 멤버리스트 생성 버튼 누르면 호출하는 함수
@@ -145,8 +147,10 @@ export default function AddmemberModal({ courseId }) {
 
   const findByName = () => {
     // 검색어 입력 후 이벤트
-    dispatch(findMemberByName(searchMember))
+    dispatch(findUserByName(searchMember))
       .then(data => {
+        setRows(userlistReducer(data))
+        setSearchMember('')
         console.log(data)
       })
       .catch(e => {
@@ -173,22 +177,26 @@ export default function AddmemberModal({ courseId }) {
         </div>
       </div>
       <div style={{ height: '30vh', width: '100%' }}>
-        <DataGrid
-          rows={rows}
-          columns={columns.map(column => ({
-            ...column,
-            sortable: false,
-          }))}
-          pageSize={pageSize}
-          onPageSizeChange={newPageSize => setPageSize(newPageSize)}
-          rowsPerPageOptions={[5, 10, 20]}
-          pagination
-          checkboxSelection
-          onSelectionModelChange={e => {
-            onChangeCheck(e)
-          }}
-          disableSelectionOnClick
-        />
+        {rows !== [] ? (
+          <DataGrid
+            rows={rows}
+            columns={columns.map(column => ({
+              ...column,
+              sortable: false,
+            }))}
+            pageSize={pageSize}
+            onPageSizeChange={newPageSize => setPageSize(newPageSize)}
+            rowsPerPageOptions={[5, 10, 20]}
+            pagination
+            checkboxSelection
+            onSelectionModelChange={e => {
+              onChangeCheck(e)
+            }}
+            disableSelectionOnClick
+          />
+        ) : (
+          <div>로딩 중..</div>
+        )}
       </div>
       <button type="submit" onClick={saveMemberList} className="btn btn-success">
         멤버 등록

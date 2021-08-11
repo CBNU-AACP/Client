@@ -2,11 +2,11 @@ import http from '../common/http'
 
 const getAll = () => http.get(`v1/users`)
 
-const findByName = name => http.get(`v1/users/test1/${encodeURIComponent(name)}`)
+const findName = name => http.get(`v1/users/userId/${encodeURIComponent(name)}`)
 
-const MemberService = {
+const UserService = {
   getAll,
-  findByName,
+  findName,
 }
 
-export default MemberService
+export default UserService
