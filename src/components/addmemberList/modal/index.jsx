@@ -10,7 +10,6 @@ import StyledAddmemberModal from './style'
 
 import { createMemberlist, findMemberByName } from '../../../actions/memberlist'
 import { retrieveUsers, findUserByName } from '../../../actions/userlist'
-import UserService from '../../../services/UserService'
 
 function rand() {
   // 여기서부터 modal style
@@ -67,6 +66,7 @@ export default function AddmemberModal({ courseId }) {
 
   const [rows, setRows] = useState([]) // 서버로부터 모든 유저들의 정보를 담을 상태변수
   const [memberList, setMemberList] = useState([]) // 멤버리스트 서버에 보낸 후 모달 밖의 컴포넌트에 보낼 멤버리스트 id배열
+  const [submit, setSubmit] = useState(false) // 멤버리스트 생성 준비 상태를 나타냄
 
   const classes = useStyles()
   const [modalStyle] = useState(getModalStyle)
@@ -79,8 +79,9 @@ export default function AddmemberModal({ courseId }) {
 
   useEffect(() => {
     // 체크박스에서 체크해서 멤버리스트 구성
-    console.log(memberList, courseId)
-  }, [memberList])
+    if (!submit && memberList.length !== 0) setSubmit(true) // 제출 불가능한 상태에서 멤버리스트에 내용이 있으면 제출 가능 상태로 만든다.
+    console.log(memberList, courseId, submit)
+  }, [memberList, submit])
 
   useEffect(() => {
     console.log(rows)
@@ -101,19 +102,24 @@ export default function AddmemberModal({ courseId }) {
           console.log(e)
         })
     }
+    if (memberList.length === 0) setSubmit(false) // modal을 열때 memberlist가 비어있으면 버튼을 누르지 못하도록 한다.
     setSearchMember('')
     userList()
   }, [open]) // open상태가 변할 때마다 반복
 
   const saveMemberList = () => {
     // 멤버리스트 생성 버튼 누르면 호출하는 함수
-    dispatch(createMemberlist(memberList, courseId))
-      .then(data => {
-        console.log(data)
-      })
-      .catch(e => {
-        console.log(e)
-      })
+    if (submit) {
+      dispatch(createMemberlist(memberList, courseId))
+        .then(data => {
+          console.log(data)
+          setOpen(false) // 멤버리스트 생성에 성공하면 창을 닫는다.
+          setSubmit(false) // 멤버리스트 생성에 성공하면 submit을 false로 바꾼다.
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    }
   }
 
   const handleOpen = () => {
@@ -128,6 +134,7 @@ export default function AddmemberModal({ courseId }) {
 
   const onChangeCheck = e => {
     // 체크한 데이터만 골라서 userId만 서버에 보낸다.
+    setSubmit(false) // 체크를 하면 일단 제출 불가능 상태로 만든다.
     const values = e.map(index =>
       rows.reduce((acc, row) => {
         if (row.id === index) {
@@ -198,9 +205,13 @@ export default function AddmemberModal({ courseId }) {
           <div>로딩 중..</div>
         )}
       </div>
-      <button type="submit" onClick={saveMemberList} className="btn btn-success">
-        멤버 등록
-      </button>
+      {submit === true ? (
+        <button type="submit" onClick={saveMemberList} className="btn btn-success">
+          멤버 등록
+        </button>
+      ) : (
+        <div>잠시 기다려주세요.</div>
+      )}
     </div>
   )
 
