@@ -10,20 +10,22 @@ export const retrieveUsers = () => async dispatch => {
       type: RETRIEVE_USERS,
       payload: res.data.data,
     })
+    return Promise.resolve(res.data.data)
   } catch (err) {
-    console.log(err)
+    return Promise.reject(err)
   }
 }
 
 export const findUserByName = name => async dispatch => {
-    try {
-      const res = await UserService.findByName(name)
-      console.log(res.data.data)
-      dispatch({
-        type: RETRIEVE_USERS,
-        payload: res.data.data,
-      })
-    } catch (err) {
-      console.log(err)
-    }
+  try {
+    const res = await UserService.findByName(name)
+    console.log(res.data.data)
+    dispatch({
+      type: RETRIEVE_USERS,
+      payload: res.data.data,
+    })
+    return Promise.resolve(res.data.data)
+  } catch (err) {
+    return Promise.reject(err)
   }
+}
