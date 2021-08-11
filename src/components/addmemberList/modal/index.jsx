@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import React, { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
 import Modal from '@material-ui/core/Modal'
 import { DataGrid } from '@material-ui/data-grid'
@@ -9,6 +9,7 @@ import PropTypes from 'prop-types'
 import StyledAddmemberModal from './style'
 
 import { createMemberlist, findMemberByName } from '../../../actions/memberlist'
+import { retrieveUsers, findUserByName } from '../../../actions/userlist'
 import UserService from '../../../services/UserService'
 
 function rand() {
@@ -57,39 +58,55 @@ const columns = [
   },
 ]
 
-const rows = [
-  { id: 1, studentId: '2017038064', name: '김동용', userId: 'test1' },
-  { id: 2, studentId: '2019038044', name: '신주영', userId: 'test4' },
-  { id: 3, studentId: '2017038063', name: '박성진', userId: 'test2' },
-  { id: 4, studentId: '2017038069', name: '이동우', userId: 'test3' },
-  { id: 5, studentId: '2017038064', name: '차재현', userId: 'test5' },
-  { id: 6, studentId: '2017038064', name: '몰라유', userId: 'tes6' },
-  { id: 7, studentId: '2017038064', name: '몰라', userId: 'test7' },
-  { id: 8, studentId: '2017038064', name: '피자', userId: 'test8' },
-  { id: 9, studentId: '2017038064', name: '치킨', userId: 'test9' },
-]
+// const rows = [
+//   { id: 1, studentId: '2017038064', name: '김동용', userId: 'test1' },
+//   { id: 2, studentId: '2019038044', name: '신주영', userId: 'test4' },
+//   { id: 3, studentId: '2017038063', name: '박성진', userId: 'test2' },
+//   { id: 4, studentId: '2017038069', name: '이동우', userId: 'test3' },
+//   { id: 5, studentId: '2017038064', name: '차재현', userId: 'test5' },
+//   { id: 6, studentId: '2017038064', name: '몰라유', userId: 'tes6' },
+//   { id: 7, studentId: '2017038064', name: '몰라', userId: 'test7' },
+//   { id: 8, studentId: '2017038064', name: '피자', userId: 'test8' },
+//   { id: 9, studentId: '2017038064', name: '치킨', userId: 'test9' },
+// ]
 
 export default function AddmemberModal({ courseId }) {
   AddmemberModal.propTypes = {
     courseId: PropTypes.string.isRequired,
   }
 
-  const initinalColumns = []
-  const [column, setColumns] = useState([]) // 서버로부터 모든 유저들의 정보를 담을 상태변수
+  const [rows, setRows] = useState([]) // 서버로부터 모든 유저들의 정보를 담을 상태변수
   const [memberList, setMemberList] = useState([]) // 멤버리스트 서버에 보낸 후 모달 밖의 컴포넌트에 보낼 멤버리스트 id배열
+
+  const classes = useStyles()
+  const [modalStyle] = useState(getModalStyle)
+  const [open, setOpen] = useState(false)
 
   useEffect(() => {
     console.log(memberList)
   }, [memberList])
 
   useEffect(() => {
-    console.log(column)
     console.log(rows)
-  }, [column])
+  }, [rows])
 
-  const classes = useStyles()
-  const [modalStyle] = useState(getModalStyle)
-  const [open, setOpen] = useState(false)
+  // const userlist = useSelector(state => state.userlist[0]) // userlist 목록 가져온다.
+
+  const userlistReducer = users => users.reduce((acc, cur, index) => [...acc, { id: index, ...cur }], []) // id 넘버를 포함한 객체 배열 반환
+
+  useEffect(() => {
+    const userList = () => {
+      // 유저리스트 불러오는 함수
+      dispatch(retrieveUsers())
+        .then(data => {
+          setRows(userlistReducer(data))
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    }
+    userList()
+  }, [open]) // open상태가 변할 때마다 반복
 
   const [pageSize, setPageSize] = useState(10)
   const [searchMember, setSearchMember] = useState('')
@@ -109,15 +126,6 @@ export default function AddmemberModal({ courseId }) {
 
   const handleOpen = () => {
     // 모달 열기
-    // UserService.getAll()
-    //   .then(response => {
-    //     setColumns(response.data.data)
-    //     console.log(response.data.data)
-    //   })
-    //   .catch(e => {
-    //     console.log(e)
-    //   })
-    setColumns([...rows])
     setOpen(true)
   }
 
@@ -156,7 +164,7 @@ export default function AddmemberModal({ courseId }) {
       })
   }
 
-  const body = (
+  const body = ( // 모달에 들어갈 내용
     <div style={modalStyle} className={classes.paper}>
       <div className="col-md-8">
         <div className="input-group mb-3">
@@ -176,7 +184,7 @@ export default function AddmemberModal({ courseId }) {
       </div>
       <div style={{ height: '30vh', width: '100%' }}>
         <DataGrid
-          rows={column}
+          rows={rows}
           columns={columns.map(column => ({
             ...column,
             sortable: false,
