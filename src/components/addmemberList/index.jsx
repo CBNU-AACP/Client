@@ -130,29 +130,33 @@ function MemberList(props) {
 
   return (
     <StyledAddMember>
-      <div>
+      {currentCourse.courseId !== null ? (
         <div>
-          <p>강좌id: {currentCourse.courseId}</p>
-          <p>강좌명: {currentCourse.name}</p>
-          <p>설명: {currentCourse.description}</p>
-        </div>
-        {/* <div className="plusdiv">
+          <div>
+            <p>강좌id: {currentCourse.courseId}</p>
+            <p>강좌명: {currentCourse.name}</p>
+            <p>설명: {currentCourse.description}</p>
+          </div>
+          {/* <div className="plusdiv">
           <button type="button" className="plusbutton" onClick={addMember}>
             <FiPlusSquare className="plus"></FiPlusSquare>
           </button>
           <p className="plustext">학생을 추가하려면 버튼을 눌러주세요.</p>
         </div> */}
-        <AddmemberModal courseId={currentCourse.courseId}/>
-        <div className="member">
-          {memberList.map(member => (
-            <Member key={member.id} member={member} updateMember={updateMember} removeMember={removeMember} />
-          ))}
-        </div>
+          <AddmemberModal courseId={currentCourse.courseId} />
+          <div className="member">
+            {memberList.map(member => (
+              <Member key={member.id} member={member} updateMember={updateMember} removeMember={removeMember} />
+            ))}
+          </div>
 
-        {/* <button type="submit" onClick={saveMemberList} className="btn btn-success">
+          {/* <button type="submit" onClick={saveMemberList} className="btn btn-success">
           멤버 등록
         </button> */}
-      </div>
+        </div>
+      ) : (
+        <div>로딩 중..</div>
+      )}
     </StyledAddMember>
   )
 }

@@ -13,6 +13,7 @@ import { retrieveUsers, findUserByName } from '../../../actions/userlist'
 import UserService from '../../../services/UserService'
 
 function rand() {
+  // 여기서부터 modal style
   return Math.round(Math.random() * 20) - 10
 }
 
@@ -41,6 +42,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const columns = [
+  // 여기까지 modal style
   {
     field: 'studentId',
     headerName: '학번',
@@ -58,18 +60,6 @@ const columns = [
   },
 ]
 
-// const rows = [
-//   { id: 1, studentId: '2017038064', name: '김동용', userId: 'test1' },
-//   { id: 2, studentId: '2019038044', name: '신주영', userId: 'test4' },
-//   { id: 3, studentId: '2017038063', name: '박성진', userId: 'test2' },
-//   { id: 4, studentId: '2017038069', name: '이동우', userId: 'test3' },
-//   { id: 5, studentId: '2017038064', name: '차재현', userId: 'test5' },
-//   { id: 6, studentId: '2017038064', name: '몰라유', userId: 'tes6' },
-//   { id: 7, studentId: '2017038064', name: '몰라', userId: 'test7' },
-//   { id: 8, studentId: '2017038064', name: '피자', userId: 'test8' },
-//   { id: 9, studentId: '2017038064', name: '치킨', userId: 'test9' },
-// ]
-
 export default function AddmemberModal({ courseId }) {
   AddmemberModal.propTypes = {
     courseId: PropTypes.string.isRequired,
@@ -82,8 +72,8 @@ export default function AddmemberModal({ courseId }) {
   const [modalStyle] = useState(getModalStyle)
   const [open, setOpen] = useState(false)
 
-  useEffect(() => {
-    console.log(memberList)
+  useEffect(() => { // 체크박스에서 체크해서 멤버리스트 구성
+    console.log(memberList, courseId)
   }, [memberList])
 
   useEffect(() => {
