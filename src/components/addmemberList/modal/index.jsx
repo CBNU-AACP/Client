@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
 import Modal from '@material-ui/core/Modal'
@@ -8,22 +8,19 @@ import { FiPlusSquare } from 'react-icons/fi'
 import PropTypes from 'prop-types'
 import StyledAddmemberModal from './style'
 
-import { createMemberlist, findMemberByName } from '../../../actions/memberlist'
+import { createMemberlist, retrieveMemberlist, findMemberByName } from '../../../actions/memberlist'
 import { retrieveUsers, findUserByName } from '../../../actions/userlist'
 
-function rand() {
-  // 여기서부터 modal style
-  return Math.round(Math.random() * 20) - 10
-}
-
 function getModalStyle() {
-  const top = 50 + rand()
-  const left = 50 + rand()
-
+  // 여기서부터 modal style
   return {
-    top: `${top}%`,
-    left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`,
+    top: `50%`,
+    left: `50%`,
+    WebkitTransform: `translate(-50%, -50%)`,
+    MsTransform: `translate(-50%, -50%)`,
+    MozTransform: `translate(-50%, -50%)`,
+    OTransform: `translate(-50%, -50%)`,
+    transform: `translate(-50%, -50%)`,
   }
 }
 
@@ -31,7 +28,7 @@ const useStyles = makeStyles(theme => ({
   paper: {
     position: 'absolute',
     width: '80vw',
-    max_width: '100%',
+    maxWidth: '100%',
     height: '42vh',
     backgroundColor: theme.palette.background.paper,
     border: '2px solid #000',
@@ -59,29 +56,32 @@ const columns = [
   },
 ]
 
-export default function AddmemberModal({ courseId }) {
+export default function AddmemberModal({ courseId, members }) {
   AddmemberModal.propTypes = {
     courseId: PropTypes.string.isRequired,
+    members: PropTypes.shape.isRequired,
   }
 
   const [rows, setRows] = useState([]) // 서버로부터 모든 유저들의 정보를 담을 상태변수
   const [memberList, setMemberList] = useState([]) // 멤버리스트 서버에 보낸 후 모달 밖의 컴포넌트에 보낼 멤버리스트 id배열
-  const [submit, setSubmit] = useState(false) // 멤버리스트 생성 준비 상태를 나타냄
+  const [submitable, setSubmitable] = useState(false) // 멤버리스트 생성 준비 상태를 나타냄
 
   const classes = useStyles()
   const [modalStyle] = useState(getModalStyle)
   const [open, setOpen] = useState(false)
 
   const dispatch = useDispatch()
+  const reduxmemberList = useSelector(state => state.memberlist) // 리덕스 상태에 저장된 memberlist 데이터
 
   const [pageSize, setPageSize] = useState(10) // 페이지 사이즈 상태변수
   const [searchMember, setSearchMember] = useState('') // 검색어 저장 상태변수
 
   useEffect(() => {
     // 체크박스에서 체크해서 멤버리스트 구성
-    if (!submit && memberList.length !== 0) setSubmit(true) // 제출 불가능한 상태에서 멤버리스트에 내용이 있으면 제출 가능 상태로 만든다.
-    console.log(memberList, courseId, submit)
-  }, [memberList, submit])
+    if (!submitable && memberList.length !== 0) setSubmitable(true) // 제출 불가능한 상태에서 멤버리스트에 내용이 있으면 제출 가능 상태로 만든다.
+    console.log(memberList)
+    console.log(courseId, submitable)
+  }, [memberList, submitable])
 
   useEffect(() => {
     console.log(rows)
@@ -102,19 +102,27 @@ export default function AddmemberModal({ courseId }) {
           console.log(e)
         })
     }
-    if (memberList.length === 0) setSubmit(false) // modal을 열때 memberlist가 비어있으면 버튼을 누르지 못하도록 한다.
-    setSearchMember('')
-    userList()
+    if (memberList.length === 0) setSubmitable(false) // modal을 열때 memberlist가 비어있으면 버튼을 누르지 못하도록 한다.
+    setSearchMember('') // 검색어 초기화
+    dispatch(retrieveMemberlist(courseId)) // 서버로부터 현재 코스의 멤버리스트 가져옴
+      .then(data => {
+        console.log(data)
+      })
+      .catch(e => {
+        console.log(e)
+      })
+    userList() // 유저리스트 불러오는 함수 호출
   }, [open]) // open상태가 변할 때마다 반복
 
   const saveMemberList = () => {
     // 멤버리스트 생성 버튼 누르면 호출하는 함수
-    if (submit) {
+    if (submitable) {
       dispatch(createMemberlist(memberList, courseId))
         .then(data => {
           console.log(data)
           setOpen(false) // 멤버리스트 생성에 성공하면 창을 닫는다.
-          setSubmit(false) // 멤버리스트 생성에 성공하면 submit을 false로 바꾼다.
+          setSubmitable(false) // 멤버리스트 생성에 성공하면 submit을 false로 바꾼다.
+          members = data
         })
         .catch(e => {
           console.log(e)
@@ -129,12 +137,14 @@ export default function AddmemberModal({ courseId }) {
 
   const handleClose = () => {
     // 모달 닫기
+    setMemberList([])
+    setSubmitable(false)
     setOpen(false)
   }
 
   const onChangeCheck = e => {
     // 체크한 데이터만 골라서 userId만 서버에 보낸다.
-    setSubmit(false) // 체크를 하면 일단 제출 불가능 상태로 만든다.
+    setSubmitable(false) // 체크를 하면 일단 제출 불가능 상태로 만든다.
     const values = e.map(index =>
       rows.reduce((acc, row) => {
         if (row.id === index) {
@@ -164,6 +174,12 @@ export default function AddmemberModal({ courseId }) {
         console.log(e)
       })
   }
+
+  const selectionModel = useMemo(
+    // 서버에 있는 유저데이터와 코스의 멤버리스트 데이터 비교해서 겹치는 것을 추린다.
+    () => rows.filter(row => reduxmemberList.every(member => row.userId === member)),
+    [rows],
+  )
 
   const body = ( // 모달에 들어갈 내용
     <div style={modalStyle} className={classes.paper}>
@@ -196,8 +212,13 @@ export default function AddmemberModal({ courseId }) {
             rowsPerPageOptions={[5, 10, 20]}
             pagination
             checkboxSelection
+            selectionModel={selectionModel}
             onSelectionModelChange={e => {
               onChangeCheck(e)
+              // const selectedIDs = new Set(e.selectionModel)
+              // console.log(selectedIDs)
+              // const selectedRowData = rows.filter(row => selectedIDs.has(row.userId))
+              // console.log(selectedRowData)
             }}
             disableSelectionOnClick
           />
@@ -205,12 +226,12 @@ export default function AddmemberModal({ courseId }) {
           <div>로딩 중..</div>
         )}
       </div>
-      {submit === true ? (
+      {submitable === true ? (
         <button type="submit" onClick={saveMemberList} className="btn btn-success">
           멤버 등록
         </button>
       ) : (
-        <div>잠시 기다려주세요.</div>
+        <div>수강생을 추가해주세요.</div>
       )}
     </div>
   )
