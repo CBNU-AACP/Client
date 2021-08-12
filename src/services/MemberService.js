@@ -4,7 +4,7 @@ const create = (members, courseId) => http.post(`v1/memberLists/${courseId}`, me
 
 const update = (members, courseId) => http.put(`v1/memberLists/${courseId}`, members)
 
-const getAll = () => http.get(`v1/users`)
+const getAll = courseId => http.get(`v1/memberLists/${courseId}`)
 
 const remove = id => http.delete(`v1/courses/single/${id}`)
 

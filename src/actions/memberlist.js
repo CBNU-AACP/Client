@@ -9,7 +9,6 @@ export const createMemberlist = (members, courseId) => async dispatch => {
     console.log(res.data.data)
     dispatch({
       type: CREATE_MEMBERLIST,
-      courseId,
       payload: res.data.data,
     })
     return Promise.resolve(res.data.data)
@@ -18,16 +17,17 @@ export const createMemberlist = (members, courseId) => async dispatch => {
   }
 }
 
-export const retrieveMemberlist = () => async dispatch => {
+export const retrieveMemberlist = (courseId) => async dispatch => {
   try {
-    const res = await MemberService.getAll()
+    const res = await MemberService.getAll(courseId)
     console.log(res.data.data)
     dispatch({
       type: RETRIEVE_MEMBERLIST,
-      payload: res.data.data.member,
+      payload: res.data.data,
     })
+    return Promise.resolve(res.data.data)
   } catch (err) {
-    console.log(err)
+    return Promise.reject(err)
   }
 }
 
