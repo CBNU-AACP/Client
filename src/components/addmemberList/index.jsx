@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 
 import CourseDataService from '../../services/CourseService'
 import Member from './addmember'
-import { createMemberlist } from '../../actions/memberlist'
+import { retrieveMemberlist } from '../../actions/memberlist'
 import AddmemberModal from './modal'
 
 function MemberList(props) {
@@ -30,7 +30,6 @@ function MemberList(props) {
 
   const [currentCourse, setCurrentCourse] = useState(initialCourseState) // 현재 강좌 정보 저장
   const [memberList, setMemberList] = useState([]) // 멤버리스트 배열 저장
-  const [memberData, setMemberData] = useState([])
   const nextId = useRef(0) // 멤버리스트의 다음 id값을 저장할 변수
 
   const dispatch = useDispatch()
@@ -52,6 +51,14 @@ function MemberList(props) {
   useEffect(() => {
     // router의 params가 바뀌면 실행
     getCourse(props.match.params.id)
+    dispatch(retrieveMemberlist(props.match.params.id)) // 서버로부터 현재 코스의 멤버리스트 가져옴
+      .then(data => {
+        console.log(data)
+        setMemberList(data) // 서버에서 데이터 가져와서 멤버리스트 상태로 set
+      })
+      .catch(e => {
+        console.log(e)
+      })
   }, [props.match.params.id])
 
   useEffect(() => {
@@ -59,11 +66,6 @@ function MemberList(props) {
     console.log(memberList)
     console.log(nextId)
   }, [memberList, nextId])
-
-  const addMember = () => {
-    setMemberList([...memberList, { id: nextId.current, userId: '' }])
-    nextId.current += 1
-  }
 
   const removeMember = remove => {
     console.log(remove)
@@ -79,7 +81,7 @@ function MemberList(props) {
             <p>강좌명: {currentCourse.name}</p>
             <p>설명: {currentCourse.description}</p>
           </div>
-          <AddmemberModal courseId={currentCourse.courseId} members={memberList} />
+          <AddmemberModal courseId={currentCourse.courseId} />
           <div className="member">
             {memberList.map(member => (
               <Member key={member.id} member={member} removeMember={removeMember} />
