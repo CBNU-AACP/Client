@@ -1,8 +1,8 @@
-import http from '../../http'
+import http from '../../common/http'
 import { useCookies } from 'react-cookie'
 
 const JWT_EXPIRY_TIME = 24 * 3600 * 1000
-const [cookies, setCookie, removeCookie] = useCookies(['user'])
+
 
 const register = (userId, userName, email, passWord) =>
   http.post(`signup`, {
@@ -20,6 +20,7 @@ const login = (userId, passWord) => {
     })
     .then(response => {
       if (response.data.accessToken) {
+        const [setCookie] = useCookies(['user'])
         // localStorage.setItem('user', JSON.stringify(response.data))
         setCookie('user', JSON.stringify(response.data), JWT_EXPIRY_TIME)
       }
@@ -28,6 +29,7 @@ const login = (userId, passWord) => {
     })
 }
 const logout = () => {
+  const [removeCookie] = useCookies(['user'])
   removeCookie('user')
 }
 

@@ -1,5 +1,5 @@
 import authHeader from './auth_header'
-import http from '../../http'
+import http from '../../common/http'
 
 const getPublicContent = () => http.get(`all`)
 
