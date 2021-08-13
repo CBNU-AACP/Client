@@ -56,10 +56,10 @@ const columns = [
   },
 ]
 
-export default function AddmemberModal({ courseId, members }) {
+export default function AddmemberModal({ courseId }) {
   AddmemberModal.propTypes = {
     courseId: PropTypes.string.isRequired,
-    members: PropTypes.shape.isRequired,
+    // members: PropTypes.shape.isRequired,
   }
 
   const [rows, setRows] = useState([]) // 서버로부터 모든 유저들의 정보를 담을 상태변수
@@ -83,8 +83,18 @@ export default function AddmemberModal({ courseId, members }) {
     console.log(courseId, submitable)
   }, [memberList, submitable])
 
+  const selectionModel =
+    // 서버에 있는 유저데이터와 코스의 멤버리스트 데이터 비교해서 겹치는 것을 추린다.
+    useMemo(() => {
+      rows.filter(row => {
+        console.log(reduxmemberList.filter(member => member === row.userId).map(row => row.id))
+        return reduxmemberList.filter(member => member === row.userId).map(row => row.id)
+      })
+    }, [rows])
+
   useEffect(() => {
     console.log(rows)
+    console.log(() => selectionModel())
   }, [rows])
 
   // const userlist = useSelector(state => state.userlist[0]) // userlist 목록 가져온다.
@@ -122,7 +132,7 @@ export default function AddmemberModal({ courseId, members }) {
           console.log(data)
           setOpen(false) // 멤버리스트 생성에 성공하면 창을 닫는다.
           setSubmitable(false) // 멤버리스트 생성에 성공하면 submit을 false로 바꾼다.
-          members = data
+          // members = data
         })
         .catch(e => {
           console.log(e)
@@ -175,12 +185,6 @@ export default function AddmemberModal({ courseId, members }) {
       })
   }
 
-  const selectionModel = useMemo(
-    // 서버에 있는 유저데이터와 코스의 멤버리스트 데이터 비교해서 겹치는 것을 추린다.
-    () => rows.filter(row => reduxmemberList.every(member => row.userId === member)),
-    [rows],
-  )
-
   const body = ( // 모달에 들어갈 내용
     <div style={modalStyle} className={classes.paper}>
       <div className="col-md-8">
@@ -200,7 +204,7 @@ export default function AddmemberModal({ courseId, members }) {
         </div>
       </div>
       <div style={{ height: '30vh', width: '100%' }}>
-        {rows !== [] ? (
+        {rows.length !== 0 ? (
           <DataGrid
             rows={rows}
             columns={columns.map(column => ({
@@ -214,11 +218,9 @@ export default function AddmemberModal({ courseId, members }) {
             checkboxSelection
             selectionModel={selectionModel}
             onSelectionModelChange={e => {
+              console.log(reduxmemberList)
+              console.log(selectionModel)
               onChangeCheck(e)
-              // const selectedIDs = new Set(e.selectionModel)
-              // console.log(selectedIDs)
-              // const selectedRowData = rows.filter(row => selectedIDs.has(row.userId))
-              // console.log(selectedRowData)
             }}
             disableSelectionOnClick
           />
