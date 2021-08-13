@@ -7,7 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import AddCourse from './CreateCourse'
 import Course from './CoursesList/course'
 import CoursesList from './CoursesList'
-import MemberList from '../memberList'
+import MemberList from '../addmemberList'
 
 function Courses() {
   // const { user: currentUser } = useSelector(state => state.auth)

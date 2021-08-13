@@ -27,8 +27,8 @@ function QrScanner() {
       const response = await axios.patch(
         'http://localhost::3001/v1',
         `{
-            "UserName": "${id}",
-            "ValidNum": "${isChecked}"
+            "userId": "${id}",
+            "validNum": "${isChecked}"
         }`,
       )
       console.log(response.data.ValidNum)

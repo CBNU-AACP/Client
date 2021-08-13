@@ -21,11 +21,11 @@ const Login = props => {
     formState: { errors },
   } = useForm()
 
-//   const form = useRef()
-//   const checkBtn = useRef()
+  //   const form = useRef()
+  //   const checkBtn = useRef()
 
-//   const [userId, setUserId] = useState('')
-//   const [passWord, setPassword] = useState('')
+  //   const [userId, setUserId] = useState('')
+  //   const [passWord, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
 
   const { isLoggedIn } = useSelector(state => state.auth)
@@ -33,16 +33,16 @@ const Login = props => {
 
   const dispatch = useDispatch()
 
-//   const onChangeUserid = e => {
-//     const [name, value] = e.target
-//     console.log(name, value)
-//     setUserId(value)
-//   }
+  //   const onChangeUserid = e => {
+  //     const [name, value] = e.target
+  //     console.log(name, value)
+  //     setUserId(value)
+  //   }
 
-//   const onChangePassword = e => {
-//     const password = e.target.value
-//     setPassword(password)
-//   }
+  //   const onChangePassword = e => {
+  //     const password = e.target.value
+  //     setPassword(password)
+  //   }
 
   const handleLogin = data => {
     setLoading(true)
@@ -68,7 +68,7 @@ const Login = props => {
       <div className="card card-container">
         <form onSubmit={handleSubmit(handleLogin)}>
           <div className="form-group">
-            <label htmlFor="userId">id</label>
+            <label htmlFor="userId">아이디</label>
             <input
               type="text"
               className="form-control"
@@ -83,7 +83,7 @@ const Login = props => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="passWord">password</label>
+            <label htmlFor="passWord">비밀번호</label>
             <input
               type="password"
               className="form-control"

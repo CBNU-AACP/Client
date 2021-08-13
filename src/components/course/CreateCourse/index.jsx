@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { createCourse } from '../../../actions/courses'
-import MemberList from '../../memberList/index'
+import MemberList from '../../addmemberList/index'
 
 const AddCourse = () => {
   const initialCourseState = {

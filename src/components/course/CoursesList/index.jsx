@@ -6,7 +6,7 @@ import { Route, Link, Switch, useRouteMatch } from 'react-router-dom'
 
 import { retrieveCourses, findCoursesByName, deleteAllCourses } from '../../../actions/courses'
 import Course from './course'
-import MemberList from '../../memberList'
+import MemberList from '../../addmemberList'
 
 const CoursesList = () => {
   const { url } = useRouteMatch()
