@@ -11,8 +11,6 @@ const Member = ({ member, removeMember }) => {
     removeMember: PropTypes.func.isRequired,
   }
 
-  const userId = member.userId
-
   const handleMinus = () => {
     removeMember(member.id)
   }
@@ -21,13 +19,15 @@ const Member = ({ member, removeMember }) => {
     <StyledMember>
       <div className="add">
         <p id="userId" className="submitted_id">
-          {userId}
+          {member.studentId}
+        </p>
+        <p id="userId" className="submitted_id">
+          {member.name}
         </p>
         <button type="button">
           <FiMinusSquare className="minus" onClick={handleMinus}></FiMinusSquare>
         </button>
       </div>
-      )
     </StyledMember>
   )
 }

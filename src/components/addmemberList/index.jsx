@@ -30,11 +30,8 @@ function MemberList(props) {
 
   const [currentCourse, setCurrentCourse] = useState(initialCourseState) // 현재 강좌 정보 저장
   const [memberList, setMemberList] = useState([]) // 멤버리스트 배열 저장
-  const nextId = useRef(0) // 멤버리스트의 다음 id값을 저장할 변수
 
   const dispatch = useDispatch()
-
-  const courseList = useSelector(state => state.memberlist)
 
   const getCourse = id => {
     // 현재 강좌를 찾는 함수
@@ -48,24 +45,27 @@ function MemberList(props) {
       })
   }
 
-  useEffect(() => {
-    // router의 params가 바뀌면 실행
-    getCourse(props.match.params.id)
-    dispatch(retrieveMemberlist(props.match.params.id)) // 서버로부터 현재 코스의 멤버리스트 가져옴
+  const getMemberlist = id => {
+    dispatch(retrieveMemberlist(id)) // 서버로부터 현재 코스의 멤버리스트 가져옴
       .then(data => {
         console.log(data)
-        setMemberList(data) // 서버에서 데이터 가져와서 멤버리스트 상태로 set
+        setMemberList(data.reduce((acc, cur, index) => [...acc, { id: index, ...cur }], [])) // 서버에서 데이터 가져와서 멤버리스트 상태로 set
       })
       .catch(e => {
         console.log(e)
       })
+  }
+
+  useEffect(() => {
+    // router의 params가 바뀌면 실행
+    getCourse(props.match.params.id)
+    getMemberlist(props.match.params.id)
   }, [props.match.params.id])
 
   useEffect(() => {
     // 멤버리스트 배열과 nextId값이 바뀌면 실행
     console.log(memberList)
-    console.log(nextId)
-  }, [memberList, nextId])
+  }, [memberList])
 
   const removeMember = remove => {
     console.log(remove)
