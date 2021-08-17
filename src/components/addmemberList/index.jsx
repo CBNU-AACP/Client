@@ -30,6 +30,7 @@ function MemberList(props) {
 
   const [currentCourse, setCurrentCourse] = useState(initialCourseState) // 현재 강좌 정보 저장
   const [memberList, setMemberList] = useState([]) // 멤버리스트 배열 저장
+  const [submitted, setSubmitted] = useState(false) // 멤버리스트 제출 여부
 
   const dispatch = useDispatch()
 
@@ -38,7 +39,6 @@ function MemberList(props) {
     CourseDataService.get(id)
       .then(response => {
         setCurrentCourse(response.data.data)
-        console.log(response.data.data)
       })
       .catch(e => {
         console.log(e)
@@ -59,17 +59,20 @@ function MemberList(props) {
   useEffect(() => {
     // router의 params가 바뀌면 실행
     getCourse(props.match.params.id)
-    getMemberlist(props.match.params.id)
   }, [props.match.params.id])
 
   useEffect(() => {
-    // 멤버리스트 배열과 nextId값이 바뀌면 실행
-    console.log(memberList)
-  }, [memberList])
+    getMemberlist(props.match.params.id)
+    setSubmitted(false)
+  }, [submitted])
 
   const removeMember = remove => {
     console.log(remove)
     setMemberList(memberList.filter(member => member.id !== remove))
+  }
+
+  const submitMemberlist = fact => {
+    setSubmitted(fact)
   }
 
   return (
@@ -81,7 +84,7 @@ function MemberList(props) {
             <p>강좌명: {currentCourse.name}</p>
             <p>설명: {currentCourse.description}</p>
           </div>
-          <AddmemberModal courseId={currentCourse.courseId} />
+          <AddmemberModal courseId={currentCourse.courseId} submitted={submitMemberlist} />
           <div className="member">
             {memberList.map(member => (
               <Member key={member.id} member={member} removeMember={removeMember} />

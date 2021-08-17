@@ -56,10 +56,10 @@ const columns = [
   },
 ]
 
-export default function AddmemberModal({ courseId }) {
+export default function AddmemberModal({ courseId, submitted }) {
   AddmemberModal.propTypes = {
     courseId: PropTypes.string.isRequired,
-    // members: PropTypes.shape.isRequired,
+    submitted: PropTypes.func.isRequired,
   }
 
   const [rows, setRows] = useState([]) // 서버로부터 모든 유저들의 정보를 담을 상태변수
@@ -79,18 +79,12 @@ export default function AddmemberModal({ courseId }) {
   useEffect(() => {
     // 체크박스에서 체크해서 멤버리스트 구성
     if (!submitable && memberList.length !== 0) setSubmitable(true) // 제출 불가능한 상태에서 멤버리스트에 내용이 있으면 제출 가능 상태로 만든다.
-    console.log(memberList)
-    console.log(courseId, submitable)
+    console.log(memberList, courseId, submitable)
   }, [memberList, submitable])
 
   useEffect(() => {
     console.log(rows)
-    console.log(open)
   }, [rows])
-
-  useEffect(() => {
-    console.log(reduxmemberList)
-  }, [reduxmemberList])
 
   // const userlist = useSelector(state => state.userlist[0]) // userlist 목록 가져온다.
 
@@ -123,6 +117,7 @@ export default function AddmemberModal({ courseId }) {
       .then(data => {
         console.log(data)
         setOpen(false) // 멤버리스트 생성에 성공하면 창을 닫는다.
+        submitted(true) // 멤버 등록 버튼을 눌렀음을 알려줌
         setSubmitable(false) // 멤버리스트 생성에 성공하면 submit을 false로 바꾼다.
       })
       .catch(e => {
@@ -189,6 +184,8 @@ export default function AddmemberModal({ courseId }) {
       })
   }
 
+  const preMemberlist = [] // 서버에 있는 유저데이터와 코스의 멤버리스트 데이터 비교해서 겹치는 것을 추린 배열
+
   const selectionModel =
     // 서버에 있는 유저데이터와 코스의 멤버리스트 데이터 비교해서 겹치는 것을 추린다.
     useMemo(
@@ -197,11 +194,11 @@ export default function AddmemberModal({ courseId }) {
           const value = reduxmemberList.reduce((acc, member) => {
             if (member.userId === row.userId) {
               acc += row.id
-              console.log(row.userId)
+              preMemberlist.push(row.userId)
             }
             return acc
           }, '')
-
+          setMemberList(preMemberlist)
           return value !== '' ? [...accu, +value] : [...accu]
         }, []),
       [rows],
