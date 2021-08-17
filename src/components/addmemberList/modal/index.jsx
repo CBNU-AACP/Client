@@ -83,60 +83,64 @@ export default function AddmemberModal({ courseId }) {
     console.log(courseId, submitable)
   }, [memberList, submitable])
 
-  const selectionModel =
-    // 서버에 있는 유저데이터와 코스의 멤버리스트 데이터 비교해서 겹치는 것을 추린다.
-    useMemo(() => {
-      rows.filter(row => {
-        console.log(reduxmemberList.filter(member => member === row.userId).map(row => row.id))
-        return reduxmemberList.filter(member => member === row.userId).map(row => row.id)
-      })
-    }, [rows])
-
   useEffect(() => {
     console.log(rows)
-    console.log(() => selectionModel())
+    console.log(open)
   }, [rows])
+
+  useEffect(() => {
+    console.log(reduxmemberList)
+  }, [reduxmemberList])
 
   // const userlist = useSelector(state => state.userlist[0]) // userlist 목록 가져온다.
 
   const userlistReducer = users => users.reduce((acc, cur, index) => [...acc, { id: index, ...cur }], []) // id 넘버를 포함한 객체 배열 반환
 
-  useEffect(() => {
-    const userList = () => {
-      // 유저리스트 불러오는 함수
-      dispatch(retrieveUsers())
-        .then(data => {
-          setRows(userlistReducer(data))
-        })
-        .catch(e => {
-          console.log(e)
-        })
-    }
-    if (memberList.length === 0) setSubmitable(false) // modal을 열때 memberlist가 비어있으면 버튼을 누르지 못하도록 한다.
-    setSearchMember('') // 검색어 초기화
-    dispatch(retrieveMemberlist(courseId)) // 서버로부터 현재 코스의 멤버리스트 가져옴
+  const getUserlist = () => {
+    // 유저리스트 불러오는 함수
+    dispatch(retrieveUsers())
+      .then(data => {
+        setRows(userlistReducer(data))
+      })
+      .catch(e => {
+        console.log(e)
+      })
+  }
+
+  const getMemberlist = () => {
+    // 서버로부터 현재 코스의 멤버리스트 가져옴
+    dispatch(retrieveMemberlist(courseId))
       .then(data => {
         console.log(data)
       })
       .catch(e => {
         console.log(e)
       })
-    userList() // 유저리스트 불러오는 함수 호출
+  }
+
+  const addMemberlist = () => {
+    dispatch(createMemberlist(memberList, courseId))
+      .then(data => {
+        console.log(data)
+        setOpen(false) // 멤버리스트 생성에 성공하면 창을 닫는다.
+        setSubmitable(false) // 멤버리스트 생성에 성공하면 submit을 false로 바꾼다.
+      })
+      .catch(e => {
+        console.log(e)
+      })
+  }
+
+  useEffect(() => {
+    if (memberList.length === 0) setSubmitable(false) // modal을 열때 memberlist가 비어있으면 버튼을 누르지 못하도록 한다.
+    setSearchMember('') // 검색어 초기화
+    getMemberlist() // 멤버리스트 불러오는 함수 호출
+    getUserlist() // 유저리스트 불러오는 함수 호출
   }, [open]) // open상태가 변할 때마다 반복
 
   const saveMemberList = () => {
     // 멤버리스트 생성 버튼 누르면 호출하는 함수
     if (submitable) {
-      dispatch(createMemberlist(memberList, courseId))
-        .then(data => {
-          console.log(data)
-          setOpen(false) // 멤버리스트 생성에 성공하면 창을 닫는다.
-          setSubmitable(false) // 멤버리스트 생성에 성공하면 submit을 false로 바꾼다.
-          // members = data
-        })
-        .catch(e => {
-          console.log(e)
-        })
+      addMemberlist()
     }
   }
 
@@ -184,6 +188,24 @@ export default function AddmemberModal({ courseId }) {
         console.log(e)
       })
   }
+
+  const selectionModel =
+    // 서버에 있는 유저데이터와 코스의 멤버리스트 데이터 비교해서 겹치는 것을 추린다.
+    useMemo(
+      () =>
+        rows.reduce((accu, row) => {
+          const value = reduxmemberList.reduce((acc, member) => {
+            if (member.userId === row.userId) {
+              acc += row.id
+              console.log(row.userId)
+            }
+            return acc
+          }, '')
+
+          return value !== '' ? [...accu, +value] : [...accu]
+        }, []),
+      [rows],
+    )
 
   const body = ( // 모달에 들어갈 내용
     <div style={modalStyle} className={classes.paper}>
@@ -245,7 +267,7 @@ export default function AddmemberModal({ courseId }) {
           <button type="button" className="plusbutton" onClick={handleOpen}>
             <FiPlusSquare className="plus" />
           </button>
-          <p className="plustext">학생을 추가하려면 버튼을 눌러주세요.</p>
+          <p className="plustext">학생명단을 등록 및 수정하려면 버튼을 눌러주세요.</p>
         </div>
         <Modal
           open={open}
