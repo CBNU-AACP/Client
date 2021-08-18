@@ -8,6 +8,7 @@ import AddCourse from './CreateCourse'
 import Course from './CoursesList/course'
 import CoursesList from './CoursesList'
 import MemberList from '../addmemberList'
+import QrScanner from '../QrScanner'
 
 function Courses() {
   // const { user: currentUser } = useSelector(state => state.auth)
@@ -47,8 +48,8 @@ function Courses() {
         <Switch>
           <Route exact path={[path, `${path}/courses`]} component={CoursesList} />
           <Route exact path={`${path}/add`} component={AddCourse} />
-          <Route exact path={`${path}/courses/:id/genmember`} component={MemberList} />
-          <Route exact path={`${path}/courses/:id/modmember`} component={MemberList} />
+          <Route exact path={`${path}/courses/:id/member`} component={MemberList} />
+          <Route exact path={`${path}/courses/:id/qrscan`} component={QrScanner} />
           <Route exact path={`${path}/courses/:id`} component={Course} />
         </Switch>
       </div>

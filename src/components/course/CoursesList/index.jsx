@@ -7,6 +7,7 @@ import { Route, Link, Switch, useRouteMatch } from 'react-router-dom'
 import { retrieveCourses, findCoursesByName, deleteAllCourses } from '../../../actions/courses'
 import Course from './course'
 import MemberList from '../../addmemberList'
+import QrScanner from '../../QrScanner'
 
 const CoursesList = () => {
   const { url } = useRouteMatch()
@@ -106,20 +107,17 @@ const CoursesList = () => {
             </div>
 
             <div>
+              <Link to={`${url}/${currentCourse.courseId}/qrscan`} className="badge-warning">
+                출석체크
+              </Link>
+
               <Link to={`${url}/${currentCourse.courseId}`} className="badge-warning">
                 강좌 편집
               </Link>
 
-              <Link to={`${url}/${currentCourse.courseId}/genmember`} className="badge-warning">
+              <Link to={`${url}/${currentCourse.courseId}/member`} className="badge-warning">
                 멤버 등록
               </Link>
-            </div>
-            <div>
-              <Switch>
-                <Route exact path={`${url}/:id/genmember`} component={MemberList} />
-                <Route exact path={`${url}/:id/modmember`} component={MemberList} />
-                <Route exact path={`${url}/:id`} component={Course} />
-              </Switch>
             </div>
           </div>
         ) : (
