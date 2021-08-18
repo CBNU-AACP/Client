@@ -29,7 +29,7 @@ function Courses() {
       <nav className="navbar navbar-expand navbar-dark bg-dark">
         <div className="navbar-nav mr-auto">
           <li className="nav-item">
-            <Link to={`${url}/courses`} className="nav-link">
+            <Link to={`${url}`} className="nav-link">
               강좌 목록
             </Link>
           </li>
@@ -46,11 +46,11 @@ function Courses() {
 
       <div className="container mt-3">
         <Switch>
-          <Route exact path={[path, `${path}/courses`]} component={CoursesList} />
+          <Route exact path={`${path}`} component={CoursesList} />
           <Route exact path={`${path}/add`} component={AddCourse} />
-          <Route exact path={`${path}/courses/:id/member`} component={MemberList} />
-          <Route exact path={`${path}/courses/:id/qrscan`} component={QrScanner} />
-          <Route exact path={`${path}/courses/:id`} component={Course} />
+          <Route exact path={`${path}/:id/member`} component={MemberList} />
+          <Route exact path={`${path}/:id/qrscan`} component={QrScanner} />
+          <Route exact path={`${path}/:id`} component={Course} />
         </Switch>
       </div>
     </Router>

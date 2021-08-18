@@ -63,12 +63,12 @@ function App() {
                 </Link>
               </li> */}
             <li className="nav-item">
-              <Link to="/QrGen" className="nav-link">
+              <Link to="/qrgen" className="nav-link">
                 출석하기
               </Link>
             </li>
             <li className="nav-item">
-              <Link to="/Course" className="nav-link">
+              <Link to="/courses" className="nav-link">
                 강좌보기
               </Link>
             </li>
@@ -98,12 +98,11 @@ function App() {
       {/* {!hasCookie ? <Redirect to="/login" /> : <Redirect to="QrScan" />} */}
       <Switch>
         <Route exact path={['/', '/home']} component={Home} />
-        <Route exact path="/Login" component={Login} />
-        <Route exact path="/Register" component={RegisterForm} />
+        <Route exact path="/login" component={Login} />
+        <Route exact path="/register" component={RegisterForm} />
         <Route exact path="/profile" component={Profile} />
-        <Route exact path="/QrGen" component={QrGenerator} />
-        <Route exact path="/QrScan" component={QrScanner} />
-        <Route exact path="/Course" component={Courses} />
+        <Route exact path="/qrgen" component={QrGenerator} />
+        <Route exact path="/courses" component={Courses} />
       </Switch>
     </BrowserRouter>
   )
