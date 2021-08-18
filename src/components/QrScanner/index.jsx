@@ -1,14 +1,52 @@
 import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import QrReader from 'react-qr-reader'
+import PropTypes from 'prop-types'
 import StyledQrScan from './style'
+import CourseDataService from '../../services/CourseService'
 
-function QrScanner() {
+function QrScanner(props) {
+  QrScanner.propTypes = {
+    history: PropTypes.shape({
+      push: PropTypes.func.isRequired,
+    }).isRequired,
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+      }),
+    }),
+  }
+
+  const { match } = props
+
+  const initialCourseState = {
+    courseId: null,
+    name: '',
+    description: '',
+  }
+
   const [id, setId] = useState('No result')
   const [result, setResult] = useState(false)
   const [error, setError] = useState(null)
   const [isChecked, setChecked] = useState(false)
   const [text, setText] = useState('인증 정보가 잘못되었습니다.')
+  const [currentCourse, setCurrentCourse] = useState(initialCourseState) // 현재 강좌 정보 저장
+
+  const getCourse = id => {
+    // 현재 강좌를 찾는 함수
+    CourseDataService.get(id)
+      .then(response => {
+        setCurrentCourse(response.data.data)
+      })
+      .catch(e => {
+        console.log(e)
+      })
+  }
+
+  useEffect(() => {
+    // router의 params가 바뀌면 실행
+    getCourse(match.params.id)
+  }, [match.params.id])
 
   useEffect(() => {
     const valid = () => {
@@ -76,7 +114,7 @@ function QrScanner() {
     <StyledQrScan>
       <div className="box">
         <div className="desc">
-          <p className="info">"운영체제"</p>
+          <p className="info">"{currentCourse.name}"과목 출석체크</p>
         </div>
         {/* <div className="qrscan"> */}
         <QrReader
