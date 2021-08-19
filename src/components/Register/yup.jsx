@@ -11,7 +11,10 @@ export const schema = yup.object({
     .required('이름을 입력해주세요.')
     .max(15, '이름은 15자리 이하여야 합니다.')
     .min(2, '이름은 2자리 이상이어야 합니다.'),
-  studentId: yup.number().required('학번을 입력해주세요. 학번이 없으시면 "null"을 입력해주세요.').typeError('학번을 올바르게 입력해주세요.'),
+  studentId: yup
+    .number()
+    .required('학번을 입력해주세요. 학번이 없으시면 "null"을 입력해주세요.')
+    .typeError('학번을 올바르게 입력해주세요.'),
   email: yup.string().required('이메일을 입력해주세요.').email('잘못된 형식의 이메일입니다.'),
   passWord: yup
     .string()

@@ -2,7 +2,7 @@ import { REGISTER_SUCCESS, REGISTER_FAIL, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, SET
 
 import AuthService from '../services/auth/auth_service'
 
-export const register = (user) => async dispatch =>
+export const register = user => async dispatch =>
   AuthService.register(user).then(
     response => {
       dispatch({
