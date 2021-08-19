@@ -4,6 +4,7 @@ import QrReader from 'react-qr-reader'
 import PropTypes from 'prop-types'
 import StyledQrScan from './style'
 import CourseDataService from '../../services/CourseService'
+import QrService from '../../services/QrServices'
 
 function QrScanner(props) {
   QrScanner.propTypes = {
@@ -25,10 +26,15 @@ function QrScanner(props) {
     description: '',
   }
 
-  const [id, setId] = useState('No result')
+  const initialQrState = {
+    memberId: '',
+    validNum: '',
+    courseDateId: '',
+  }
+
+  const [info, setInfo] = useState(initialQrState)
   const [result, setResult] = useState(false)
   const [error, setError] = useState(null)
-  const [isChecked, setChecked] = useState(false)
   const [text, setText] = useState('인증 정보가 잘못되었습니다.')
   const [currentCourse, setCurrentCourse] = useState(initialCourseState) // 현재 강좌 정보 저장
 
@@ -62,19 +68,8 @@ function QrScanner(props) {
   const sendInfo = async () => {
     try {
       setError(null)
-      const response = await axios.patch(
-        'http://localhost::3001/v1',
-        `{
-            "userId": "${id}",
-            "validNum": "${isChecked}"
-        }`,
-      )
-      console.log(response.data.ValidNum)
-      if (response.data.ValidNum === isChecked) {
-        setResult(true)
-      } else {
-        setResult(false)
-      }
+      const res = await QrService.patch(info)
+      console.log(res.data.data)
     } catch (e) {
       setError(e)
     }
@@ -83,23 +78,17 @@ function QrScanner(props) {
   const getInfo = async () => {
     try {
       setError(null)
-      const response = await axios.get('http://localhost::3001/v1')
-      console.log(response.data.ValidNum)
-      if (response.data.ValidNum === isChecked) {
-        setResult(true)
-      } else {
-        setResult(false)
-      }
+      const response = await QrService.get(currentCourse.courseId)
+      console.log(response.data.data)
     } catch (e) {
       setError(e)
     }
   }
 
-  const handleScan = async data => {
+  const handleScan = data => {
     if (data) {
-      setId(JSON.parse(data).UserName)
-      setChecked(JSON.parse(data).ValidNum)
-      console.log(id, isChecked)
+      setInfo(JSON.parse(data))
+      console.log(info)
       sendInfo()
       getInfo()
     }
