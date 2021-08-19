@@ -4,13 +4,11 @@ const create = (members, courseId) => http.post(`v1/memberLists/${courseId}`, me
 
 const update = (members, courseId) => http.put(`v1/memberLists/${courseId}`, members)
 
-const getAll = courseId => http.get(`v1/memberLists/search/${courseId}`)
+const getAll = courseId => http.get(`v1/memberLists/${courseId}`)
 
-const remove = id => http.delete(`v1/courses/single/${id}`)
+const remove = courseId => http.delete(`v1/memberLists/${courseId}?userId=test1`)
 
-const removeAll = () => http.delete(`v1/courses/multiple/test12`)
-
-const findByName = name => http.get(`v1/users/test1/${encodeURIComponent(name)}`)
+const removeAll = () => http.delete(`v1/courses/multiple/test1`)
 
 const MemberService = {
   create,
@@ -18,7 +16,6 @@ const MemberService = {
   getAll,
   remove,
   removeAll,
-  findByName,
 }
 
 export default MemberService
