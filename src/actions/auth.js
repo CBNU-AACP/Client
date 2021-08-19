@@ -2,8 +2,8 @@ import { REGISTER_SUCCESS, REGISTER_FAIL, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, SET
 
 import AuthService from '../services/auth/auth_service'
 
-export const register = (user) => async dispatch =>
-  AuthService.register(user).then(
+export const register = (userId, userName, email, passWord) => async dispatch =>
+  AuthService.register(userId, userName, email, passWord).then(
     response => {
       dispatch({
         type: REGISTER_SUCCESS,

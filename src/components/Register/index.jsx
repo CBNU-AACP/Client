@@ -44,8 +44,6 @@ function RegisterForm() {
   const { message } = useSelector(state => state.message)
   const dispatch = useDispatch()
 
-  const [visible, setVisible]= useState(false);
-
   // const onChangeUserid = e => {
   //   const userid = e.target.value
   //   setUserId(userid)
@@ -67,19 +65,11 @@ function RegisterForm() {
   //   setPassWord(password)
   // }
 
-  const VerifyVisible = () => {
-    setVisible(true)
-  }
-  const visivel= {
-    visibility: visible ? 'visible' : 'hidden',
-  };
-
   const handleRegister = data => {
     setSuccessful(false)
-    const { userId, userName, studentId, email, passWord } = data
-    const user = { userId, userName, studentId, email, passWord }
-    console.log(user)
-    dispatch(register(user))
+    // const { userId, userName, email, passWord } = Register
+    console.log(data.userId, data.userName, data.memberId, data.email, data.passWord)
+    dispatch(register(data.userId, data.userName, data.memberId, data.email, data.passWord))
       .then(() => {
         setSuccessful(true)
       })
@@ -98,11 +88,14 @@ function RegisterForm() {
             <Controller
               name="userId"
               control={control}
+              placeholder="아이디를 입력해주세요."
+              // value={Register.userId}
+
               render={({ field }) => (
                 <Input
                   type="text"
+                  // onChange={onChangeUserid}
                   {...field}
-                  placeholder="아이디를 입력해주세요."
                 />
               )}
             />
@@ -113,29 +106,40 @@ function RegisterForm() {
             <Controller
               name="userName"
               control={control}
-              render={({ field }) => <Input type="text" {...field} placeholder="이름을 정확하게 입력해주세요."/>}
+              placeholder="이름을 정확하게 입력해주세요."
+              // value={Register.userName}
+              // onChange={onChangeUsername}
+              render={({ field }) => <Input type="text" {...field} />}
             />
             {errors.userName && <FormErrorMessage className="error" Message={errors.userName.message} />}
           </div>
           <div className="element">
-            <label htmlFor="studentId">학번</label>
+            <label htmlFor="memberId">학번</label>
             <Controller
-              name="studentId"
+              name="memberId"
               control={control}
+              placeholder="학번을 입력해주세요."
+              // value={Register.userId}
+
               render={({ field }) => (
-                <Input type="text" // onChange={onChangeUserid}
+                <Input
+                  type="text"
+                  // onChange={onChangeUserid}
                   {...field}
-                  placeholder="학번을 입력해주세요."/>
+                />
               )}
             />
-            {errors.studentId && <FormErrorMessage className="error" Message={errors.studentId.message} />}
+            {errors.memberId && <FormErrorMessage className="error" Message={errors.memberId.message} />}
           </div>
           <div className="element">
             <label htmlFor="email">이메일</label>
             <Controller
               name="email"
               control={control}
-              render={({ field }) => <Input type="text" {...field} placeholder="이메일을 입력해주세요."/>}
+              placeholder="이메일을 입력해주세요."
+              // value={Register.email}
+              // onChange={onChangeEmail}
+              render={({ field }) => <Input type="text" {...field} />}
             />
             {errors.email && <FormErrorMessage className="error" Message={errors.email.message} />}
           </div>
@@ -145,7 +149,10 @@ function RegisterForm() {
             <Controller
               name="passWord"
               control={control}
-              render={({ field }) => <Input type="password" {...field} placeholder="비밀번호를 입력해주세요."/>}
+              placeholder="비밀번호를 입력해주세요."
+              // value={Register.passWord}
+              // onChange={onChangePassword}
+              render={({ field }) => <Input type="password" {...field} />}
             />
             {errors.passWord && <FormErrorMessage className="error" Message={errors.passWord.message} />}
           </div>
@@ -154,30 +161,10 @@ function RegisterForm() {
             <Controller
               name="passWord2"
               control={control}
-              render={({ field }) => <Input type="password" {...field} placeholder="비밀번호를 확인해주세요."/>}
+              placeholder="비밀번호를 확인해주세요."
+              render={({ field }) => <Input type="password" {...field} />}
             />
             {errors.passWord2 && <FormErrorMessage className="error" Message={errors.passWord2.message} />}
-          </div>
-          <div className="element">
-            <label htmlFor="userPhoneNum">전화번호</label>
-            <Controller
-              name="userPhoneNum"
-              control={control}
-              render={({ field }) => <Input type="text" {...field} placeholder="전화번호를 입력해주세요."/>}
-            />
-            <Button type="primary" htmlType="submit" onClick={VerifyVisible} block>인증번호 받기</Button>
-            {errors.userPhoneNum && <FormErrorMessage className="error" Message={errors.userPhoneNum.message} />}
-          </div>
-          <div className="element">
-            <Controller
-              name="userVerifyNum"
-              control={control}
-              render={({ field }) => <Input type="text" {...field} style={visivel} placeholder="인증번호를 입력해주세요." />}
-            />
-            <Button type="primary" htmlType="submit"
-            //  onClick={Verifysubmit} 
-             block>인증하기</Button>
-            {errors.userVerifyNum && <FormErrorMessage className="error" Message={errors.userVerifyNum.message} />}
           </div>
           <div className="element">
             <Controller

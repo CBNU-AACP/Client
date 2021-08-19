@@ -11,9 +11,6 @@ const Register = styled(Form)`
     margin: 1.3rem 1.3rem;
     .element {
       margin: 1.3rem 0;
-      .input-verify{
-        visibility: hidden;
-      }
       .error {
         margin: 0;
         position: relative;
