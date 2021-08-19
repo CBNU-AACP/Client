@@ -67,7 +67,7 @@ function RegisterForm() {
   //   setPassWord(password)
   // }
 
-  const Verifyvisible = () => {
+  const VerifyVisible = () => {
     setVisible(true)
   }
   const visivel= {
@@ -76,9 +76,10 @@ function RegisterForm() {
 
   const handleRegister = data => {
     setSuccessful(false)
-    const user = { userId: data.userId, userName:data.userName, studentId:data.studentId, email:data.email, passWord:data.passWord }
-    console.log(data.userId, data.userName, data.studentId, data.email, data.passWord)
-    dispatch(register(data.userId, data.userName, data.studentId, data.email, data.passWord))
+    const { userId, userName, studentId, email, passWord } = data
+    const user = { userId, userName, studentId, email, passWord }
+    console.log(user)
+    dispatch(register(user))
       .then(() => {
         setSuccessful(true)
       })
@@ -164,7 +165,7 @@ function RegisterForm() {
               control={control}
               render={({ field }) => <Input type="text" {...field} placeholder="전화번호를 입력해주세요."/>}
             />
-            <Button type="primary" htmlType="submit" onClick={Verifyvisible} block>인증번호 받기</Button>
+            <Button type="primary" htmlType="submit" onClick={VerifyVisible} block>인증번호 받기</Button>
             {errors.userPhoneNum && <FormErrorMessage className="error" Message={errors.userPhoneNum.message} />}
           </div>
           <div className="element">
