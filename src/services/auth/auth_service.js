@@ -4,13 +4,20 @@ import { useCookies } from 'react-cookie'
 const JWT_EXPIRY_TIME = 24 * 3600 * 1000
 
 
-const register = (userId, userName, email, passWord) =>
+const register = (userId, userName, memberId, email, passWord) =>
   http.post(`signup`, {
     userId,
     userName,
+    memberId,
     email,
     passWord,
   })
+  .then(response=>{
+    window.alert(response.data.result);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
 
 const login = (userId, passWord) => {
   http
