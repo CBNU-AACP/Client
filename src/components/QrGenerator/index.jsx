@@ -7,14 +7,6 @@ import StyledQrGen from './style'
 import QrService from '../../services/QrServices'
 
 function QrGenerator() {
-  const [error, setError] = useState(null)
-  const [timer, setTimer] = useState(15)
-  const [validNum, setValidnum] = useState('')
-  const [flag, setFlag] = useState(false) // validNum을 서버에 보낼 준비가 되었는지
-
-  // const user = useSelector(state => state.auth.user) // user 상태
-  const user = '김동용'
-
   const createValidnum = id => {
     const date = new Date()
     const year = date.getFullYear().toString() // 현재 년도 받아오기
@@ -26,47 +18,44 @@ function QrGenerator() {
     return year + month + name + milie
   }
 
+  // const user = useSelector(state => state.auth.user) // user 상태
+  const user = '김동용'
+
+  const [timer, setTimer] = useState(15)
+  const [validNum, setValidnum] = useState(createValidnum(user))
+
   const sendValidnum = async () => {
     try {
-      setError(null)
       const res = await QrService.put(validNum)
-      return Promise.resolve(res.data.data)
+      return Promise.resolve(res.data.message)
     } catch (e) {
-      setError(e)
       return Promise.reject(e)
     }
   }
 
   const reload = () => {
-    sendValidnum()
-    setTimer(15)
+    setValidnum(createValidnum(user))
   }
 
   useEffect(() => {
-    console.log(flag)
-  }, [flag])
+    console.log(validNum)
+    sendValidnum()
+      .then(data => {
+        setTimer(15)
+        console.log(data)
+      })
+      .catch(e => {
+        console.log(e)
+      })
+  }, [validNum])
 
   useEffect(() => {
     const countdown = setInterval(() => {
       if (parseInt(timer, 10) > 0) {
         setTimer(parseInt(timer, 10) - 1)
-        if (parseInt(timer, 10) === 15) {
-          setValidnum(createValidnum(user)) // timer와 validNum 동기화 필요
-          setFlag(true)
-          if (flag) {
-            sendValidnum()
-              .then(data => {
-                console.log(data)
-                setFlag(false) // 다시 살펴보기
-              })
-              .catch(e => {
-                console.log(e)
-              })
-          }
-        }
       }
-      if (parseInt(timer, 10) === 1) {
-        setTimer(15)
+      if (parseInt(timer, 10) === 0) {
+        setValidnum(createValidnum(user))
       }
     }, 1000)
     return () => clearInterval(countdown)
