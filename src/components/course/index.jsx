@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { BrowserRouter as Router, Switch, Route, Link, useRouteMatch, Redirect } from 'react-router-dom'
+import { BrowserRouter, Router, Switch, Route, Link, useRouteMatch, Redirect } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { withCookies, useCookies } from 'react-cookie'
-import 'bootstrap/dist/css/bootstrap.min.css'
+import { BsCardChecklist } from 'react-icons/bs'
+import { RiPlayListAddLine } from 'react-icons/ri'
 
 import AddCourse from './CreateCourse'
 import Course from './CoursesList/course'
 import CoursesList from './CoursesList'
 import MemberList from '../addmemberList'
 import QrScanner from '../QrScanner'
+import StyledCourse from './style'
+import { history } from '../../helpers/history'
 
 function Courses() {
   // const { user: currentUser } = useSelector(state => state.auth)
@@ -24,36 +27,33 @@ function Courses() {
     }
   }, [cookies])
   return (
-    <Router>
-      {/* {hasCookie ? ( */}
-      <nav className="navbar navbar-expand navbar-dark bg-dark">
-        <div className="navbar-nav mr-auto">
-          <li className="nav-item">
-            <Link to={`${url}`} className="nav-link">
-              강좌 목록
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link to={`${url}/add`} className="nav-link">
-              강좌 추가
-            </Link>
-          </li>
+    <StyledCourse>
+      <BrowserRouter history={history}>
+        <div className="components">
+          <div className="icons">
+            <li className="iconList">
+              <Link to={`${url}`} className="">
+                <BsCardChecklist className="icon" />
+                <p>강좌목록</p>
+              </Link>
+            </li>
+            <li className="iconList">
+              <Link to={`${url}/add`} className="">
+                <RiPlayListAddLine className="icon" />
+                <p>강좌추가</p>
+              </Link>
+            </li>
+          </div>
+          <Switch>
+            <Route exact path={`${path}`} component={CoursesList} />
+            <Route exact path={`${path}/add`} component={AddCourse} />
+            <Route exact path={`${path}/:id/member`} component={MemberList} />
+            <Route exact path={`${path}/:id/qrscan`} component={QrScanner} />
+            <Route exact path={`${path}/:id`} component={Course} />
+          </Switch>
         </div>
-      </nav>
-      {/* ) : (
-        <Redirect to="/" />
-      )} */}
-
-      <div className="container mt-3">
-        <Switch>
-          <Route exact path={`${path}`} component={CoursesList} />
-          <Route exact path={`${path}/add`} component={AddCourse} />
-          <Route exact path={`${path}/:id/member`} component={MemberList} />
-          <Route exact path={`${path}/:id/qrscan`} component={QrScanner} />
-          <Route exact path={`${path}/:id`} component={Course} />
-        </Switch>
-      </div>
-    </Router>
+      </BrowserRouter>
+    </StyledCourse>
   )
 }
 
