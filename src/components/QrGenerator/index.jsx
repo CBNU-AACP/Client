@@ -23,9 +23,10 @@ function QrGenerator() {
   const [timer, setTimer] = useState(15)
   const [validNum, setValidnum] = useState(createValidnum(user))
 
-  const sendValidnum = async () => {
+  const sendValidnum = async num => {
     try {
-      const res = await QrService.put(validNum)
+      console.log('send', num)
+      const res = await QrService.put(num)
       return Promise.resolve(res.data.message)
     } catch (e) {
       return Promise.reject(e)
@@ -38,7 +39,7 @@ function QrGenerator() {
 
   useEffect(() => {
     console.log(validNum)
-    sendValidnum()
+    sendValidnum(validNum)
       .then(data => {
         setTimer(15)
         console.log(data)
@@ -64,7 +65,7 @@ function QrGenerator() {
     <StyledQrGen>
       <div className="box">
         <div className="qrcode">
-          <QR value={`{"userId": "${user}", ${validNum}}`} />
+          <QR value={`{"userId": "test1", ${validNum}}`} />
         </div>
         <div className="desc">
           <p className="info">{`"${user}"`} 님의 출석 QR 코드</p>
