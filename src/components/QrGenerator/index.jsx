@@ -1,5 +1,4 @@
 import { AiOutlineReload, AiOutlineClockCircle } from 'react-icons/ai'
-import axios from 'axios'
 import QR from 'react-qr-code'
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
@@ -65,7 +64,7 @@ function QrGenerator() {
     <StyledQrGen>
       <div className="box">
         <div className="qrcode">
-          <QR value={`{"userId": "${user}", "validNum": "${validNum}"}`} />
+          <QR value={`{"userId": "${user}", ${validNum}}`} />
         </div>
         <div className="desc">
           <p className="info">{`"${user}"`} 님의 출석 QR 코드</p>
