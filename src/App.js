@@ -14,12 +14,11 @@ import RegisterForm from './components/Register'
 import Home from './components/content/home'
 import Profile from './components/profile'
 import Courses from './components/course'
+import StyledApp from './style'
 
 import { logout } from './actions/auth'
 import { clearMessage } from './actions/message'
 import { history } from './helpers/history'
-
-import 'bootstrap/dist/css/bootstrap.min.css'
 
 function App() {
   const [cookies, removeCookie, setCookie, getCookie] = useCookies(['user'])
@@ -45,64 +44,40 @@ function App() {
   }, [cookies])
 
   return (
-    <BrowserRouter history={history}>
-      <div>
-        <nav className="navbar navbar-expand navbar-dark bg-dark">
-          {/* {hasCookie ? ( */}
-          <div className="navbar-nav ml-auto">
-            <li className="nav-item">
-              <Link to="/home" className="nav-link">
-                <IoHome />
-              </Link>
-            </li>
-            {/* <li className="nav-item">
-                <Link to="/profile" className="nav-link">
-                  {cookies.user.userName}
-                </Link>
-              </li> */}
-            <li className="nav-item">
-              <Link to="/qrgen" className="nav-link">
-                <ImQrcode />
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/courses" className="nav-link">
-                <GiArchiveResearch />
-              </Link>
-            </li>
-            <li className="nav-item">
-              <a href="/" className="nav-link" onClick={logOut}>
-                <BsFillPersonFill />
-              </a>
-            </li>
-          </div>
-          {/* ) : (
-            <div className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <Link to="/login" className="nav-link">
-                  로그인
-                </Link>
-              </li>
+    <StyledApp>
+      <BrowserRouter history={history}>
+        {/* {!hasCookie ? <Redirect to="/login" /> : <Redirect to="QrScan" />} */}
+        <Switch>
+          <Route exact path={['/', '/home']} component={Home} />
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/register" component={RegisterForm} />
+          <Route exact path="/profile" component={Profile} />
+          <Route exact path="/qrgen" component={QrGenerator} />
+          <Route exact path="/courses" component={Courses} />
+        </Switch>
 
-              <li className="nav-item">
-                <Link to="/register" className="nav-link">
-                  회원가입
-                </Link>
-              </li>
-            </div>
-          )} */}
-        </nav>
-      </div>
-      {/* {!hasCookie ? <Redirect to="/login" /> : <Redirect to="QrScan" />} */}
-      <Switch>
-        <Route exact path={['/', '/home']} component={Home} />
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/register" component={RegisterForm} />
-        <Route exact path="/profile" component={Profile} />
-        <Route exact path="/qrgen" component={QrGenerator} />
-        <Route exact path="/courses" component={Courses} />
-      </Switch>
-    </BrowserRouter>
+        <div className="appbar">
+          <div className="bar">
+            <Link to="/home" className="iconList">
+              <IoHome className="icon" />
+              <p className="label">홈</p>
+            </Link>
+            <Link to="/qrgen" className="iconList">
+              <ImQrcode className="icon" />
+              <p className="label">출석하기</p>
+            </Link>
+            <Link to="/courses" className="iconList">
+              <GiArchiveResearch className="icon" />
+              <p className="label">강좌보기</p>
+            </Link>
+            <a href="/" onClick={logOut} className="iconList">
+              <BsFillPersonFill className="icon" />
+              <p className="label">마이페이지</p>
+            </a>
+          </div>
+        </div>
+      </BrowserRouter>
+    </StyledApp>
   )
 }
 
