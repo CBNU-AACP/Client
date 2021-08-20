@@ -3,9 +3,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { BrowserRouter, Route, Switch, Link, Redirect } from 'react-router-dom'
 import { withCookies, useCookies } from 'react-cookie'
 import PropTypes from 'prop-types'
+import { IoHome } from 'react-icons/io5'
+import { ImQrcode } from 'react-icons/im'
+import { GiArchiveResearch } from 'react-icons/gi'
+import { BsFillPersonFill } from 'react-icons/bs'
 
 import QrGenerator from './components/QrGenerator'
-import QrScanner from './components/QrScanner'
 import Login from './components/Login/login'
 import RegisterForm from './components/Register'
 import Home from './components/content/home'
@@ -45,18 +48,13 @@ function App() {
     <BrowserRouter history={history}>
       <div>
         <nav className="navbar navbar-expand navbar-dark bg-dark">
-          <Link to="/" className="navbar-brand">
-            체크메이트(CHECKMATE)
-          </Link>
-          <div className="navbar-nav mr-auto">
-            <li className="nav-item">
-              <Link to="/home" className="nav-link">
-                Home
-              </Link>
-            </li>
-          </div>
           {/* {hasCookie ? ( */}
           <div className="navbar-nav ml-auto">
+            <li className="nav-item">
+              <Link to="/home" className="nav-link">
+                <IoHome />
+              </Link>
+            </li>
             {/* <li className="nav-item">
                 <Link to="/profile" className="nav-link">
                   {cookies.user.userName}
@@ -64,17 +62,17 @@ function App() {
               </li> */}
             <li className="nav-item">
               <Link to="/qrgen" className="nav-link">
-                출석하기
+                <ImQrcode />
               </Link>
             </li>
             <li className="nav-item">
               <Link to="/courses" className="nav-link">
-                강좌보기
+                <GiArchiveResearch />
               </Link>
             </li>
             <li className="nav-item">
               <a href="/" className="nav-link" onClick={logOut}>
-                로그아웃
+                <BsFillPersonFill />
               </a>
             </li>
           </div>

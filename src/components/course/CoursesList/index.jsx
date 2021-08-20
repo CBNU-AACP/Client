@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Route, Link, Switch, useRouteMatch } from 'react-router-dom'
+import { FaSearch } from 'react-icons/fa'
 
 import { retrieveCourses, findCoursesByName, deleteAllCourses } from '../../../actions/courses'
 import Course from './course'
@@ -66,7 +67,7 @@ const CoursesList = () => {
           />
           <div className="input-group-append">
             <button className="btn btn-outline-secondary" type="button" onClick={findByName}>
-              검색
+              <FaSearch />
             </button>
           </div>
         </div>

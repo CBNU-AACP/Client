@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { createCourse } from '../../../actions/courses'
-import MemberList from '../../addmemberList/index'
 
 const AddCourse = () => {
   const initialCourseState = {
@@ -11,7 +10,6 @@ const AddCourse = () => {
     description: '',
   }
   const [course, setCourse] = useState(initialCourseState)
-  const [memberdata, setMemberdata] = useState([])
   const [submitted, setSubmitted] = useState(false)
 
   const dispatch = useDispatch()
@@ -84,7 +82,6 @@ const AddCourse = () => {
           <button type="submit" onClick={saveCourse} className="btn btn-success">
             등록
           </button>
-          {/* <MemberList></MemberList> */}
         </div>
       )}
     </div>
