@@ -3,6 +3,7 @@ import styled from 'styled-components'
 const App = styled.div`
   margin: auto;
   .appbar {
+    background-color: white;
     display: flex;
     text-align: center;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;

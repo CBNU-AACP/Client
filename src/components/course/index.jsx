@@ -29,28 +29,32 @@ function Courses() {
   return (
     <StyledCourse>
       <BrowserRouter history={history}>
-        <div className="components">
-          <div className="icons">
-            <li className="iconList">
-              <Link to={`${url}`} className="">
-                <BsCardChecklist className="icon" />
-                <p>강좌목록</p>
-              </Link>
-            </li>
-            <li className="iconList">
-              <Link to={`${url}/add`} className="">
-                <RiPlayListAddLine className="icon" />
-                <p>강좌추가</p>
-              </Link>
-            </li>
+        <div className="container">
+          <div className="topbar">
+            <div className="icons">
+              <li className="iconList">
+                <Link to={`${url}`} className="">
+                  <BsCardChecklist className="icon" />
+                  <p>강좌목록</p>
+                </Link>
+              </li>
+              <li className="iconList">
+                <Link to={`${url}/add`} className="">
+                  <RiPlayListAddLine className="icon" />
+                  <p>강좌추가</p>
+                </Link>
+              </li>
+            </div>
           </div>
-          <Switch>
-            <Route exact path={`${path}`} component={CoursesList} />
-            <Route exact path={`${path}/add`} component={AddCourse} />
-            <Route exact path={`${path}/:id/member`} component={MemberList} />
-            <Route exact path={`${path}/:id/qrscan`} component={QrScanner} />
-            <Route exact path={`${path}/:id`} component={Course} />
-          </Switch>
+          <div className="components">
+            <Switch>
+              <Route exact path={`${path}`} component={CoursesList} />
+              <Route exact path={`${path}/add`} component={AddCourse} />
+              <Route exact path={`${path}/:id/member`} component={MemberList} />
+              <Route exact path={`${path}/:id/qrscan`} component={QrScanner} />
+              <Route exact path={`${path}/:id`} component={Course} />
+            </Switch>
+          </div>
         </div>
       </BrowserRouter>
     </StyledCourse>
