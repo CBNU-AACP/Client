@@ -1,21 +1,21 @@
 import styled from 'styled-components'
 
 const CrCourse = styled.div`
-  margin: 8rem 0 0 0;
-  align-items: center;
-  max-width: 300px;
-  width: 100%;
-  height: 200px;
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-  border-radius: 20px;
+  height: 730px;
+  margin-top: 7rem;
   .container {
-    margin: auto;
+    max-width: 300px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    border-radius: 20px;
     .formGroup {
-      margin: 2rem auto;
-      width: max-content;
+      margin: 1rem auto;
       .form {
         margin: 1rem;
         .icons {
+          display: flex;
           .icon {
             font-size: 1.3rem;
           }
@@ -25,16 +25,14 @@ const CrCourse = styled.div`
           }
         }
         input {
+          width: 12rem;
           font-size: 0.7rem;
           border: 0;
           border-bottom: 2px solid black;
         }
-        input::placeholder {
-          font-size: 0.7rem;
-        }
       }
       .submit {
-        margin: 0 0 0 6.7rem;
+        margin: 0 0 1rem 8rem;
         display: flex;
         background-color: #dcdcdc;
         border-radius: 5px;
@@ -46,7 +44,7 @@ const CrCourse = styled.div`
           font-size: 0.8rem;
         }
       }
-      .submit:hover {
+      .submit:active {
         background-color: #c8c8c8;
         .icon {
           color: orange;
