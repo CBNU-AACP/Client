@@ -65,7 +65,7 @@ function QrGenerator() {
     <StyledQrGen>
       <div className="box">
         <div className="qrcode">
-          <QR value={`{"userId": "test1", ${validNum}}`} />
+          <QR value={`{"userId": "test1", "validNum": "${validNum}"}`} />
         </div>
         <div className="desc">
           <p className="info">{`"${user}"`} 님의 출석 QR 코드</p>

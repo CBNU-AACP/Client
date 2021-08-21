@@ -8,23 +8,13 @@ const QrScan = styled.div`
   .box {
     display: flex;
     flex-direction: column;
-    max-width: 400px;
     height: 500px;
-    width: 100%;
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     align-items: center;
     border-radius: 20px;
-
-    .qrscan {
-      margin-top: 30px;
-      canvas {
-        height: 160px !important;
-        width: 160px !important;
-      }
-    }
     .scan {
+      height: 300px !important;
+      width: 300px !important;
       div {
-        border-radius: 20px;
         box-sizing: border-box !important;
         border: 50px solid rgba(0, 0, 0, 0.3) !important;
         box-shadow: orange 0px 0px 0px 5px inset !important;
