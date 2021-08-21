@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import Modal from '@material-ui/core/Modal'
 import { DataGrid } from '@material-ui/data-grid'
 import { FiPlusSquare } from 'react-icons/fi'
+import { FaSearch } from 'react-icons/fa'
 import PropTypes from 'prop-types'
 import StyledAddmemberModal from './style'
 
@@ -217,7 +218,7 @@ export default function AddmemberModal({ courseId, submitted }) {
           />
           <div className="input-group-append">
             <button className="btn btn-outline-secondary" type="button" onClick={findByName}>
-              검색
+              <FaSearch />
             </button>
           </div>
         </div>

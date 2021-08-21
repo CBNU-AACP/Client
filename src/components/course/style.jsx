@@ -1,73 +1,50 @@
 import styled from 'styled-components'
 
 const Course = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 40px;
-  .box {
-    display: flex;
-    flex-direction: column;
-    max-width: 400px;
-    height: 500px;
-    width: 100%;
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-    align-items: center;
-    border-radius: 20px;
-    .name {
-      font-size: 1.7rem;
-      font-weight: bold;
-      margin-top: 43px;
-    }
-    .number {
-      margin: 10px 0;
+  margin-top: 80px;
+  .container {
+    .topbar {
+      background-color: white;
+      align-items: center;
+      flex-direction: column;
       display: flex;
-      .phone-icon {
-        margin-top: -2px;
-        margin-right: 1px;
+      margin: auto;
+      box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      .icons {
+        display: flex;
+        list-style: none;
+        .iconList {
+          margin: 0.4rem 0.5rem;
+          padding: 0.4rem 0.5rem;
+          text-align: center;
+          border-radius: 10px;
+          .icon {
+            font-size: 1.3rem;
+          }
+          p {
+            font-size: 0.7rem;
+          }
+        }
+        .iconList:active {
+          background-color: orange;
+        }
       }
     }
-    .qrcode {
-      margin-top: 67px;
-      canvas {
-        height: 160px !important;
-        width: 160px !important;
-      }
-    }
-    .desc {
-      margin-top: 15px;
-      font-size: 0.75rem;
+    .components {
+      display: flex;
+      flex-direction: column;
+      margin: auto;
+      max-width: 800px;
+      height: 100%;
+      width: 100%;
+      box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+      align-items: center;
       text-align: center;
-      .info {
-        font-size: 1rem;
-        text-align: center;
-        margin-bottom: 1.2rem;
-      }
-      .time_clock {
-        font-size: 1.1rem;
-        vertical-align: middle;
-      }
-      .time1,
-      .time2 {
-        display: inline;
-        text-align: center;
-        font-size: 1rem;
-      }
-      .time2 {
-        color: orange;
-      }
-      p {
-        margin: 0.6rem 0;
-      }
+      border-radius: 20px;
     }
-    .reload {
-      font-size: 1.5rem;
-      margin-top: 1rem;
-    }
-  }
-  .print {
-    margin-top: 2rem;
-    color: gray;
   }
 `
 

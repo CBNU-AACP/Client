@@ -3,11 +3,16 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Route, Link, Switch, useRouteMatch } from 'react-router-dom'
+import { FaSearch } from 'react-icons/fa'
+import { HiOutlineTrash } from 'react-icons/hi'
+import { CgList } from 'react-icons/cg'
+import { RiCamera2Line } from 'react-icons/ri'
+import { FiEdit } from 'react-icons/fi'
+import { BsPeopleFill } from 'react-icons/bs'
 
 import { retrieveCourses, findCoursesByName, deleteAllCourses } from '../../../actions/courses'
-import Course from './course'
-import MemberList from '../../addmemberList'
-import QrScanner from '../../QrScanner'
+
+import StyledCoursesList from './style'
 
 const CoursesList = () => {
   const { url } = useRouteMatch()
@@ -54,80 +59,94 @@ const CoursesList = () => {
   }
 
   return (
-    <div className="list row">
-      <div className="col-md-8">
-        <div className="input-group mb-3">
+    <StyledCoursesList>
+      <div className="container">
+        <div className="searchset">
           <input
             type="text"
-            className="form-control"
-            placeholder="강좌명으로 강좌 찾기"
+            className="searchtext"
+            placeholder="강좌이름으로 강좌 찾기"
             value={searchName}
             onChange={onChangeSearchName}
           />
-          <div className="input-group-append">
-            <button className="btn btn-outline-secondary" type="button" onClick={findByName}>
-              검색
+          <div className="search">
+            <button className="" type="button" onClick={findByName}>
+              <FaSearch className="icon" />
             </button>
           </div>
         </div>
-      </div>
-      <div className="col-md-6">
-        <h4>강좌 목록</h4>
 
-        <ul className="list-group">
-          {courses &&
-            courses.map((course, index) => (
-              <li
-                className={`list-group-item ${index === currentIndex ? 'active' : ''}`}
-                onClick={() => setActiveCourse(course, index)}
-                key={index}>
-                {course.name}
-              </li>
-            ))}
-        </ul>
-
-        <button type="button" className="m-3 btn btn-sm btn-danger" onClick={removeAllCourses}>
-          모두 삭제
-        </button>
-      </div>
-      <div className="col-md-6">
-        {currentCourse ? (
-          <div>
-            <div>
-              <label>
-                <strong>강좌명:</strong>
-              </label>{' '}
-              {currentCourse.name}
+        <div className="set">
+          <div className="left">
+            <div className="courseTitle">
+              <CgList className="icon" />
+              <p className="listtitle">강좌목록</p>
             </div>
-            <div>
-              <label>
-                <strong>설명:</strong>
-              </label>{' '}
-              {currentCourse.description}
-            </div>
-
-            <div>
-              <Link to={`${url}/${currentCourse.courseId}/qrscan`} className="badge-warning">
-                출석체크
-              </Link>
-
-              <Link to={`${url}/${currentCourse.courseId}`} className="badge-warning">
-                강좌 편집
-              </Link>
-
-              <Link to={`${url}/${currentCourse.courseId}/member`} className="badge-warning">
-                멤버 등록
-              </Link>
-            </div>
+            <ul className="list">
+              {courses &&
+                courses.map((course, index) => (
+                  <li
+                    className={`item ${index === currentIndex ? 'active' : ''}`}
+                    onClick={() => setActiveCourse(course, index)}
+                    key={index}>
+                    <span className="liText">{course.name}</span>
+                  </li>
+                ))}
+            </ul>
+            <button type="button" className="delete" onClick={removeAllCourses}>
+              <HiOutlineTrash />
+              <p className="deleteText">모두삭제</p>
+            </button>
           </div>
-        ) : (
-          <div>
-            <br />
-            <p>강좌를 선택해주세요.</p>
+
+          <div className="right">
+            {currentCourse ? (
+              currentCourse.courseId !== null ? (
+                <div className="courseData">
+                  <div className="course">
+                    <label>
+                      <strong>강좌이름:</strong>
+                    </label>
+                    {` ${currentCourse.name}`}
+                  </div>
+                  <div className="course">
+                    <label>
+                      <strong>강좌설명:</strong>
+                    </label>
+                    {` ${currentCourse.description}`}
+                  </div>
+
+                  <div className="iconlist">
+                    <Link to={`${url}/${currentCourse.courseId}/qrscan`} className="icons">
+                      <RiCamera2Line className="icon" />
+                      <p className="text">출석체크</p>
+                    </Link>
+
+                    <Link to={`${url}/${currentCourse.courseId}`} className="icons">
+                      <FiEdit className="icon" />
+                      <p className="text">강좌편집</p>
+                    </Link>
+
+                    <Link to={`${url}/${currentCourse.courseId}/member`} className="icons">
+                      <BsPeopleFill className="icon" />
+                      <p className="text">멤버등록</p>
+                    </Link>
+                  </div>
+                </div>
+              ) : (
+                <div className="courseData">
+                  <p>로딩 중...</p>
+                </div>
+              )
+            ) : (
+              <div className="courseData">
+                <p>강좌를 선택해주세요.</p>
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
-    </div>
+    </StyledCoursesList>
   )
 }
 
