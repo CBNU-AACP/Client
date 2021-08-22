@@ -2,36 +2,39 @@ import { REGISTER_SUCCESS, REGISTER_FAIL, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, SET
 
 import AuthService from '../services/auth/auth_service'
 
-export const register = user => async dispatch =>
-  AuthService.register(user).then(
-    response => {
-      dispatch({
-        type: REGISTER_SUCCESS,
-      })
+export const RegisterUser = user => async dispatch => {
+  try {
+    const res = await AuthService.register(user)
+    console.log(res)
+    dispatch({
+      type: REGISTER_SUCCESS,
+      payload: res.data.data,
+    })
+    dispatch({
+      type: SET_MESSAGE,
+      payload: res.data.message,
+    })
 
-      dispatch({
-        type: SET_MESSAGE,
-        payload: response.data.message,
-      })
+    return Promise.resolve(res.data.data)
+  } catch (err) {
+    return Promise.reject(err)
+  }
+}
 
-      return Promise.resolve()
-    },
-    error => {
-      const message =
-        (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+export const DpUsercheck = userId => async dispatch => {
+  try {
+    const res = await AuthService.Idcheck(userId)
+    console.log(res)
+    dispatch({
+      type: SET_MESSAGE,
+      payload: res.data.message,
+    })
 
-      dispatch({
-        type: REGISTER_FAIL,
-      })
-
-      dispatch({
-        type: SET_MESSAGE,
-        payload: message,
-      })
-
-      return Promise.reject()
-    },
-  )
+    return Promise.resolve(res.data.data)
+  } catch (err) {
+    return Promise.reject(err)
+  }
+}
 
 export const login = (userId, password) => async dispatch =>
   AuthService.login(userId, password).then(
