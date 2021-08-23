@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import StyedRegister from './style'
 import { Button, Checkbox, Input } from 'antd'
@@ -84,6 +84,7 @@ function RegisterForm() {
     message: '',
   })
   const onChangeId = async e => {
+    console.log(1)
     await setdpUserIdcheck(dpUserIdcheck => ({ ...dpUserIdcheck, value: e.target.value }))
     console.log(dpUserIdcheck)
   }
@@ -91,20 +92,13 @@ function RegisterForm() {
     await setdpUserEmailcheck(dpUserEmailcheck => ({ ...dpUserEmailcheck, value: e.target.value }))
     console.log(dpUserEmailcheck)
   }
+
+  const [checkUserId, setcheckUserId] = useState('')
+  const [clicked, setClicked] = useState(false)
   // 아이디 중복확인
   const VerifyId = () => {
-    console.log(dpUserIdcheck)
-    dispatch(DpUsercheck(dpUserIdcheck.value))
-      .then(e => {
-        // 중복이 없을 경우
-        console.log(e)
-        setdpIdcheck(dpIdcheck => ({ ...dpIdcheck, state: true, message: '사용 가능한 아이디입니다.' }))
-      })
-      .catch(e => {
-        // 중복이 있을 경우
-        console.log(e)
-        setdpIdcheck(dpIdcheck => ({ ...dpIdcheck, state: false, message: '존재하는 아이디입니다.' }))
-      })
+    setcheckUserId(document.getElementById('userId').value)
+    setClicked(true)
   }
   // 이메일 중복확인
   const VerifyEmail = () => {
@@ -121,6 +115,22 @@ function RegisterForm() {
         setdpEmailcheck(dpEmailcheck => ({ ...dpEmailcheck, state: false, message: '존재하는 이메일입니다.' }))
       })
   }
+  useEffect(() => {
+    if (clicked === true) {
+      dispatch(DpUsercheck(checkUserId))
+        .then(e => {
+          // 중복이 없을 경우
+          console.log(e)
+          setdpIdcheck(dpIdcheck => ({ ...dpIdcheck, state: true, message: '사용 가능한 아이디입니다.' }))
+        })
+        .catch(e => {
+          // 중복이 있을 경우
+          console.log(e)
+          setdpIdcheck(dpIdcheck => ({ ...dpIdcheck, state: false, message: '존재하는 아이디입니다.' }))
+        })
+      setClicked(false)
+    }
+  }, [checkUserId, clicked])
 
   // 회원가입 버튼 클릭 시
   const handleRegister = data => {
@@ -128,15 +138,22 @@ function RegisterForm() {
     const { userId, userPassword, studentId, userEmail, userPhoneNumber, name } = data
     const user = { userId, userPassword, studentId, userEmail, userPhoneNumber, name }
     console.log(user)
-    dispatch(RegisterUser(user))
-      .then(e => {
-        console.log(e)
-        setSuccessful(true)
-      })
-      .catch(e => {
-        console.log(e)
-        setSuccessful(false)
-      })
+    if (user.userId !== checkUserId) {
+      document.getElementById('userId').focus()
+    } else
+      dispatch(RegisterUser(user))
+        .then(e => {
+          console.log(e)
+          setSuccessful(true)
+        })
+        .catch(e => {
+          console.log(e)
+          setSuccessful(false)
+        })
+  }
+
+  const onchange = () => {
+    console.log(false)
   }
 
   return (
@@ -149,13 +166,19 @@ function RegisterForm() {
               name="userId"
               control={control}
               render={({ field }) => (
-                <Input type="text" {...field} onChange={onChangeId} placeholder="아이디를 입력해주세요." />
+                <Input
+                  type="text"
+                  onChange={e => console.log(e)}
+                  {...field}
+                  id="userId"
+                  placeholder="아이디를 입력해주세요."
+                />
               )}
             />
             {errors.userId && <FormErrorMessage className="error" Message={errors.userId.message} />}
           </div>
           <div className="element">
-            <Button type="primary" onClick={VerifyId} block>
+            <Button variant="outlined" color="secondary" type="primary" onClick={VerifyId} block>
               중복확인
             </Button>
             {dpIdcheck.state ? (
@@ -187,9 +210,7 @@ function RegisterForm() {
             <Controller
               name="userEmail"
               control={control}
-              render={({ field }) => (
-                <Input type="text" {...field} onChange={onChangeEmail} placeholder="이메일을 입력해주세요." />
-              )}
+              render={({ field }) => <Input type="text" {...field} placeholder="이메일을 입력해주세요." />}
             />
             {errors.userEmail && <FormErrorMessage className="error" Message={errors.userEmail.message} />}
           </div>
@@ -197,11 +218,11 @@ function RegisterForm() {
             <Button type="primary" onClick={VerifyEmail} block>
               중복확인
             </Button>
-            {dpEmailcheck.state ? (
+            {/* {dpEmailcheck.state ? (
               <FormErrorMessage className="error" Message={dpEmailcheck.message} />
             ) : (
               <FormErrorMessage className="error" Message={dpEmailcheck.message} />
-            )}
+            )} */}
           </div>
           <div className="element">
             <label htmlFor="userPassword">비밀번호</label>

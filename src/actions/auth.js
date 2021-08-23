@@ -23,14 +23,15 @@ export const RegisterUser = user => async dispatch => {
 
 export const DpUsercheck = userId => async dispatch => {
   try {
+    console.log(userId)
     const res = await AuthService.Idcheck(userId)
-    console.log(res)
+    console.log(res.data.success)
     dispatch({
       type: SET_MESSAGE,
-      payload: res.data.message,
+      payload: res.data.success,
     })
 
-    return Promise.resolve(res.data.data)
+    return Promise.resolve(res.data.success)
   } catch (err) {
     return Promise.reject(err)
   }
