@@ -34,6 +34,9 @@ const QrGen = styled.div`
         width: 160px !important;
       }
     }
+    .blur {
+      opacity: 0.1;
+    }
     .desc {
       margin-top: 15px;
       font-size: 0.75rem;
@@ -56,12 +59,21 @@ const QrGen = styled.div`
       .time2 {
         color: orange;
       }
+      .blocking {
+        color: orange;
+        font-size: 1rem;
+        display: inline;
+      }
       p {
         margin: 0.6rem 0;
       }
     }
     .reload {
-      font-size: 1.5rem;
+      font-size: 2rem;
+      margin-top: 1rem;
+    }
+    .warning {
+      font-size: 1rem;
       margin-top: 1rem;
     }
   }

@@ -48,6 +48,7 @@ function QrScanner(props) {
 
   const sendInfo = async () => {
     try {
+      console.log({ ...info, courseDateId })
       const res = await QrService.patch({ ...info, courseDateId })
       console.log(res.data)
       setResult('출석되었습니다.')
