@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import StyedRegister from './style'
 import { Button, Checkbox, Input } from 'antd'
@@ -9,8 +9,6 @@ import { schema } from './yup'
 import FormErrorMessage from './FormErrorMessage'
 
 import { RegisterUser, DpUsercheck } from '../../actions/auth'
-import { event } from 'jquery'
-// import queryString from 'query-string'
 
 function RegisterForm() {
   const {
@@ -29,50 +27,15 @@ function RegisterForm() {
 
   const [visible, setVisible] = useState(false)
 
-  // 아임포트
-  const callback = response => {
-    console.log(2)
-    if (response.success) {
-      console.log('인증에 성공했습니다.')
-    } else {
-      console.log('인증에 실패했습니다.')
-    }
-  }
-
   // 인증번호 받기
   function VerifyVisible(e) {
     setVisible(true)
     e.preventDefault()
-
-    const userCode = 'imp37713085'
-    const { IMP } = window
-
-    IMP.init(userCode)
-    console.log(IMP)
-    IMP.certification(
-      {
-        merchant_uid: `mid_${new Date().getTime()}`, // 주문번호
-        company: '아임포트', // 회사명 또는 URL
-        carrier: 'SKT', // 통신사
-        name: '홍길동',
-      },
-      callback,
-    )
-    console.log(IMP)
-    console.log(1)
   }
-  const visivel = {
+  const isVisible = {
     visibility: visible ? 'visible' : 'hidden',
   }
 
-  // Id값
-  const [dpUserIdcheck, setdpUserIdcheck] = useState({
-    value: '',
-  })
-  // Email값
-  const [dpUserEmailcheck, setdpUserEmailcheck] = useState({
-    value: '',
-  })
   //  아이디 중복 체크
   const [dpIdcheck, setdpIdcheck] = useState({
     state: false,
@@ -83,40 +46,23 @@ function RegisterForm() {
     state: false,
     message: '',
   })
-  const onChangeId = async e => {
-    console.log(1)
-    await setdpUserIdcheck(dpUserIdcheck => ({ ...dpUserIdcheck, value: e.target.value }))
-    console.log(dpUserIdcheck)
-  }
-  const onChangeEmail = async e => {
-    await setdpUserEmailcheck(dpUserEmailcheck => ({ ...dpUserEmailcheck, value: e.target.value }))
-    console.log(dpUserEmailcheck)
-  }
 
   const [checkUserId, setcheckUserId] = useState('')
-  const [clicked, setClicked] = useState(false)
+  const [checkUserEmail, setcheckUserEmail] = useState('')
+  const [clickedId, setClickedId] = useState(false)
+  const [clickedEmail, setClickedEmail] = useState(false)
   // 아이디 중복확인
   const VerifyId = () => {
     setcheckUserId(document.getElementById('userId').value)
-    setClicked(true)
+    setClickedId(true)
   }
   // 이메일 중복확인
   const VerifyEmail = () => {
-    console.log(dpUserEmailcheck)
-    dispatch(DpUsercheck(dpUserEmailcheck.value))
-      .then(e => {
-        // 중복이 없을 경우
-        console.log(e)
-        setdpEmailcheck(dpEmailcheck => ({ ...dpEmailcheck, state: true, message: '사용 가능한 이메일입니다.' }))
-      })
-      .catch(e => {
-        // 중복이 있을 경우
-        console.log(e)
-        setdpEmailcheck(dpEmailcheck => ({ ...dpEmailcheck, state: false, message: '존재하는 이메일입니다.' }))
-      })
+    setcheckUserEmail(document.getElementById('userEmail').value)
+    setClickedEmail(true)
   }
   useEffect(() => {
-    if (clicked === true) {
+    if (clickedId === true) {
       dispatch(DpUsercheck(checkUserId))
         .then(e => {
           // 중복이 없을 경우
@@ -128,9 +74,26 @@ function RegisterForm() {
           console.log(e)
           setdpIdcheck(dpIdcheck => ({ ...dpIdcheck, state: false, message: '존재하는 아이디입니다.' }))
         })
-      setClicked(false)
+      setClickedId(false)
     }
-  }, [checkUserId, clicked])
+  }, [checkUserId, clickedId])
+
+  useEffect(() => {
+    if (clickedEmail === true) {
+      dispatch(DpUsercheck(checkUserEmail))
+        .then(e => {
+          // 중복이 없을 경우
+          console.log(e)
+          setdpEmailcheck(dpEmailcheck => ({ ...dpEmailcheck, state: true, message: '사용 가능한 이메일입니다.' }))
+        })
+        .catch(e => {
+          // 중복이 있을 경우
+          console.log(e)
+          setdpEmailcheck(dpEmailcheck => ({ ...dpEmailcheck, state: false, message: '이미 사용 중인 이메일입니다.' }))
+        })
+      setClickedEmail(false)
+    }
+  }, [checkUserEmail, clickedId])
 
   // 회원가입 버튼 클릭 시
   const handleRegister = data => {
@@ -150,10 +113,6 @@ function RegisterForm() {
           console.log(e)
           setSuccessful(false)
         })
-  }
-
-  const onchange = () => {
-    console.log(false)
   }
 
   return (
@@ -210,7 +169,9 @@ function RegisterForm() {
             <Controller
               name="userEmail"
               control={control}
-              render={({ field }) => <Input type="text" {...field} placeholder="이메일을 입력해주세요." />}
+              render={({ field }) => (
+                <Input type="text" {...field} id="userEmail" placeholder="이메일을 입력해주세요." />
+              )}
             />
             {errors.userEmail && <FormErrorMessage className="error" Message={errors.userEmail.message} />}
           </div>
@@ -218,11 +179,11 @@ function RegisterForm() {
             <Button type="primary" onClick={VerifyEmail} block>
               중복확인
             </Button>
-            {/* {dpEmailcheck.state ? (
+            {dpEmailcheck.state ? (
               <FormErrorMessage className="error" Message={dpEmailcheck.message} />
             ) : (
               <FormErrorMessage className="error" Message={dpEmailcheck.message} />
-            )} */}
+            )}
           </div>
           <div className="element">
             <label htmlFor="userPassword">비밀번호</label>
@@ -259,13 +220,13 @@ function RegisterForm() {
               name="userVerifyNum"
               control={control}
               render={({ field }) => (
-                <Input type="text" {...field} style={visivel} placeholder="인증번호를 입력해주세요." />
+                <Input type="text" {...field} style={isVisible} placeholder="인증번호를 입력해주세요." />
               )}
             />
             <Button
               type="primary"
               htmlType="submit"
-              style={visivel}
+              style={isVisible}
               //  onClick={Verifysubmit}
               block>
               인증하기
