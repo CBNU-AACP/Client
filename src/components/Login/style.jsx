@@ -1,124 +1,33 @@
 import styled from 'styled-components'
+import { Form } from 'antd'
+import 'antd/dist/antd.css'
 
-const Login = styled.div`
-  max-width: 500px;
-  margin: 0 auto;
-  h1 {
-    font-weight: 100;
-    color: white;
-    text-align: center;
-    padding-bottom: 10px;
-    border-bottom: 1px solid rgb(79, 98, 148);
-  }
-
-  .form {
-    background: #0e101c;
-    max-width: 400px;
-    margin: 0 auto;
-  }
-
-  p {
-    color: #bf1650;
-  }
-
-  p::before {
-    display: inline;
-    content: '⚠ ';
-  }
-
-  input {
-    display: block;
-    box-sizing: border-box;
-    width: 100%;
-    border-radius: 4px;
-    border: none;
-    background-color: #c8c8c8;
-    padding: 10px 15px;
-    margin-bottom: 10px;
-    font-size: 14px;
-  }
-
-  label {
-    line-height: 2;
-    text-align: left;
-    display: block;
-    margin-bottom: 13px;
-    margin-top: 20px;
-    color: black;
-    font-size: 14px;
-    font-weight: 200;
-  }
-
-  button[type='submit'],
-  input[type='submit'] {
-    background: #ec5990;
-    color: white;
-    text-transform: uppercase;
-    border: none;
-    margin-top: 40px;
-    padding: 20px;
-    font-size: 16px;
-    font-weight: 100;
-    letter-spacing: 10px;
-  }
-
-  button[type='submit']:hover,
-  input[type='submit']:hover {
-    background: #bf1650;
-  }
-
-  button[type='submit']:active,
-  input[type='button']:active,
-  input[type='submit']:active {
-    transition: 0.3s all;
-    transform: translateY(3px);
-    border: 1px solid transparent;
-    opacity: 0.8;
-  }
-
-  input:disabled {
-    opacity: 0.4;
-  }
-
-  input[type='button']:hover {
-    transition: 0.3s all;
-  }
-
-  button[type='submit'],
-  input[type='button'],
-  input[type='submit'] {
-    -webkit-appearance: none;
-  }
-
-  .App {
-    max-width: 600px;
-    margin: 0 auto;
-  }
-
-  button[type='button'] {
-    display: block;
-    appearance: none;
-    background: #333;
-    color: white;
-    border: none;
-    text-transform: uppercase;
-    padding: 10px 20px;
-    border-radius: 4px;
-  }
-
-  hr {
-    margin-top: 30px;
-  }
-
-  button {
-    display: block;
-    appearance: none;
-    margin-top: 40px;
-    border: 1px solid #333;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-    padding: 10px 20px;
-    border-radius: 4px;
+const Login = styled(Form)`
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  margin-top: 40px;
+  padding-bottom: 40px;
+  .login {
+    border-radius: 20px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    box-sizing: border-box !important;
+    margin: 1.3rem auto;
+    padding: 2.3rem;
+    .form-group {
+      margin: 1.3rem 0;
+      max-width: 500px;
+      .login-btn {
+        background-color: orange;
+        border: 1px solid orange;
+        border-radius: 5px;
+        margin-top: 0.5rem;
+      }
+      button:hover {
+        background-color: #e98533;
+        color: black;
+      }
+    }
   }
 `
 
