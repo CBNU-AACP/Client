@@ -2,6 +2,7 @@ import { REGISTER_SUCCESS, REGISTER_FAIL, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, SET
 
 import AuthService from '../services/auth/auth_service'
 
+// 유저 등록
 export const RegisterUser = user => async dispatch => {
   try {
     const res = await AuthService.register(user)
@@ -21,6 +22,7 @@ export const RegisterUser = user => async dispatch => {
   }
 }
 
+// 중복 확인
 export const DpUsercheck = userId => async dispatch => {
   try {
     console.log(userId)
@@ -37,6 +39,7 @@ export const DpUsercheck = userId => async dispatch => {
   }
 }
 
+// 로그인
 export const login = (userId, password) => async dispatch =>
   AuthService.login(userId, password).then(
     data => {
@@ -63,6 +66,7 @@ export const login = (userId, password) => async dispatch =>
     },
   )
 
+// 로그아웃
 export const logout = () => dispatch => {
   AuthService.logout()
 
