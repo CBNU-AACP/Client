@@ -23,7 +23,7 @@ const Login = styled(Form)`
         border-radius: 5px;
         margin-top: 0.5rem;
       }
-      button:hover {
+      .login-btn:hover {
         background-color: #e98533;
         color: black;
       }
