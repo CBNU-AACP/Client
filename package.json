@@ -13,6 +13,7 @@
     "axios": "^0.21.1",
     "bootstrap": "^5.0.2",
     "history": "^5.0.0",
+    "jquery": "^3.6.0",
     "prop-types": "^15.7.2",
     "qrcode.react": "^1.0.1",
     "react": "^17.0.2",

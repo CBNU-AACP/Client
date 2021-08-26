@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import StyedRegister from './style'
 import { Button, Checkbox, Input } from 'antd'
@@ -8,7 +8,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { schema } from './yup'
 import FormErrorMessage from './FormErrorMessage'
 
-import { register } from '../../actions/auth'
+import { RegisterUser, DpUsercheck } from '../../actions/auth'
 
 function RegisterForm() {
   const {
@@ -19,26 +19,7 @@ function RegisterForm() {
     resolver: yupResolver(schema),
     mode: 'onBlur',
   })
-  // const initialCourseState = {
-  //   userId: '',
-  //   userName: '',
-  //   email: '',
-  //   passWord: '',
-  // }
-  // const [Register, setRegister] = useState(initialCourseState)
 
-  // const handleInputChange = event => {
-  //   const { name, value } = event.target
-  //   setRegister({ ...Register, [name]: value })
-  // }
-
-  // const form = useRef()
-  // const checkBtn = useRef()
-
-  // const [userId, setUserId] = useState('')
-  // const [userName, setUserName] = useState('')
-  // const [email, setEmail] = useState('')
-  // const [passWord, setPassWord] = useState('')
   const [successful, setSuccessful] = useState(false)
 
   const { message } = useSelector(state => state.message)
@@ -46,47 +27,92 @@ function RegisterForm() {
 
   const [visible, setVisible] = useState(false)
 
-  // const onChangeUserid = e => {
-  //   const userid = e.target.value
-  //   setUserId(userid)
-  //   console.log(userId)
-  // }
-
-  // const onChangeUsername = e => {
-  //   const username = e.target.value
-  //   setUserName(username)
-  // }
-
-  // const onChangeEmail = e => {
-  //   const email = e.target.value
-  //   setEmail(email)
-  // }
-
-  // const onChangePassword = e => {
-  //   const password = e.target.value
-  //   setPassWord(password)
-  // }
-
-  const VerifyVisible = () => {
+  // 인증번호 받기
+  function VerifyVisible(e) {
     setVisible(true)
+    e.preventDefault()
   }
-  const visivel = {
+  const isVisible = {
     visibility: visible ? 'visible' : 'hidden',
   }
 
+  //  아이디 중복 체크
+  const [dpIdcheck, setdpIdcheck] = useState({
+    state: false,
+    message: '',
+  })
+  //  이메일 중복 체크
+  const [dpEmailcheck, setdpEmailcheck] = useState({
+    state: false,
+    message: '',
+  })
+
+  const [checkUserId, setcheckUserId] = useState('')
+  const [checkUserEmail, setcheckUserEmail] = useState('')
+  const [clickedId, setClickedId] = useState(false)
+  const [clickedEmail, setClickedEmail] = useState(false)
+  // 아이디 중복확인
+  const VerifyId = () => {
+    setcheckUserId(document.getElementById('userId').value)
+    setClickedId(true)
+  }
+  // 이메일 중복확인
+  const VerifyEmail = () => {
+    setcheckUserEmail(document.getElementById('userEmail').value)
+    setClickedEmail(true)
+  }
+  useEffect(() => {
+    if (clickedId === true) {
+      dispatch(DpUsercheck(checkUserId))
+        .then(e => {
+          // 중복이 없을 경우
+          console.log(e)
+          setdpIdcheck(dpIdcheck => ({ ...dpIdcheck, state: true, message: '사용 가능한 아이디입니다.' }))
+        })
+        .catch(e => {
+          // 중복이 있을 경우
+          console.log(e)
+          setdpIdcheck(dpIdcheck => ({ ...dpIdcheck, state: false, message: '존재하는 아이디입니다.' }))
+        })
+      setClickedId(false)
+    }
+  }, [checkUserId, clickedId])
+
+  useEffect(() => {
+    if (clickedEmail === true) {
+      dispatch(DpUsercheck(checkUserEmail))
+        .then(e => {
+          // 중복이 없을 경우
+          console.log(e)
+          setdpEmailcheck(dpEmailcheck => ({ ...dpEmailcheck, state: true, message: '사용 가능한 이메일입니다.' }))
+        })
+        .catch(e => {
+          // 중복이 있을 경우
+          console.log(e)
+          setdpEmailcheck(dpEmailcheck => ({ ...dpEmailcheck, state: false, message: '이미 사용 중인 이메일입니다.' }))
+        })
+      setClickedEmail(false)
+    }
+  }, [checkUserEmail, clickedId])
+
+  // 회원가입 버튼 클릭 시
   const handleRegister = data => {
     setSuccessful(false)
-    const { userId, userName, studentId, email, passWord } = data
-    const user = { userId, userName, studentId, email, passWord }
+    const { userId, userPassword, studentId, userEmail, userPhoneNumber, name } = data
+    const user = { userId, userPassword, studentId, userEmail, userPhoneNumber, name }
     console.log(user)
-    dispatch(register(user))
-      .then(() => {
-        setSuccessful(true)
-      })
-      .catch(e => {
-        console.log(e)
-        setSuccessful(false)
-      })
+    if (user.userId !== checkUserId) {
+      document.getElementById('userId').focus()
+    } else
+      dispatch(RegisterUser(user))
+        .then(e => {
+          console.log(e)
+          setSuccessful(true)
+        })
+        .catch(e => {
+          console.log(e)
+          setSuccessful(false)
+        })
   }
 
   return (
@@ -98,85 +124,109 @@ function RegisterForm() {
             <Controller
               name="userId"
               control={control}
-              render={({ field }) => <Input type="text" {...field} placeholder="아이디를 입력해주세요." />}
+              render={({ field }) => (
+                <Input
+                  type="text"
+                  onChange={e => console.log(e)}
+                  {...field}
+                  id="userId"
+                  placeholder="아이디를 입력해주세요."
+                />
+              )}
             />
             {errors.userId && <FormErrorMessage className="error" Message={errors.userId.message} />}
           </div>
           <div className="element">
-            <label htmlFor="userName">이름</label>
+            <Button variant="outlined" color="secondary" type="primary" onClick={VerifyId} block>
+              중복확인
+            </Button>
+            {dpIdcheck.state ? (
+              <FormErrorMessage className="error" Message={dpIdcheck.message} />
+            ) : (
+              <FormErrorMessage className="error" Message={dpIdcheck.message} />
+            )}
+          </div>
+          <div className="element">
+            <label htmlFor="name">이름</label>
             <Controller
-              name="userName"
+              name="name"
               control={control}
-              render={({ field }) => <Input type="text" {...field} placeholder="이름을 정확하게 입력해주세요." />}
+              render={({ field }) => <Input type="text" {...field} placeholder="이름을 입력해주세요." />}
             />
-            {errors.userName && <FormErrorMessage className="error" Message={errors.userName.message} />}
+            {errors.name && <FormErrorMessage className="error" Message={errors.name.message} />}
           </div>
           <div className="element">
             <label htmlFor="studentId">학번</label>
             <Controller
               name="studentId"
               control={control}
-              render={({ field }) => (
-                <Input
-                  type="text" // onChange={onChangeUserid}
-                  {...field}
-                  placeholder="학번을 입력해주세요."
-                />
-              )}
+              render={({ field }) => <Input type="text" {...field} placeholder="학번을 입력해주세요." />}
             />
             {errors.studentId && <FormErrorMessage className="error" Message={errors.studentId.message} />}
           </div>
           <div className="element">
-            <label htmlFor="email">이메일</label>
+            <label htmlFor="userEmail">이메일</label>
             <Controller
-              name="email"
+              name="userEmail"
               control={control}
-              render={({ field }) => <Input type="text" {...field} placeholder="이메일을 입력해주세요." />}
+              render={({ field }) => (
+                <Input type="text" {...field} id="userEmail" placeholder="이메일을 입력해주세요." />
+              )}
             />
-            {errors.email && <FormErrorMessage className="error" Message={errors.email.message} />}
+            {errors.userEmail && <FormErrorMessage className="error" Message={errors.userEmail.message} />}
           </div>
-
           <div className="element">
-            <label htmlFor="passWord">비밀번호</label>
+            <Button type="primary" onClick={VerifyEmail} block>
+              중복확인
+            </Button>
+            {dpEmailcheck.state ? (
+              <FormErrorMessage className="error" Message={dpEmailcheck.message} />
+            ) : (
+              <FormErrorMessage className="error" Message={dpEmailcheck.message} />
+            )}
+          </div>
+          <div className="element">
+            <label htmlFor="userPassword">비밀번호</label>
             <Controller
-              name="passWord"
+              name="userPassword"
               control={control}
               render={({ field }) => <Input type="password" {...field} placeholder="비밀번호를 입력해주세요." />}
             />
-            {errors.passWord && <FormErrorMessage className="error" Message={errors.passWord.message} />}
+            {errors.userPassword && <FormErrorMessage className="error" Message={errors.userPassword.message} />}
           </div>
           <div className="element">
             <label htmlFor="passWord2">비밀번호 확인</label>
             <Controller
-              name="passWord2"
+              name="userPassword2"
               control={control}
               render={({ field }) => <Input type="password" {...field} placeholder="비밀번호를 확인해주세요." />}
             />
-            {errors.passWord2 && <FormErrorMessage className="error" Message={errors.passWord2.message} />}
+            {errors.userPassword2 && <FormErrorMessage className="error" Message={errors.userPassword2.message} />}
           </div>
           <div className="element">
-            <label htmlFor="userPhoneNum">전화번호</label>
+            <label htmlFor="userPhoneNumber">전화번호</label>
             <Controller
-              name="userPhoneNum"
+              name="userPhoneNumber"
               control={control}
               render={({ field }) => <Input type="text" {...field} placeholder="전화번호를 입력해주세요." />}
             />
             <Button type="primary" htmlType="submit" onClick={VerifyVisible} block>
               인증번호 받기
             </Button>
-            {errors.userPhoneNum && <FormErrorMessage className="error" Message={errors.userPhoneNum.message} />}
+            {errors.userPhoneNumber && <FormErrorMessage className="error" Message={errors.userPhoneNumber.message} />}
           </div>
           <div className="element">
             <Controller
               name="userVerifyNum"
               control={control}
               render={({ field }) => (
-                <Input type="text" {...field} style={visivel} placeholder="인증번호를 입력해주세요." />
+                <Input type="text" {...field} style={isVisible} placeholder="인증번호를 입력해주세요." />
               )}
             />
             <Button
               type="primary"
               htmlType="submit"
+              style={isVisible}
               //  onClick={Verifysubmit}
               block>
               인증하기
@@ -196,7 +246,7 @@ function RegisterForm() {
             />
             {errors.term && <FormErrorMessage className="error" Message={errors.term.message} />}
           </div>
-          <div>
+          <div className="element">
             <Button type="primary" htmlType="submit" block>
               회원가입
             </Button>
