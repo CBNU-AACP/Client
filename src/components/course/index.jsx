@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { BrowserRouter, Router, Switch, Route, Link, useRouteMatch, Redirect } from 'react-router-dom'
+import { BrowserRouter, Switch, Route, Link, useRouteMatch, Redirect } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { withCookies, useCookies } from 'react-cookie'
 import { BsCardChecklist } from 'react-icons/bs'
