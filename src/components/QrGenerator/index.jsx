@@ -88,10 +88,13 @@ function QrGenerator() {
         <div className="desc">
           <p className="info">{`"${user}"`} 님의 출석 QR 코드</p>
           {blocking === false ? (
-            <p className="time1">
-              <AiOutlineClockCircle className="time_clock" />
-              남은 시간 <p className="time2">{timer < 10 ? `0${timer}` : timer}초</p>
-            </p>
+            <article>
+              <p className="time1">
+                <AiOutlineClockCircle className="time_clock" />
+                남은 시간{' '}
+              </p>
+              <p className="time2">{timer < 10 ? `0${timer}` : timer}초</p>
+            </article>
           ) : (
             <p className="blocking">인증 유효시간 초과</p>
           )}

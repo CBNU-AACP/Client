@@ -47,7 +47,7 @@ const QrGen = styled.div`
         margin-bottom: 1.2rem;
       }
       .time_clock {
-        font-size: 1.1rem;
+        font-weight: bold;
         vertical-align: middle;
       }
       .time1,
