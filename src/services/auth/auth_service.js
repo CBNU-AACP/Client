@@ -3,21 +3,12 @@ import { useCookies } from 'react-cookie'
 
 const JWT_EXPIRY_TIME = 24 * 3600 * 1000
 
-const register = user =>
-  http
-    .post(`signup`, {
-      user,
-    })
-    .then(response => {
-      window.alert(response.data.result)
-    })
-    .catch(error => {
-      console.log(error)
-    })
+const register = user => http.post(`v1/users/register`, user)
+const Idcheck = userId => http.get(`v1/users/check/${userId}`)
 
 const login = (userId, passWord) => {
   http
-    .post(`signin`, {
+    .post(`login`, {
       userId,
       passWord,
     })
@@ -36,8 +27,11 @@ const logout = () => {
   removeCookie('user')
 }
 
-export default {
+const AuthService = {
   register,
+  Idcheck,
   login,
   logout,
 }
+
+export default AuthService
