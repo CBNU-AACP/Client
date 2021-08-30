@@ -19,8 +19,9 @@ import InputAdornment from '@material-ui/core/InputAdornment'
 import FormControl from '@material-ui/core/FormControl'
 import Visibility from '@material-ui/icons/Visibility'
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
+import { Typography } from '@material-ui/core'
 
-function Login(props) {
+function Login(props, { match }) {
   const useStyles = makeStyles(theme => ({
     root: {
       display: 'flex',
@@ -108,6 +109,9 @@ function Login(props) {
       {!successful && (
         <div className={classes.root}>
           <div className="login">
+            <Typography variant="h5" align="center">
+              로그인
+            </Typography>
             <div className="element">
               <FormControl className={clsx(classes.margin, classes.textField)}>
                 <InputLabel htmlFor="standard-adornment-userid">아이디</InputLabel>
@@ -117,8 +121,9 @@ function Login(props) {
                   render={({ field }) => (
                     <Input
                       id="standard-adornment-userid"
+                      className="input-login"
                       type="text"
-                      value={values.userId}
+                      value={values.userId || ''}
                       name="userId"
                       onChange={handleChange('userId')}
                       {...field}
@@ -136,8 +141,9 @@ function Login(props) {
                   render={({ field }) => (
                     <Input
                       id="standard-adornment-password"
+                      className="input-login"
                       type={values.showPassword ? 'text' : 'password'}
-                      value={values.userPassword}
+                      value={values.userPassword || ''}
                       name="userPassword"
                       onChange={handleChange('userPassword')}
                       endAdornment={
@@ -161,9 +167,19 @@ function Login(props) {
                 로그인
               </Button>
             </div>
-            <div className="element">
+            <div className="element-btn">
               <Link to="/register" className="iconList">
                 <p className="label">회원가입</p>
+              </Link>
+            </div>
+            <div className="element-btn">
+              <Link to="/find" className="iconList">
+                <p className="label">아이디 찾기</p>
+              </Link>
+            </div>
+            <div className="element-btn">
+              <Link to="/find" className="iconList">
+                <p className="label">비밀번호 찾기</p>
               </Link>
             </div>
           </div>

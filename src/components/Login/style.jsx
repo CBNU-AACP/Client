@@ -16,17 +16,26 @@ const Login = styled(Form)`
     padding: 2.3rem;
     .element {
       margin: 1.3rem 0;
-      max-width: 500px;
+      /* max-width: 500px; */
+      .input-login {
+        flex-wrap: nowrap;
+        width: 142%;
+      }
       .login-btn {
         background-color: orange;
         border: 1px solid orange;
         border-radius: 5px;
         margin-top: 0.5rem;
+        width: 100%;
       }
       .login-btn:hover {
         background-color: #e98533;
         color: black;
       }
+    }
+    .element-btn {
+      margin: 1rem;
+      display: inline-flex;
     }
   }
 `
