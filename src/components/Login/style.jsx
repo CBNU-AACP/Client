@@ -14,7 +14,7 @@ const Login = styled(Form)`
     box-sizing: border-box !important;
     margin: 1.3rem auto;
     padding: 2.3rem;
-    .form-group {
+    .element {
       margin: 1.3rem 0;
       max-width: 500px;
       .login-btn {
