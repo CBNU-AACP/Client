@@ -10,6 +10,7 @@ import { BsFillPersonFill } from 'react-icons/bs'
 
 import QrGenerator from './components/QrGenerator'
 import Login from './components/Login/login'
+import Find from './components/Login/find'
 import RegisterForm from './components/Register'
 import Home from './components/content/home'
 import Profile from './components/profile'
@@ -50,6 +51,7 @@ function App() {
         <Switch>
           <Route exact path={['/', '/home']} component={Home} />
           <Route exact path="/login" component={Login} />
+          <Route exact path="/find" component={Find} />
           <Route exact path="/register" component={RegisterForm} />
           <Route exact path="/profile" component={Profile} />
           <Route exact path="/qrgen" component={QrGenerator} />
