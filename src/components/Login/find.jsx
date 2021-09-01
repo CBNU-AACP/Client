@@ -13,6 +13,8 @@ import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
+import TelegramIcon from '@material-ui/icons/Telegram'
+import VpnKeyIcon from '@material-ui/icons/VpnKey'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props
@@ -63,6 +65,7 @@ function Find() {
   const [values, setValues] = useState({
     userId: '',
     userPassword: '',
+    userPhoneNumber: '',
     showPassword: false,
   })
 
@@ -77,7 +80,7 @@ function Find() {
           <AppBar position="static" id="appbar">
             <Tabs
               scrollable
-              centered
+              // centered
               classes={{
                 indicator: classes.indicator,
               }}
@@ -85,8 +88,8 @@ function Find() {
               onChange={handleChange}
               aria-label="simple tabs example"
               id="tabs">
-              <Tab label="아이디 찾기" {...a11yProps(0)} />
-              <Tab label="비밀번호 찾기" {...a11yProps(1)} />
+              <Tab icon={<TelegramIcon />} label="아이디 찾기" {...a11yProps(0)}></Tab>
+              <Tab icon={<VpnKeyIcon />} label="비밀번호 찾기" {...a11yProps(1)}></Tab>
             </Tabs>
           </AppBar>
           <TabPanel value={value} index={0}>
@@ -96,22 +99,23 @@ function Find() {
               className="input-login"
               type="text"
               value={values.userId || ''}
-              name="userId"
-              //   onChange={handleChange('userId')}
-              //   {...field}
-            ></Input>
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            <InputLabel htmlFor="standard-adornment-userpassword">비밀번호</InputLabel>
+              name="userId"></Input>
+            <InputLabel htmlFor="standard-adornment-userphonenumber">전화번호</InputLabel>
             <Input
-              id="standard-adornment-userpassword"
+              id="standard-adornment-userphonenumber"
               className="input-login"
               type="text"
-              value={values.userpassword || ''}
-              name="userpassword"
-              //   onChange={handleChange('userId')}
-              //   {...field}
-            ></Input>
+              value={values.userPhoneNumber || ''}
+              name="userPhoneNumber"></Input>
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <InputLabel htmlFor="standard-adornment-userid">아이디</InputLabel>
+            <Input
+              id="standard-adornment-userid"
+              className="input-login"
+              type="text"
+              value={values.userId || ''}
+              name="userid"></Input>
           </TabPanel>
         </div>
       </div>
