@@ -20,9 +20,10 @@ import StyledApp from './style'
 import { logout } from './actions/auth'
 import { clearMessage } from './actions/message'
 import { history } from './helpers/history'
+import { Button } from 'antd'
 
 function App() {
-  const [cookies, removeCookie, setCookie, getCookie] = useCookies(['user'])
+  const [cookies, removeCookie] = useCookies(['userId'])
   const [hasCookie, setHasCookie] = useState(false)
 
   // const { user: currentUser } = useSelector(state => state.auth)
@@ -32,17 +33,18 @@ function App() {
     history.listen(location => dispatch(clearMessage()))
   }, [dispatch])
 
-  const logOut = () => {
-    dispatch(logout())
+  const Logout = () => {
+    removeCookie('userId')
+    setHasCookie(false)
   }
 
   useEffect(() => {
-    if (cookies.user && cookies.user !== 'undefined') {
+    if (cookies.userId && cookies.userId !== 'undefined') {
       setHasCookie(true)
     } else {
       setHasCookie(false)
     }
-  }, [cookies])
+  }, [cookies.userId])
 
   return (
     <StyledApp>
@@ -57,7 +59,13 @@ function App() {
           <Route exact path="/qrgen" component={QrGenerator} />
           <Route exact path="/courses" component={Courses} />
         </Switch>
-
+        {hasCookie ? (
+          <div className="navbar">
+            <Button onClick={Logout}>로그아웃</Button>
+          </div>
+        ) : (
+          <Redirect to="/login" />
+        )}
         <div className="appbar">
           <div className="bar">
             <Link to="/home" className="iconList">
@@ -72,7 +80,7 @@ function App() {
               <GiArchiveResearch className="icon" />
               <p className="label">강좌보기</p>
             </Link>
-            <a href="/" onClick={logOut} className="iconList">
+            <a href="/" className="iconList">
               <BsFillPersonFill className="icon" />
               <p className="label">마이페이지</p>
             </a>
