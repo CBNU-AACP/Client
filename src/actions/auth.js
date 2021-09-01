@@ -45,44 +45,20 @@ export const LoginUser = user => async dispatch => {
     console.log(user)
     const res = await AuthService.login(user)
     console.log(res)
-    dispatch({
-      type: LOGIN_SUCCESS,
-      payload: res.data.data,
-    })
-    dispatch({
-      type: SET_MESSAGE,
-      payload: res.data.message,
-    })
+    // dispatch({
+    //   type: LOGIN_SUCCESS,
+    //   payload: res.data.data,
+    // })
+    // dispatch({
+    //   type: SET_MESSAGE,
+    //   payload: res.data.message,
+    // })
 
     return Promise.resolve(res.data.data)
   } catch (err) {
     return Promise.reject(err)
   }
 }
-// AuthService.login(user).then(
-//   data => {
-//     dispatch({
-//       type: LOGIN_SUCCESS,
-//       payload: { user: data },
-//     })
-//     return Promise.resolve()
-//   },
-//   error => {
-//     const message =
-//       (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
-
-//     dispatch({
-//       type: LOGIN_FAIL,
-//     })
-
-//     dispatch({
-//       type: SET_MESSAGE,
-//       payload: message,
-//     })
-
-//     return Promise.reject()
-//   },
-// )
 
 // 로그아웃
 export const logout = () => dispatch => {
