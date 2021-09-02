@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
 import { Controller, useForm } from 'react-hook-form'
@@ -20,6 +20,8 @@ import FormControl from '@material-ui/core/FormControl'
 import Visibility from '@material-ui/icons/Visibility'
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
 import { Typography } from '@material-ui/core'
+import LockIcon from '@material-ui/icons/Lock'
+import PersonIcon from '@material-ui/icons/Person'
 
 function Login(props, { match }) {
   const useStyles = makeStyles(theme => ({
@@ -38,12 +40,7 @@ function Login(props, { match }) {
     },
   }))
   const dispatch = useDispatch()
-  const [successful, setSuccessful] = useState(false)
 
-  const [userInfo, setUserInfo] = useState({
-    userId: '',
-    userPassword: '',
-  })
   Login.propTypes = {
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
@@ -61,25 +58,6 @@ function Login(props, { match }) {
 
   const { isLoggedIn } = useSelector(state => state.auth)
   const { message } = useSelector(state => state.message)
-
-  const [cookies, setCookie] = useCookies(['userId'])
-
-  const handleLogin = data => {
-    setSuccessful(false)
-    console.log('submit', data)
-    const { userId, userPassword } = data
-    const user = { userId, userPassword }
-    setCookie('userId', userId, { path: '/' })
-    dispatch(LoginUser(user))
-      .then(e => {
-        console.log(e)
-        setSuccessful(true)
-      })
-      .catch(e => {
-        console.log(e)
-        setSuccessful(false)
-      })
-  }
 
   if (isLoggedIn) {
     return <Redirect to="/profile" />
@@ -104,87 +82,107 @@ function Login(props, { match }) {
     event.preventDefault()
   }
 
+  const [isRemember, setIsRemember] = useState(false)
+  const [cookies, setCookie, removeCookie] = useCookies(['userId'])
+
+  const handleLogin = data => {
+    console.log('submit', data)
+    const { userId, userPassword } = data
+    const user = { userId, userPassword }
+
+    dispatch(LoginUser(user))
+      .then(e => {
+        console.log(e)
+        setCookie('userId', user.userId, { path: '/' })
+      })
+      .catch(e => {
+        console.log('errer', e)
+        alert('아이디 또는 비밀번호를 다시 확인해주세요.')
+      })
+  }
+
   return (
     <StyedLogin onFinish={handleSubmit(handleLogin)} size="large">
-      {!successful && (
-        <div className={classes.root}>
-          <div className="login">
-            <Typography variant="h5" align="center">
-              로그인
-            </Typography>
-            <div className="element">
-              <FormControl className={clsx(classes.margin, classes.textField)}>
-                <InputLabel htmlFor="standard-adornment-userid">아이디</InputLabel>
-                <Controller
-                  name="userId"
-                  control={control}
-                  render={({ field }) => (
-                    <Input
-                      id="standard-adornment-userid"
-                      className="input-login"
-                      type="text"
-                      value={values.userId || ''}
-                      name="userId"
-                      onChange={handleChange('userId')}
-                      {...field}
-                    />
-                  )}
-                />
-              </FormControl>
-            </div>
-            <div className="element">
-              <FormControl className={clsx(classes.margin, classes.textField)}>
-                <InputLabel htmlFor="standard-adornment-password">비밀번호</InputLabel>
-                <Controller
-                  name="userPassword"
-                  control={control}
-                  render={({ field }) => (
-                    <Input
-                      id="standard-adornment-password"
-                      className="input-login"
-                      type={values.showPassword ? 'text' : 'password'}
-                      value={values.userPassword || ''}
-                      name="userPassword"
-                      onChange={handleChange('userPassword')}
-                      endAdornment={
-                        <InputAdornment position="end">
-                          <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={handleClickShowPassword}
-                            onMouseDown={handleMouseDownPassword}>
-                            {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                          </IconButton>
-                        </InputAdornment>
-                      }
-                      {...field}
-                    />
-                  )}
-                />
-              </FormControl>
-            </div>
-            <div className="element">
-              <Button value="Login" className="login-btn" disabled={loading} type="primary" htmlType="submit" block>
+      {(cookies.userId, cookies.userId !== 'undefined' && <Redirect to="/qrgen" />)}
+      {
+        (!cookies.userId,
+        cookies.userId === 'undefined' && (
+          <div className={classes.root}>
+            <div className="login">
+              <Typography variant="h5" align="center">
                 로그인
-              </Button>
-            </div>
-            <div className="element-btn">
-              <Link to="/register" className="iconList">
-                <p className="label">회원가입</p>
-              </Link>
-            </div>
-            <div className="element-btn">
-              <Link to="/find" className="iconList">
-                <p className="label">아이디 찾기</p>
-              </Link>
-            </div>
-            <div className="element-btn">
-              <Link to="/find" className="iconList">
-                <p className="label">비밀번호 찾기</p>
-              </Link>
+              </Typography>
+              <div className="element">
+                <FormControl className={clsx(classes.margin, classes.textField)}>
+                  <InputLabel htmlFor="standard-adornment-userid">아이디</InputLabel>
+                  <Controller
+                    name="userId"
+                    control={control}
+                    render={({ field }) => (
+                      <Input
+                        id="standard-adornment-userid"
+                        className="input-login"
+                        type="text"
+                        value={values.userId || ''}
+                        name="userId"
+                        onChange={handleChange('userId')}
+                        {...field}
+                      />
+                    )}
+                  />
+                </FormControl>
+              </div>
+              <div className="element">
+                <FormControl className={clsx(classes.margin, classes.textField)}>
+                  <InputLabel htmlFor="standard-adornment-password">비밀번호</InputLabel>
+                  <Controller
+                    name="userPassword"
+                    control={control}
+                    render={({ field }) => (
+                      <Input
+                        id="standard-adornment-password"
+                        className="input-login"
+                        type={values.showPassword ? 'text' : 'password'}
+                        value={values.userPassword || ''}
+                        name="userPassword"
+                        onChange={handleChange('userPassword')}
+                        endAdornment={
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={handleClickShowPassword}
+                              onMouseDown={handleMouseDownPassword}>
+                              {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                            </IconButton>
+                          </InputAdornment>
+                        }
+                        {...field}
+                      />
+                    )}
+                  />
+                </FormControl>
+              </div>
+              <div className="element">
+                <Button value="Login" className="login-btn" disabled={loading} type="primary" htmlType="submit" block>
+                  로그인
+                </Button>
+              </div>
+              <div className="element-btn">
+                <LockIcon style={{ width: 20, margin: '0 5' }}></LockIcon>
+                <Link to="/find" className="iconList">
+                  <p className="label">아이디•비밀번호 찾기</p>
+                </Link>
+              </div>
+              <div className="element-btn">
+                <PersonIcon style={{ width: 20, margin: '0 5' }}></PersonIcon>
+                <Link to="/register" className="iconList">
+                  <p className="label">회원가입</p>
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        ))
+      }
     </StyedLogin>
   )
 }

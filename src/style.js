@@ -2,6 +2,11 @@ import styled from 'styled-components'
 
 const App = styled.div`
   margin: auto;
+  .navbar {
+    position: fixed;
+    top: 0;
+    right: 0;
+  }
   .appbar {
     background-color: white;
     display: flex;
