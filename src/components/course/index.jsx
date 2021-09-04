@@ -10,6 +10,7 @@ import Course from './CoursesList/course'
 import CoursesList from './CoursesList'
 import MemberList from '../addmemberList'
 import QrScanner from '../QrScanner'
+import Attendance from '../Attendance'
 import StyledCourse from './style'
 import { history } from '../../helpers/history'
 
@@ -52,6 +53,7 @@ function Courses() {
               <Route exact path={`${path}/add`} component={AddCourse} />
               <Route exact path={`${path}/:id/member`} component={MemberList} />
               <Route exact path={`${path}/:id/qrscan`} component={QrScanner} />
+              <Route exact path={`${path}/:id/attendance`} component={Attendance} />
               <Route exact path={`${path}/:id`} component={Course} />
             </Switch>
           </div>

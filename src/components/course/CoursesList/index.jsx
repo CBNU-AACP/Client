@@ -6,7 +6,7 @@ import { Route, Link, Switch, useRouteMatch } from 'react-router-dom'
 import { FaSearch } from 'react-icons/fa'
 import { HiOutlineTrash } from 'react-icons/hi'
 import { CgList } from 'react-icons/cg'
-import { RiCamera2Line } from 'react-icons/ri'
+import { RiCamera2Line, RiContactsBook2Fill } from 'react-icons/ri'
 import { FiEdit } from 'react-icons/fi'
 import { BsPeopleFill } from 'react-icons/bs'
 
@@ -120,6 +120,11 @@ const CoursesList = () => {
                     <Link to={`${url}/${currentCourse.courseId}/qrscan`} className="icons">
                       <RiCamera2Line className="icon" />
                       <p className="text">출석체크</p>
+                    </Link>
+
+                    <Link to={`${url}/${currentCourse.courseId}/attendance`} className="icons">
+                      <RiContactsBook2Fill className="icon" />
+                      <p className="text">출석부</p>
                     </Link>
 
                     <Link to={`${url}/${currentCourse.courseId}`} className="icons">
