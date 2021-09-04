@@ -10,7 +10,7 @@ import FormErrorMessage from './FormErrorMessage'
 
 import { RegisterUser, DpUsercheck } from '../../actions/auth'
 
-function RegisterForm() {
+function Register() {
   const {
     handleSubmit,
     formState: { errors },
@@ -29,8 +29,11 @@ function RegisterForm() {
 
   // 인증번호 받기
   function VerifyVisible(e) {
-    setVisible(true)
     e.preventDefault()
+    const userPhoneNumber = document.getElementById('userPhoneNumber').value
+    if (!userPhoneNumber) {
+    }
+    setVisible(true)
   }
   const isVisible = {
     visibility: visible ? 'visible' : 'hidden',
@@ -208,7 +211,9 @@ function RegisterForm() {
             <Controller
               name="userPhoneNumber"
               control={control}
-              render={({ field }) => <Input type="text" {...field} placeholder="전화번호를 입력해주세요." />}
+              render={({ field }) => (
+                <Input type="text" {...field} id="userPhoneNumber" placeholder="전화번호를 입력해주세요." />
+              )}
             />
             <Button type="primary" htmlType="submit" onClick={VerifyVisible} block>
               인증번호 받기
@@ -264,4 +269,4 @@ function RegisterForm() {
   )
 }
 
-export default RegisterForm
+export default Register
