@@ -12,9 +12,9 @@ ReactDOM.render(
     <CookiesProvider>
       <Provider store={store}>
         <App />
-        <GlobalStyle />
       </Provider>
     </CookiesProvider>
+    <GlobalStyle />
   </React.StrictMode>,
   document.getElementById('root'),
 )

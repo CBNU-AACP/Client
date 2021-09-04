@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components'
+import reset from 'styled-reset'
 
 const GlobalStyle = createGlobalStyle`
     @font-face {
@@ -41,6 +42,7 @@ const GlobalStyle = createGlobalStyle`
         font-family: 'NanumBarunGothic', sans-serif !important;
         line-height: normal;
     }
+    ${reset}
     html,
     body,
     div,
