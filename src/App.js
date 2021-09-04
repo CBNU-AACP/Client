@@ -11,13 +11,12 @@ import { BsFillPersonFill } from 'react-icons/bs'
 import QrGenerator from './components/QrGenerator'
 import Login from './components/Login/login'
 import Find from './components/Login/find'
-import RegisterForm from './components/Register'
+import Register from './components/Register'
 import Home from './components/content/home'
 import Profile from './components/profile'
 import Courses from './components/course'
 import StyledApp from './style'
 
-import { logout } from './actions/auth'
 import { clearMessage } from './actions/message'
 import { history } from './helpers/history'
 import { Button } from 'antd'
@@ -33,9 +32,9 @@ function App() {
     history.listen(location => dispatch(clearMessage()))
   }, [dispatch])
 
-  const Logout = () => {
+  const Logout = async () => {
     removeCookie('userId')
-    setHasCookie(false)
+    await setHasCookie(false)
   }
 
   useEffect(() => {
@@ -54,7 +53,7 @@ function App() {
           <Route exact path={['/', '/home']} component={Home} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/find" component={Find} />
-          <Route exact path="/register" component={RegisterForm} />
+          <Route exact path="/register" component={Register} />
           <Route exact path="/profile" component={Profile} />
           <Route exact path="/qrgen" component={QrGenerator} />
           <Route exact path="/courses" component={Courses} />
