@@ -53,6 +53,12 @@ const AddCourse = () => {
 
   const newCourse = () => {
     // setCourse(initialCourseState)
+    const input = document.querySelectorAll('input').value
+    // const input2 = document.querySelector('description')
+    // console.log(input1.value, input2.value)
+    console.log(input)
+    input.value = ''
+    // input2.value = ''
     setSubmitted(false)
   }
 
@@ -79,7 +85,13 @@ const AddCourse = () => {
                 name="name"
                 control={control}
                 render={({ field }) => (
-                  <Input type="text" className="input" {...field} id="name" placeholder="강좌이름을 입력해주세요." />
+                  <Input
+                    type="text"
+                    className="input"
+                    {...field}
+                    id="name"
+                    placeholder="강좌이름을 입력해주세요."
+                  />
                 )}
               />
               {errors.name && <FormErrorMessage className="error" Message={errors.name.message} />}
