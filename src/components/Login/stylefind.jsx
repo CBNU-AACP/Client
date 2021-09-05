@@ -5,16 +5,18 @@ import 'antd/dist/antd.css'
 const Find = styled(Form)`
   display: flex;
   flex-direction: column;
-  align-content: center;
-  margin-top: 40px;
-  padding-bottom: 40px;
-  .login {
-    border-radius: 20px;
+  height: 500px;
+  align-items: center;
+  border-radius: 20px;
+  .box {
+    max-width: 400px;
+    height: 500px;
+    width: 100%;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-    box-sizing: border-box !important;
-    margin: 1.3rem auto;
+    align-items: center;
+    border-radius: 20px;
+    margin: 2.3rem auto;
     padding: 2.3rem;
-    width: 80%;
     .find-btn {
       background-color: orange;
       border: 1px solid orange;

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button } from 'antd'
-import StyedLogin from './stylefind'
+import StyledFind from './stylefind'
 import { Link, Redirect } from 'react-router-dom'
 import { Controller, useForm } from 'react-hook-form'
 import { makeStyles } from '@material-ui/core/styles'
@@ -74,9 +74,9 @@ function Find() {
   }
   const handleFind = data => {}
   return (
-    <StyedLogin onFinish={handleSubmit(handleFind)} size="large">
+    <StyledFind onFinish={handleSubmit(handleFind)} size="large">
       <div className={classes.root}>
-        <div className="login">
+        <div className="box">
           <AppBar position="static" id="appbar">
             <Tabs
               scrollable
@@ -119,7 +119,7 @@ function Find() {
           </TabPanel>
         </div>
       </div>
-    </StyedLogin>
+    </StyledFind>
   )
 }
 
