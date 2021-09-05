@@ -13,15 +13,20 @@ const CoursesList = styled.div`
       border-radius: 10px;
       display: flex;
       .searchtext {
-        margin: auto;
+        margin: 0;
+        padding: auto;
         font-size: 0.8rem;
         background-color: #dcdcdc;
         border-radius: 6px;
         border: none;
       }
       .search {
+        padding: auto;
         margin: auto;
         font-size: 1.3rem;
+        .icon {
+          vertical-align: middle;
+        }
       }
       .search:active {
         color: orange;
