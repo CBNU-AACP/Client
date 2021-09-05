@@ -30,7 +30,13 @@ const CrCourse = styled.form`
           width: 12rem;
           font-size: 0.7rem;
           border: 0;
+          border-radius: 0;
           border-bottom: 2px solid black;
+        }
+        .input:focus {
+          outline: none;
+          box-shadow: none;
+          -webkit-box-shadow: none;
         }
       }
       .submit {
