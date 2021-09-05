@@ -68,3 +68,14 @@ export const logout = () => dispatch => {
     type: LOGOUT,
   })
 }
+
+// 전화번호 인증
+export const PhoneVerify = userPhoneVerify => async dispatch => {
+  try {
+    console.log(userPhoneVerify)
+    const res = await AuthService.phoneverify(userPhoneVerify)
+    return Promise.resolve(res.data.data)
+  } catch (err) {
+    return Promise.reject(err)
+  }
+}
