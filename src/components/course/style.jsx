@@ -4,6 +4,8 @@ const Course = styled.div`
   margin-top: 80px;
   .container {
     .topbar {
+      position: abolute;
+      z-index: 999;
       background-color: white;
       align-items: center;
       flex-direction: column;
