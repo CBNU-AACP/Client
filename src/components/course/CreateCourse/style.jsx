@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-const CrCourse = styled.div`
+const CrCourse = styled.form`
   height: 730px;
   margin-top: 7rem;
   .container {
@@ -14,6 +14,7 @@ const CrCourse = styled.div`
       margin: 1rem auto;
       .form {
         margin: 1rem;
+        font-size: 0.8rem;
         .icons {
           display: flex;
           .icon {
@@ -24,7 +25,8 @@ const CrCourse = styled.div`
             font-size: 0.8rem;
           }
         }
-        input {
+        .input {
+          margin-bottom: 0.2rem;
           width: 12rem;
           font-size: 0.7rem;
           border: 0;
