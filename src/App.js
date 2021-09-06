@@ -59,32 +59,48 @@ function App() {
           <Route exact path="/courses" component={Courses} />
         </Switch>
         {hasCookie ? (
-          <div className="navbar">
-            <Button onClick={Logout}>로그아웃</Button>
+          <div>
+            <div className="navbar">
+              <Button onClick={Logout}>로그아웃</Button>
+            </div>
+            <div className="appbar">
+              <div className="bar">
+                <Link to="/home" className="iconList">
+                  <IoHome className="icon" />
+                  <p className="label">홈</p>
+                </Link>
+                <Link to="/qrgen" className="iconList">
+                  <ImQrcode className="icon" />
+                  <p className="label">출석하기</p>
+                </Link>
+                <Link to="/courses" className="iconList">
+                  <GiArchiveResearch className="icon" />
+                  <p className="label">강좌보기</p>
+                </Link>
+                <a href="/" className="iconList">
+                  <BsFillPersonFill className="icon" />
+                  <p className="label">마이페이지</p>
+                </a>
+              </div>
+            </div>
           </div>
         ) : (
-          <Redirect to="/login" />
-        )}
-        <div className="appbar">
-          <div className="bar">
-            <Link to="/home" className="iconList">
-              <IoHome className="icon" />
-              <p className="label">홈</p>
-            </Link>
-            <Link to="/qrgen" className="iconList">
-              <ImQrcode className="icon" />
-              <p className="label">출석하기</p>
-            </Link>
-            <Link to="/courses" className="iconList">
-              <GiArchiveResearch className="icon" />
-              <p className="label">강좌보기</p>
-            </Link>
-            <a href="/" className="iconList">
-              <BsFillPersonFill className="icon" />
-              <p className="label">마이페이지</p>
-            </a>
+          <div>
+            <Redirect to="/login" />
+            <div className="appbar">
+              <div className="bar">
+                <Link to="/home" className="iconList">
+                  <IoHome className="icon" />
+                  <p className="label">홈</p>
+                </Link>
+                <a href="/" className="iconList">
+                  <BsFillPersonFill className="icon" />
+                  <p className="label">마이페이지</p>
+                </a>
+              </div>
+            </div>
           </div>
-        </div>
+        )}
       </BrowserRouter>
     </StyledApp>
   )

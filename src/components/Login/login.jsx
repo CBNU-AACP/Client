@@ -103,7 +103,7 @@ function Login(props, { match }) {
     <StyedLogin onFinish={handleSubmit(handleLogin)} size="large">
       {!cookies.userId || cookies.userId === 'undefined' ? (
         <div className={classes.root}>
-          <div className="login">
+          <div className="box">
             <Typography variant="h5" align="center">
               로그인
             </Typography>

@@ -7,11 +7,12 @@ import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { schema } from './yup'
 import FormErrorMessage from './FormErrorMessage'
-
-import { RegisterUser, DpUsercheck } from '../../actions/auth'
+import { RegisterUser, DpUsercheck, PhoneVerify } from '../../actions/auth'
+import { Redirect } from 'react-router-dom'
 
 function Register() {
   const {
+    register,
     handleSubmit,
     formState: { errors },
     control,
@@ -28,15 +29,39 @@ function Register() {
   const [visible, setVisible] = useState(false)
 
   // 인증번호 받기
-  function VerifyVisible(e) {
-    e.preventDefault()
+  function VerifyVisible() {
     const userPhoneNumber = document.getElementById('userPhoneNumber').value
+    // const userPhoneVerify = document.getElementById('userPhoneVerify').value
     if (!userPhoneNumber) {
+      document.getElementById('userPhoneNumber').focus()
+      setVisible(false)
+    } else {
+      setVisible(true)
+      console.log(userPhoneNumber)
+      dispatch(PhoneVerify(userPhoneNumber))
+        .then(e => {
+          console.log(e)
+        })
+        .catch(e => {
+          console.log(e)
+        })
     }
-    setVisible(true)
   }
   const isVisible = {
     visibility: visible ? 'visible' : 'hidden',
+  }
+  // 인증번호 인증
+  function Verifysubmit() {
+    // console.log(1)
+    // const userPhoneVerify = document.getElementById('userPhoneVerify').value
+    // console.log(userPhoneVerify)
+    // dispatch(PhoneVerify(userPhoneVerify))
+    //   .then(e => {
+    //     console.log(e)
+    //   })
+    //   .catch(e => {
+    //     console.log(e)
+    //   })
   }
 
   //  아이디 중복 체크
@@ -52,20 +77,19 @@ function Register() {
 
   const [checkUserId, setcheckUserId] = useState('')
   const [checkUserEmail, setcheckUserEmail] = useState('')
-  const [clickedId, setClickedId] = useState(false)
-  const [clickedEmail, setClickedEmail] = useState(false)
+
   // 아이디 중복확인
   const VerifyId = () => {
     setcheckUserId(document.getElementById('userId').value)
-    setClickedId(true)
+    setdpIdcheck(dpIdcheck => ({ ...dpIdcheck, state: true }))
   }
   // 이메일 중복확인
   const VerifyEmail = () => {
     setcheckUserEmail(document.getElementById('userEmail').value)
-    setClickedEmail(true)
+    setdpEmailcheck(dpIdcheck => ({ ...dpIdcheck, state: true }))
   }
   useEffect(() => {
-    if (clickedId === true) {
+    if (dpIdcheck.state === true) {
       dispatch(DpUsercheck(checkUserId))
         .then(e => {
           // 중복이 없을 경우
@@ -77,12 +101,11 @@ function Register() {
           console.log(e)
           setdpIdcheck(dpIdcheck => ({ ...dpIdcheck, state: false, message: '존재하는 아이디입니다.' }))
         })
-      setClickedId(false)
     }
-  }, [checkUserId, clickedId])
+  }, [checkUserId, dpIdcheck.state])
 
   useEffect(() => {
-    if (clickedEmail === true) {
+    if (dpEmailcheck.state === true) {
       dispatch(DpUsercheck(checkUserEmail))
         .then(e => {
           // 중복이 없을 경우
@@ -94,9 +117,8 @@ function Register() {
           console.log(e)
           setdpEmailcheck(dpEmailcheck => ({ ...dpEmailcheck, state: false, message: '이미 사용 중인 이메일입니다.' }))
         })
-      setClickedEmail(false)
     }
-  }, [checkUserEmail, clickedId])
+  }, [checkUserEmail, dpEmailcheck.state])
 
   // 회원가입 버튼 클릭 시
   const handleRegister = data => {
@@ -106,6 +128,10 @@ function Register() {
     console.log(user)
     if (user.userId !== checkUserId) {
       document.getElementById('userId').focus()
+      setdpIdcheck(dpIdcheck => ({ ...dpIdcheck, state: false, message: '중복확인을 해주세요.' }))
+    } else if (user.userEmail !== checkUserEmail) {
+      document.getElementById('userEmail').focus()
+      setdpEmailcheck(dpEmailcheck => ({ ...dpEmailcheck, state: false, message: '중복확인을 해주세요.' }))
     } else
       dispatch(RegisterUser(user))
         .then(e => {
@@ -120,7 +146,7 @@ function Register() {
 
   return (
     <StyedRegister onFinish={handleSubmit(handleRegister)} size="large">
-      {!successful && (
+      {!successful ? (
         <div className="register">
           <div className="element">
             <label htmlFor="userId">아이디</label>
@@ -215,7 +241,7 @@ function Register() {
                 <Input type="text" {...field} id="userPhoneNumber" placeholder="전화번호를 입력해주세요." />
               )}
             />
-            <Button type="primary" htmlType="submit" onClick={VerifyVisible} block>
+            <Button type="primary" htmlType="button" onClick={VerifyVisible} block>
               인증번호 받기
             </Button>
             {errors.userPhoneNumber && <FormErrorMessage className="error" Message={errors.userPhoneNumber.message} />}
@@ -225,15 +251,16 @@ function Register() {
               name="userVerifyNum"
               control={control}
               render={({ field }) => (
-                <Input type="text" {...field} style={isVisible} placeholder="인증번호를 입력해주세요." />
+                <Input
+                  type="text"
+                  {...field}
+                  id="userPhoneVerify"
+                  style={isVisible}
+                  placeholder="인증번호를 입력해주세요."
+                />
               )}
             />
-            <Button
-              type="primary"
-              htmlType="submit"
-              style={isVisible}
-              //  onClick={Verifysubmit}
-              block>
+            <Button type="primary" htmlType="button" style={isVisible} onClick={Verifysubmit} block>
               인증하기
             </Button>
             {errors.userVerifyNum && <FormErrorMessage className="error" Message={errors.userVerifyNum.message} />}
@@ -253,10 +280,12 @@ function Register() {
           </div>
           <div className="element">
             <Button type="primary" htmlType="submit" block>
-              회원가입
+              가입하기
             </Button>
           </div>
         </div>
+      ) : (
+        <Redirect to="/login" />
       )}
       {message && (
         <div className="form-group">
