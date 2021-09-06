@@ -10,12 +10,14 @@ const logout = () => {
   const [cookies, removeCookie] = useCookies(['userId'])
   removeCookie('userId')
 }
+const phoneverify = userPhoneVerify => http.get(`v1/users/sms/${userPhoneVerify}`)
 
 const AuthService = {
   register,
   Idcheck,
   login,
   logout,
+  phoneverify,
 }
 
 export default AuthService
