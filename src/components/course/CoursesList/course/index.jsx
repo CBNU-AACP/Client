@@ -18,6 +18,7 @@ const Course = props => {
       }),
     }),
   }
+
   const initialCourseState = {
     id: null,
     name: '',
@@ -38,13 +39,6 @@ const Course = props => {
         console.log(e)
       })
   }
-
-  useEffect(() => {
-    console.log('컴포넌트가 화면에 나타남');
-    return () => {
-      console.log('컴포넌트가 화면에서 사라짐');
-    };
-  }, []);
 
   useEffect(() => {
     getCourse(props.match.params.id)
@@ -70,7 +64,7 @@ const Course = props => {
   const removeCourse = () => {
     dispatch(deleteCourse(currentCourse.courseId))
       .then(() => {
-        props.history.push('/Course')
+        props.history.push('/courses')
       })
       .catch(e => {
         console.log(e)

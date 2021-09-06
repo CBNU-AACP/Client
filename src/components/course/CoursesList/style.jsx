@@ -13,15 +13,20 @@ const CoursesList = styled.div`
       border-radius: 10px;
       display: flex;
       .searchtext {
-        margin: auto;
+        margin: 0;
+        padding: auto;
         font-size: 0.8rem;
         background-color: #dcdcdc;
         border-radius: 6px;
         border: none;
       }
       .search {
+        padding: auto;
         margin: auto;
         font-size: 1.3rem;
+        .icon {
+          vertical-align: middle;
+        }
       }
       .search:active {
         color: orange;
@@ -99,9 +104,12 @@ const CoursesList = styled.div`
           .iconlist {
             display: flex;
             flex-wrap: wrap;
-            width: 100px;
-            margin: 1rem 0;
+            width: 150px;
+            margin: 0;
             .icons {
+              padding: 0.5rem 0.3rem;
+              width: 50px;
+              height: 50px;
               text-align: center;
               margin: 0 0.5rem 0.5rem 0;
               background-color: white;
@@ -113,8 +121,6 @@ const CoursesList = styled.div`
               .text {
                 font-size: 0.7rem;
               }
-            }
-            .icons:nth-child(n + 3) {
             }
           }
         }
