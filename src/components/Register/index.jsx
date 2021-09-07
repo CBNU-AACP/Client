@@ -27,6 +27,16 @@ function Register() {
   const dispatch = useDispatch()
 
   const [visible, setVisible] = useState(false)
+  const [count, setCount] = useState(0)
+  const [timer, setTimer] = useState(10)
+  useEffect(() => {
+    const countdown = setInterval(() => {
+      if (parseInt(timer, 10) > 0) {
+        setTimer(parseInt(timer, 10) - 1)
+      }
+    }, 1000)
+    return () => clearInterval(countdown)
+  }, [timer])
 
   // 인증번호 받기
   function VerifyVisible() {
@@ -94,12 +104,12 @@ function Register() {
         .then(e => {
           // 중복이 없을 경우
           console.log(e)
-          setdpIdcheck(dpIdcheck => ({ ...dpIdcheck, state: true, message: '사용 가능한 아이디입니다.' }))
+          setdpIdcheck(dpIdcheck => ({ ...dpIdcheck, message: '사용 가능한 아이디입니다.' }))
         })
         .catch(e => {
           // 중복이 있을 경우
           console.log(e)
-          setdpIdcheck(dpIdcheck => ({ ...dpIdcheck, state: false, message: '존재하는 아이디입니다.' }))
+          setdpIdcheck(dpIdcheck => ({ ...dpIdcheck, message: '존재하는 아이디입니다.' }))
         })
     }
   }, [checkUserId, dpIdcheck.state])
@@ -110,12 +120,12 @@ function Register() {
         .then(e => {
           // 중복이 없을 경우
           console.log(e)
-          setdpEmailcheck(dpEmailcheck => ({ ...dpEmailcheck, state: true, message: '사용 가능한 이메일입니다.' }))
+          setdpEmailcheck(dpEmailcheck => ({ ...dpEmailcheck, message: '사용 가능한 이메일입니다.' }))
         })
         .catch(e => {
           // 중복이 있을 경우
           console.log(e)
-          setdpEmailcheck(dpEmailcheck => ({ ...dpEmailcheck, state: false, message: '이미 사용 중인 이메일입니다.' }))
+          setdpEmailcheck(dpEmailcheck => ({ ...dpEmailcheck, message: '이미 사용 중인 이메일입니다.' }))
         })
     }
   }, [checkUserEmail, dpEmailcheck.state])
@@ -260,6 +270,7 @@ function Register() {
                 />
               )}
             />
+            <p className="time2">유효시간 : {timer < 10 ? `0${timer}` : timer}초</p>
             <Button type="primary" htmlType="button" style={isVisible} onClick={Verifysubmit} block>
               인증하기
             </Button>
