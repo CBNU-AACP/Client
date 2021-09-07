@@ -10,7 +10,7 @@ import QrService from '../../services/QrServices'
 
 function QrGenerator({ cookies }) {
   QrGenerator.propTypes = {
-    cookies: PropTypes.shape.isRequired,
+    cookies: PropTypes.objectOf(PropTypes.shape),
   }
 
   const createValidnum = id => {
