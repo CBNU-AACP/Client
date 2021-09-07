@@ -48,10 +48,10 @@ function Courses({ cookies }) {
               <Switch>
                 <Route exact path={`${path}`} render={() => <CoursesList cookies={cookies} />} />
                 <Route exact path={`${path}/add`} render={() => <AddCourse cookies={cookies} />} />
-                <Route exact path={`${path}/:id/member`} component={MemberList} />
-                <Route exact path={`${path}/:id/qrscan`} component={QrScanner} />
-                <Route exact path={`${path}/:id/attendance`} component={Attendance} />
-                <Route exact path={`${path}/:id`} component={Course} />
+                <Route exact path={`${path}/:id/member`} render={() => <MemberList cookies={cookies} />} />
+                <Route exact path={`${path}/:id/qrscan`} render={() => <QrScanner cookies={cookies} />} />
+                <Route exact path={`${path}/:id/attendance`} render={() => <Attendance cookies={cookies} />} />
+                <Route exact path={`${path}/:id`} render={() => <Course cookies={cookies} />} />
               </Switch>
             </div>
           </div>
