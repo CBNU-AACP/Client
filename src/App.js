@@ -53,8 +53,8 @@ function App() {
           <Route exact path={['/', '/home']} component={Home} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/find" component={Find} />
-          <Route exact path="/register" component={Register} />
           <Route exact path="/profile" component={Profile} />
+          <Route exact path="/register" component={Register} />
           <Route exact path="/qrgen" component={QrGenerator} />
           <Route exact path="/courses" component={Courses} />
         </Switch>
@@ -77,10 +77,10 @@ function App() {
                   <GiArchiveResearch className="icon" />
                   <p className="label">강좌보기</p>
                 </Link>
-                <a href="/" className="iconList">
+                <Link to="/profile" className="iconList">
                   <BsFillPersonFill className="icon" />
                   <p className="label">마이페이지</p>
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -93,10 +93,10 @@ function App() {
                   <IoHome className="icon" />
                   <p className="label">홈</p>
                 </Link>
-                <a href="/" className="iconList">
+                <Link to="/login" className="iconList">
                   <BsFillPersonFill className="icon" />
                   <p className="label">마이페이지</p>
-                </a>
+                </Link>
               </div>
             </div>
           </div>
