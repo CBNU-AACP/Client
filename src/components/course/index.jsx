@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { BrowserRouter, Switch, Route, Link, useRouteMatch, Redirect } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { withCookies, useCookies } from 'react-cookie'
 import { BsCardChecklist } from 'react-icons/bs'
 import { RiPlayListAddLine } from 'react-icons/ri'
+import PropTypes from 'prop-types'
 
 import AddCourse from './CreateCourse'
 import Course from './CoursesList/course'
@@ -14,51 +14,51 @@ import Attendance from '../Attendance'
 import StyledCourse from './style'
 import { history } from '../../helpers/history'
 
-function Courses() {
-  // const { user: currentUser } = useSelector(state => state.auth)
-  const { path, url } = useRouteMatch()
-  const [cookies, removeCookie, setCookie, getCookie] = useCookies(['user'])
-  const [hasCookie, setHasCookie] = useState(false)
+function Courses({ cookies }) {
+  Courses.propTypes = {
+    cookies: PropTypes.objectOf(PropTypes.shape),
+  }
 
-  useEffect(() => {
-    if (cookies.user && cookies.user !== 'undefined') {
-      setHasCookie(true)
-    } else {
-      setHasCookie(false)
-    }
-  }, [cookies])
+  const { path, url } = useRouteMatch()
+
+  const { userId } = cookies
+
   return (
     <StyledCourse>
-      <BrowserRouter history={history}>
-        <div className="container">
-          <div className="topbar">
-            <div className="icons">
-              <li className="iconList">
-                <Link to={`${url}`} className="">
-                  <BsCardChecklist className="icon" />
-                  <p>강좌목록</p>
-                </Link>
-              </li>
-              <li className="iconList">
-                <Link to={`${url}/add`} className="">
-                  <RiPlayListAddLine className="icon" />
-                  <p>강좌추가</p>
-                </Link>
-              </li>
+      {userId && userId !== 'undefined' ? (
+        <BrowserRouter history={history}>
+          <div className="container">
+            <div className="topbar">
+              <div className="icons">
+                <li className="iconList">
+                  <Link to={`${url}`} className="">
+                    <BsCardChecklist className="icon" />
+                    <p>강좌목록</p>
+                  </Link>
+                </li>
+                <li className="iconList">
+                  <Link to={`${url}/add`} className="">
+                    <RiPlayListAddLine className="icon" />
+                    <p>강좌추가</p>
+                  </Link>
+                </li>
+              </div>
+            </div>
+            <div className="components">
+              <Switch>
+                <Route exact path={`${path}`} render={() => <CoursesList cookies={cookies} />} />
+                <Route exact path={`${path}/add`} render={() => <AddCourse cookies={cookies} />} />
+                <Route exact path={`${path}/:id/member`} component={MemberList} />
+                <Route exact path={`${path}/:id/qrscan`} component={QrScanner} />
+                <Route exact path={`${path}/:id/attendance`} component={Attendance} />
+                <Route exact path={`${path}/:id`} component={Course} />
+              </Switch>
             </div>
           </div>
-          <div className="components">
-            <Switch>
-              <Route exact path={`${path}`} component={CoursesList} />
-              <Route exact path={`${path}/add`} component={AddCourse} />
-              <Route exact path={`${path}/:id/member`} component={MemberList} />
-              <Route exact path={`${path}/:id/qrscan`} component={QrScanner} />
-              <Route exact path={`${path}/:id/attendance`} component={Attendance} />
-              <Route exact path={`${path}/:id`} component={Course} />
-            </Switch>
-          </div>
-        </div>
-      </BrowserRouter>
+        </BrowserRouter>
+      ) : (
+        <Redirect to="/login" />
+      )}
     </StyledCourse>
   )
 }
