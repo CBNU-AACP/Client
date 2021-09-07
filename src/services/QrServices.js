@@ -1,6 +1,6 @@
 import http from '../common/http'
 
-const put = validNum => http.put(`v1/users/test2`, { validNum })
+const put = (validNum, userId) => http.put(`v1/users/${userId}`, { validNum })
 
 const get = courseId => http.get(`v1/courseDates/${courseId}`)
 

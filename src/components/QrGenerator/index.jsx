@@ -1,11 +1,18 @@
 import { AiOutlineReload, AiOutlineClockCircle } from 'react-icons/ai'
 import QR from 'react-qr-code'
 import React, { useState, useEffect } from 'react'
+import { Redirect } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import PropTypes from 'prop-types'
+
 import StyledQrGen from './style'
 import QrService from '../../services/QrServices'
 
-function QrGenerator() {
+function QrGenerator({ cookies }) {
+  QrGenerator.propTypes = {
+    cookies: PropTypes.objectOf(PropTypes.shape),
+  }
+
   const createValidnum = id => {
     const date = new Date()
     const year = date.getFullYear().toString() // 현재 년도 받아오기
@@ -18,19 +25,19 @@ function QrGenerator() {
   }
 
   // const user = useSelector(state => state.auth.user) // user 상태
-  const user = '김동용'
+  const { userId } = cookies
 
   const [timer, setTimer] = useState(15)
   const [blocking, setBlocking] = useState(false)
   const [count, setCount] = useState(0)
   const [reloadcount, setReloadcount] = useState(1)
   const [clickreload, setClickreload] = useState(false)
-  const [validNum, setValidnum] = useState(createValidnum(user))
+  const [validNum, setValidnum] = useState(createValidnum(userId))
 
   const sendValidnum = async num => {
     try {
       console.log('send', num)
-      const res = await QrService.put(num)
+      const res = await QrService.put(num, userId)
       return Promise.resolve(res.data.message)
     } catch (e) {
       return Promise.reject(e)
@@ -42,7 +49,7 @@ function QrGenerator() {
       setClickreload(true)
       setReloadcount(0)
     }
-    setValidnum(createValidnum(user))
+    setValidnum(createValidnum(userId))
   }
 
   useEffect(() => {
@@ -72,7 +79,7 @@ function QrGenerator() {
       }
       if (parseInt(timer, 10) === 0) {
         if (count < 4) {
-          setValidnum(createValidnum(user))
+          setValidnum(createValidnum(userId))
         } else setBlocking(true)
       }
     }, 1000)
@@ -80,41 +87,47 @@ function QrGenerator() {
   }, [timer])
 
   return (
-    <StyledQrGen>
-      <div className="box">
-        <div className={`qrcode ${blocking === true ? 'blur' : ''}`}>
-          <QR value={`{"userId": "test2", "validNum": "${validNum}"}`} />
-        </div>
-        <div className="desc">
-          <p className="info">{`"${user}"`} 님의 출석 QR 코드</p>
-          {blocking === false ? (
-            <article>
-              <p className="time1">
-                <AiOutlineClockCircle className="time_clock" />
-                남은 시간{' '}
-              </p>
-              <p className="time2">{timer < 10 ? `0${timer}` : timer}초</p>
-            </article>
-          ) : (
-            <p className="blocking">인증 유효시간 초과</p>
-          )}
-        </div>
-        {count === 4 && blocking === true && (
-          <button type="button" className="reload">
-            <AiOutlineReload onClick={reload} />
-          </button>
-        )}
-        {clickreload === false && reloadcount === 1 && blocking === false && (
-          <button type="button" className="reload">
-            <AiOutlineReload onClick={reload} />
-          </button>
-        )}
-        {clickreload === false && reloadcount === 0 && blocking === false && (
-          <p className="warning">15초에 한 번 다시 갱신할 수 있습니다.</p>
-        )}
-      </div>
-      <div className="print">QR 코드를 스캐너에 보여주세요.</div>
-    </StyledQrGen>
+    <div>
+      {userId && userId !== 'undefined' ? (
+        <StyledQrGen>
+          <div className="box">
+            <div className={`qrcode ${blocking === true ? 'blur' : ''}`}>
+              <QR value={`{"userId": "test2", "validNum": "${validNum}"}`} />
+            </div>
+            <div className="desc">
+              <p className="info">{`"${userId}"`} 님의 출석 QR 코드</p>
+              {blocking === false ? (
+                <article>
+                  <p className="time1">
+                    <AiOutlineClockCircle className="time_clock" />
+                    남은 시간{' '}
+                  </p>
+                  <p className="time2">{timer < 10 ? `0${timer}` : timer}초</p>
+                </article>
+              ) : (
+                <p className="blocking">인증 유효시간 초과</p>
+              )}
+            </div>
+            {count === 4 && blocking === true && (
+              <button type="button" className="reload">
+                <AiOutlineReload onClick={reload} />
+              </button>
+            )}
+            {clickreload === false && reloadcount === 1 && blocking === false && (
+              <button type="button" className="reload">
+                <AiOutlineReload onClick={reload} />
+              </button>
+            )}
+            {clickreload === false && reloadcount === 0 && blocking === false && (
+              <p className="warning">15초에 한 번 다시 갱신할 수 있습니다.</p>
+            )}
+          </div>
+          <div className="print">QR 코드를 스캐너에 보여주세요.</div>
+        </StyledQrGen>
+      ) : (
+        <Redirect to="/login" />
+      )}
+    </div>
   )
 }
 

@@ -2,9 +2,9 @@ import { RETRIEVE_USERS } from './types'
 
 import UserService from '../services/UserService'
 
-export const retrieveUsers = () => async dispatch => {
+export const retrieveUsers = userId => async dispatch => {
   try {
-    const res = await UserService.getAll()
+    const res = await UserService.getAll(userId)
     console.log(res.data.data)
     dispatch({
       type: RETRIEVE_USERS,
@@ -16,9 +16,9 @@ export const retrieveUsers = () => async dispatch => {
   }
 }
 
-export const findUserByName = name => async dispatch => {
+export const findUserByName = (name, userId) => async dispatch => {
   try {
-    const res = await UserService.findName(name)
+    const res = await UserService.findName(name, userId)
     console.log(res.data.data)
     dispatch({
       type: RETRIEVE_USERS,

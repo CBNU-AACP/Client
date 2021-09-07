@@ -6,9 +6,9 @@ const update = (members, courseId) => http.put(`v1/memberLists/${courseId}`, mem
 
 const getAll = courseId => http.get(`v1/memberLists/${courseId}`)
 
-const remove = courseId => http.delete(`v1/memberLists/${courseId}?userId=test1`)
+const remove = (courseId, userId) => http.delete(`v1/memberLists/${courseId}?userId=${userId}`)
 
-const removeAll = () => http.delete(`v1/courses/multiple/test1`)
+const removeAll = userId => http.delete(`v1/courses/multiple/${userId}`)
 
 const MemberService = {
   create,
