@@ -50,13 +50,13 @@ function App() {
       <BrowserRouter history={history}>
         {/* {!hasCookie ? <Redirect to="/login" /> : <Redirect to="QrScan" />} */}
         <Switch>
-          <Route exact path={['/', '/home']} render={() => <Home cookies={cookies} />} />
+          <Route exact path={['/', '/home']} render={props => <Home {...props} cookies={cookies} />} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/find" component={Find} />
           <Route exact path="/register" component={Register} />
-          <Route exact path="/profile" render={() => <Profile cookies={cookies} />} />
-          <Route exact path="/qrgen" render={() => <QrGenerator cookies={cookies} />} />
-          <Route exact path="/courses" render={() => <Courses cookies={cookies} />} />
+          <Route exact path="/profile" render={props => <Profile {...props} cookies={cookies} />} />
+          <Route exact path="/qrgen" render={props => <QrGenerator {...props} cookies={cookies} />} />
+          <Route exact path="/courses" render={props => <Courses {...props} cookies={cookies} />} />
         </Switch>
         {hasCookie ? (
           <div>

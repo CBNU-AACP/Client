@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import QrReader from 'react-qr-reader'
 import PropTypes from 'prop-types'
+import { withRouter, Redirect } from 'react-router-dom'
 import StyledQrScan from './style'
 import CourseDataService from '../../services/CourseService'
 import QrService from '../../services/QrServices'
@@ -15,9 +16,11 @@ function QrScanner(props) {
         id: PropTypes.string.isRequired,
       }),
     }),
+    cookies: PropTypes.objectOf(PropTypes.shape),
   }
 
-  const { match } = props
+  const { cookies } = props
+  const { userId } = cookies
 
   const initialCourseState = {
     courseId: null,
@@ -75,7 +78,7 @@ function QrScanner(props) {
     console.log(courseDateId)
     if (info.userId !== '' && courseDateId !== '') sendInfo()
     if (info.userId === '' && info.validNum === '') {
-      getCourse(match.params.id)
+      getCourse(props.match.params.id)
     }
   }, [info])
 
@@ -91,28 +94,34 @@ function QrScanner(props) {
 
   if (error) return <div>에러가 발생했습니다.</div>
   return (
-    <StyledQrScan>
-      {currentCourse.courseId !== null ? (
-        <div className="box">
-          <div className="desc">
-            <p className="info">"{currentCourse.name}"과목 출석체크</p>
-          </div>
-          <QrReader
-            className="scan"
-            delay={300}
-            onError={handleError}
-            onScan={handleScan}
-            style={{ alignItems: 'center', width: '80%' }}
-          />
-          <div className="desc">
-            <p className="info">QR 코드를 스캐너에 찍어주세요.</p>
-          </div>
-          <p>{result}</p>
-        </div>
+    <div>
+      {userId && userId !== 'undefined' ? (
+        <StyledQrScan>
+          {currentCourse.courseId !== null ? (
+            <div className="box">
+              <div className="desc">
+                <p className="info">"{currentCourse.name}"과목 출석체크</p>
+              </div>
+              <QrReader
+                className="scan"
+                delay={300}
+                onError={handleError}
+                onScan={handleScan}
+                style={{ alignItems: 'center', width: '80%' }}
+              />
+              <div className="desc">
+                <p className="info">QR 코드를 스캐너에 찍어주세요.</p>
+              </div>
+              <p>{result}</p>
+            </div>
+          ) : (
+            <div className="box">출석 리더기 준비 중..</div>
+          )}
+        </StyledQrScan>
       ) : (
-        <div className="box">출석 리더기 준비 중..</div>
+        <Redirect to="/login" />
       )}
-    </StyledQrScan>
+    </div>
   )
 }
 
