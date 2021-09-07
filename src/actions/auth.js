@@ -70,10 +70,10 @@ export const logout = () => dispatch => {
 }
 
 // 전화번호 인증
-export const PhoneVerify = userPhoneVerify => async dispatch => {
+export const PhoneVerify = (userId, userPhoneNumber) => async dispatch => {
   try {
-    console.log(userPhoneVerify)
-    const res = await AuthService.phoneverify(userPhoneVerify)
+    console.log(userId, userPhoneNumber)
+    const res = await AuthService.phoneverify(userId, userPhoneNumber)
     return Promise.resolve(res.data.data)
   } catch (err) {
     return Promise.reject(err)

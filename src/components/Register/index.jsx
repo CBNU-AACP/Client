@@ -30,15 +30,21 @@ function Register() {
 
   // 인증번호 받기
   function VerifyVisible() {
+    const userId = document.getElementById('userId').value
     const userPhoneNumber = document.getElementById('userPhoneNumber').value
-    // const userPhoneVerify = document.getElementById('userPhoneVerify').value
+
     if (!userPhoneNumber) {
       document.getElementById('userPhoneNumber').focus()
       setVisible(false)
     } else {
+      if (userId !== checkUserId) {
+        document.getElementById('userId').focus()
+        setdpIdcheck(dpIdcheck => ({ ...dpIdcheck, state: false, message: '중복확인을 해주세요.' }))
+        return
+      }
       setVisible(true)
-      console.log(userPhoneNumber)
-      dispatch(PhoneVerify(userPhoneNumber))
+      console.log(userId, userPhoneNumber)
+      dispatch(PhoneVerify(userId, userPhoneNumber))
         .then(e => {
           console.log(e)
         })
@@ -126,10 +132,11 @@ function Register() {
     const { userId, userPassword, studentId, userEmail, userPhoneNumber, name } = data
     const user = { userId, userPassword, studentId, userEmail, userPhoneNumber, name }
     console.log(user)
-    if (user.userId !== checkUserId) {
-      document.getElementById('userId').focus()
-      setdpIdcheck(dpIdcheck => ({ ...dpIdcheck, state: false, message: '중복확인을 해주세요.' }))
-    } else if (user.userEmail !== checkUserEmail) {
+    // if (user.userId !== checkUserId) {
+    //   document.getElementById('userId').focus()
+    //   setdpIdcheck(dpIdcheck => ({ ...dpIdcheck, state: false, message: '중복확인을 해주세요.' }))
+    // }
+    if (user.userEmail !== checkUserEmail) {
       document.getElementById('userEmail').focus()
       setdpEmailcheck(dpEmailcheck => ({ ...dpEmailcheck, state: false, message: '중복확인을 해주세요.' }))
     } else
