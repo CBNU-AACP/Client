@@ -46,12 +46,20 @@ function Courses({ cookies }) {
             </div>
             <div className="components">
               <Switch>
-                <Route exact path={`${path}`} render={() => <CoursesList cookies={cookies} />} />
-                <Route exact path={`${path}/add`} render={() => <AddCourse cookies={cookies} />} />
-                <Route exact path={`${path}/:id/member`} render={() => <MemberList cookies={cookies} />} />
-                <Route exact path={`${path}/:id/qrscan`} render={() => <QrScanner cookies={cookies} />} />
-                <Route exact path={`${path}/:id/attendance`} render={() => <Attendance cookies={cookies} />} />
-                <Route exact path={`${path}/:id`} render={() => <Course cookies={cookies} />} />
+                <Route exact path={`${path}`} render={props => <CoursesList {...props} cookies={cookies} />} />
+                <Route exact path={`${path}/add`} render={props => <AddCourse {...props} cookies={cookies} />} />
+                <Route
+                  exact
+                  path={`${path}/:id/member`}
+                  render={props => <MemberList {...props} cookies={cookies} />}
+                />
+                <Route exact path={`${path}/:id/qrscan`} render={props => <QrScanner {...props} cookies={cookies} />} />
+                <Route
+                  exact
+                  path={`${path}/:id/attendance`}
+                  render={props => <Attendance {...props} cookies={cookies} />}
+                />
+                <Route exact path={`${path}/:id`} render={props => <Course {...props} />} />
               </Switch>
             </div>
           </div>

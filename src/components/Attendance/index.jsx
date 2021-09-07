@@ -1,7 +1,7 @@
 /* eslint-disable react/destructuring-assignment */
 import { useDispatch, useSelector } from 'react-redux'
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
-import { withRouter } from 'react-router-dom'
+import { withRouter, Redirect } from 'react-router-dom'
 import StyledAttendance from './style'
 import PropTypes from 'prop-types'
 import { DataGrid } from '@mui/x-data-grid'
@@ -18,7 +18,11 @@ function Attendance(props) {
         id: PropTypes.string.isRequired,
       }),
     }),
+    cookies: PropTypes.objectOf(PropTypes.shape),
   }
+
+  const { userId } = props.cookies
+
   const initialCourseState = {
     courseId: null,
     name: '',
@@ -80,32 +84,38 @@ function Attendance(props) {
   ]
 
   return (
-    <StyledAttendance>
-      {currentCourse.courseId !== null ? (
-        <div>
-          <div>
-            <p>강좌명: {currentCourse.name}</p>
-            <p>설명: {currentCourse.description}</p>
-            <p>총 학생수: 35명</p>
-          </div>
+    <div>
+      {userId && userId !== 'undefined' ? (
+        <StyledAttendance>
+          {currentCourse.courseId !== null ? (
+            <div>
+              <div>
+                <p>강좌명: {currentCourse.name}</p>
+                <p>설명: {currentCourse.description}</p>
+                <p>총 학생수: 35명</p>
+              </div>
 
-          <div className="datagrid">
-            <div className="gridparent">
-              <DataGrid
-                autoHeight
-                rows={rows}
-                columns={columns}
-                pageSize={10}
-                rowsPerPageOptions={[10]}
-                disableSelectionOnClick
-              />
+              <div className="datagrid">
+                <div className="gridparent">
+                  <DataGrid
+                    autoHeight
+                    rows={rows}
+                    columns={columns}
+                    pageSize={10}
+                    rowsPerPageOptions={[10]}
+                    disableSelectionOnClick
+                  />
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          ) : (
+            <div>로딩 중..</div>
+          )}
+        </StyledAttendance>
       ) : (
-        <div>로딩 중..</div>
+        <Redirect to="/login" />
       )}
-    </StyledAttendance>
+    </div>
   )
 }
 
