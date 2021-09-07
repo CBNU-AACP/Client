@@ -57,12 +57,14 @@ const columns = [
   },
 ]
 
-export default function AddmemberModal({ courseId, submitted }) {
+export default function AddmemberModal({ courseId, submitted, cookies }) {
   AddmemberModal.propTypes = {
     courseId: PropTypes.string.isRequired,
     submitted: PropTypes.func.isRequired,
+    cookies: PropTypes.objectOf(PropTypes.shape),
   }
 
+  const { userId } = cookies
   const [rows, setRows] = useState([]) // 서버로부터 모든 유저들의 정보를 담을 상태변수
   const [memberList, setMemberList] = useState([]) // 멤버리스트 서버에 보낸 후 모달 밖의 컴포넌트에 보낼 멤버리스트 id배열
   const [submitable, setSubmitable] = useState(false) // 멤버리스트 생성 준비 상태를 나타냄
@@ -93,7 +95,7 @@ export default function AddmemberModal({ courseId, submitted }) {
 
   const getUserlist = () => {
     // 유저리스트 불러오는 함수
-    dispatch(retrieveUsers())
+    dispatch(retrieveUsers(userId))
       .then(data => {
         setRows(userlistReducer(data))
       })
@@ -174,7 +176,7 @@ export default function AddmemberModal({ courseId, submitted }) {
 
   const findByName = () => {
     // 검색어 입력 후 이벤트
-    dispatch(findUserByName(searchMember))
+    dispatch(findUserByName(searchMember, userId))
       .then(data => {
         setRows(userlistReducer(data))
         setSearchMember('')

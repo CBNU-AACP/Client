@@ -17,7 +17,7 @@ export const createMemberlist = (members, courseId) => async dispatch => {
   }
 }
 
-export const retrieveMemberlist = (courseId) => async dispatch => {
+export const retrieveMemberlist = courseId => async dispatch => {
   try {
     const res = await MemberService.getAll(courseId)
     console.log(res.data.data)
@@ -46,21 +46,21 @@ export const editMemberlist = member => async dispatch => {
   }
 }
 
-export const deleteMember = id => async dispatch => {
+export const deleteMember = userId => async dispatch => {
   try {
-    await MemberService.remove(id)
+    await MemberService.remove(userId)
     dispatch({
       type: DELETE_MEMBER,
-      member: { id },
+      member: { userId },
     })
   } catch (err) {
     console.log(err)
   }
 }
 
-export const deleteMemberlist = () => async dispatch => {
+export const deleteMemberlist = userId => async dispatch => {
   try {
-    const res = await MemberService.removeAll()
+    const res = await MemberService.removeAll(userId)
     console.log(res.data.data)
     dispatch({
       type: DELETE_MEMBERLIST,
