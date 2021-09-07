@@ -77,10 +77,10 @@ function App() {
                   <GiArchiveResearch className="icon" />
                   <p className="label">강좌보기</p>
                 </Link>
-                <a href="/" className="iconList">
+                <Link to="/profile" className="iconList">
                   <BsFillPersonFill className="icon" />
                   <p className="label">마이페이지</p>
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -93,10 +93,10 @@ function App() {
                   <IoHome className="icon" />
                   <p className="label">홈</p>
                 </Link>
-                <a href="/" className="iconList">
+                <Link to="/login" className="iconList">
                   <BsFillPersonFill className="icon" />
                   <p className="label">마이페이지</p>
-                </a>
+                </Link>
               </div>
             </div>
           </div>
