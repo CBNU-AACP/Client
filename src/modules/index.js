@@ -3,6 +3,7 @@ import auth from './auth'
 import message from './message'
 import memberlist from './memberlist'
 import userlist from './userlist'
+import attendance from './attendance'
 import { combineReducers } from 'redux'
 
 const rootReducer = combineReducers({
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   courses,
   memberlist,
   userlist,
+  attendance,
 })
 
 export default rootReducer
