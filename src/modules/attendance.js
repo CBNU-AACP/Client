@@ -1,26 +1,34 @@
 import { GET_COURSEDATES, GET_ATTENDANCEBOOK, PUT_COURSEDATES, PUT_ATTENDANCEBOOK } from '../actions/types'
 
-const initialState = []
+const courseState = []
+const attendanceState = []
 
-function attendanceReducer(attendance = initialState, action) {
+export function courseDates(courseDates = courseState, action) {
   const { type, payload } = action
 
   switch (type) {
     case GET_COURSEDATES:
       return [...payload]
 
-    case GET_ATTENDANCEBOOK:
+    case PUT_COURSEDATES:
       return [...payload]
 
-    case PUT_COURSEDATES:
+    default:
+      return courseDates
+  }
+}
+
+export function attendanceBook(attendanceBook = attendanceState, action) {
+  const { type, payload } = action
+
+  switch (type) {
+    case GET_ATTENDANCEBOOK:
       return [...payload]
 
     case PUT_ATTENDANCEBOOK:
       return [...payload]
 
     default:
-      return attendance
+      return attendanceBook
   }
 }
-
-export default attendanceReducer
