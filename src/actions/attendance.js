@@ -4,7 +4,7 @@ import AttendanceService from '../services/AttendanceService'
 
 export const getCourseDates = courseId => async dispatch => {
   try {
-    const res = await AttendanceService.get(courseId)
+    const res = await AttendanceService.getCourseDates(courseId)
     console.log(res.data.data)
     dispatch({
       type: GET_COURSEDATES,
@@ -18,7 +18,7 @@ export const getCourseDates = courseId => async dispatch => {
 
 export const getAttendanceBook = courseId => async dispatch => {
   try {
-    const res = await AttendanceService.get(courseId)
+    const res = await AttendanceService.getAttendanceBook(courseId)
     console.log(res.data.data)
     dispatch({
       type: GET_ATTENDANCEBOOK,
@@ -32,7 +32,7 @@ export const getAttendanceBook = courseId => async dispatch => {
 
 export const putCourseDates = courseDateId => async dispatch => {
   try {
-    const res = await AttendanceService.put(courseDateId)
+    const res = await AttendanceService.putCourseDates(courseDateId)
     console.log(res.data.data)
     dispatch({
       type: PUT_COURSEDATES,
