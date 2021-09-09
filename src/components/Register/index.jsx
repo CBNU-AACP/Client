@@ -7,7 +7,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { schema } from './yup'
 import FormErrorMessage from './FormErrorMessage'
-import { RegisterUser, DpUsercheck, PhoneVerify } from '../../actions/auth'
+import { RegisterUser, DpUsercheck, GetPhoneVerifyNum, PhoneVerify } from '../../actions/auth'
 import { Redirect } from 'react-router-dom'
 
 function Register() {
@@ -27,16 +27,28 @@ function Register() {
   const dispatch = useDispatch()
 
   const [visible, setVisible] = useState(false)
-  const [count, setCount] = useState(0)
-  const [timer, setTimer] = useState(10)
+  const [isVerifyClicked, setisVerifyClicked] = useState(false)
+  const [minutes, setMinutes] = useState(parseInt(1))
+  const [seconds, setSeconds] = useState(parseInt(0))
+
   useEffect(() => {
+    // if (isVerifyClicked === true) {
     const countdown = setInterval(() => {
-      if (parseInt(timer, 10) > 0) {
-        setTimer(parseInt(timer, 10) - 1)
+      if (parseInt(seconds) > 0) {
+        setSeconds(parseInt(seconds) - 1)
+      }
+      if (parseInt(seconds) === 0) {
+        if (parseInt(minutes) === 0) {
+          clearInterval(countdown)
+        } else {
+          setMinutes(parseInt(minutes) - 1)
+          setSeconds(59)
+        }
       }
     }, 1000)
     return () => clearInterval(countdown)
-  }, [timer])
+    // }
+  }, [isVerifyClicked, minutes, seconds])
 
   // 인증번호 받기
   function VerifyVisible() {
@@ -53,8 +65,9 @@ function Register() {
         return
       }
       setVisible(true)
+      setisVerifyClicked(true)
       console.log(userId, userPhoneNumber)
-      dispatch(PhoneVerify(userId, userPhoneNumber))
+      dispatch(GetPhoneVerifyNum(userId, userPhoneNumber))
         .then(e => {
           console.log(e)
         })
@@ -68,16 +81,15 @@ function Register() {
   }
   // 인증번호 인증
   function Verifysubmit() {
-    // console.log(1)
-    // const userPhoneVerify = document.getElementById('userPhoneVerify').value
-    // console.log(userPhoneVerify)
-    // dispatch(PhoneVerify(userPhoneVerify))
-    //   .then(e => {
-    //     console.log(e)
-    //   })
-    //   .catch(e => {
-    //     console.log(e)
-    //   })
+    const Verifykey = document.getElementById('userPhoneVerify').value
+    console.log(Verifykey)
+    dispatch(PhoneVerify(Verifykey))
+      .then(e => {
+        console.log(e)
+      })
+      .catch(e => {
+        console.log(e)
+      })
   }
 
   //  아이디 중복 체크
@@ -277,7 +289,9 @@ function Register() {
                 />
               )}
             />
-            <p className="time2">유효시간 : {timer < 10 ? `0${timer}` : timer}초</p>
+            <p className="timer" style={isVisible}>
+              유효시간 : {minutes}:{seconds < 10 ? `0${seconds}` : seconds}초
+            </p>
             <Button type="primary" htmlType="button" style={isVisible} onClick={Verifysubmit} block>
               인증하기
             </Button>
