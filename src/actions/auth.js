@@ -70,7 +70,7 @@ export const GetPhoneVerifyNum = (userId, userPhoneNumber) => async dispatch => 
   try {
     console.log(userId, userPhoneNumber)
     const res = await AuthService.GetPhoneVerifyNum(userId, userPhoneNumber)
-    return Promise.resolve(res.data.data)
+    return Promise.resolve(res.data.message)
   } catch (err) {
     return Promise.reject(err)
   }
@@ -80,8 +80,8 @@ export const GetPhoneVerifyNum = (userId, userPhoneNumber) => async dispatch => 
 export const PhoneVerify = (userId, Verifykey) => async dispatch => {
   try {
     console.log(userId, Verifykey)
-    const res = await AuthService.GetPhoneVerifyNum(userId, Verifykey)
-    return Promise.resolve(res.data.data)
+    const res = await AuthService.PhoneVerify(userId, Verifykey)
+    return Promise.resolve(res.data.message)
   } catch (err) {
     return Promise.reject(err)
   }
