@@ -11,7 +11,12 @@ const logout = () => {
   removeCookie('userId')
 }
 const GetPhoneVerifyNum = (userId, userPhoneNumber) => http.get(`v1/auth/sms/messages/${userId}/${userPhoneNumber}`)
-const PhoneVerify = (userId, key) => http.get(`v1/auth/sms/compare/${userId}`, key)
+const PhoneVerify = (userId, Verifykey) =>
+  http.get(`v1/auth/sms/compare/${userId}`, {
+    params: {
+      key: Verifykey,
+    },
+  })
 
 const AuthService = {
   register,
