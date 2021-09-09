@@ -30,26 +30,42 @@ function Register() {
   const [isVerifyClicked, setisVerifyClicked] = useState(false)
   const [minutes, setMinutes] = useState(parseInt(1))
   const [seconds, setSeconds] = useState(parseInt(0))
+  const [TIME, setTIME] = useState(parseInt(0))
+  // useEffect(() => {
+  //   const [countdown, setCountdown] = useState()
+  //   if (isVerifyClicked === true) {
+  //     setCountdown(
+  //       setInterval(() => {
+  //         if (parseInt(seconds) > 0) {
+  //           setSeconds(parseInt(seconds) - 1)
+  //         }
+  //         if (parseInt(seconds) === 0) {
+  //           if (parseInt(minutes) === 0) {
+  //             clearInterval(countdown)
+  //           } else {
+  //             setMinutes(parseInt(minutes) - 1)
+  //             setSeconds(59)
+  //           }
+  //         }
+  //       }, 1000),
+  //     )
+  //     return () => clearInterval(countdown)
+  //   }
+  //   // return () => clearInterval(countdown)
+  // }, [isVerifyClicked, minutes, seconds])
+  // const CountDown = () => {
+  //   const checkMinutes = Math.floor(TIME / 60)
+  //   const minutes = checkMinutes % 60
+  //   const seconds = TIME % 60
+  //   setMinutes(minutes)
+  //   setSeconds(seconds)
+  //   setTIME(TIME - 1)
+  // }
 
-  useEffect(() => {
-    // if (isVerifyClicked === true) {
-    const countdown = setInterval(() => {
-      if (parseInt(seconds) > 0) {
-        setSeconds(parseInt(seconds) - 1)
-      }
-      if (parseInt(seconds) === 0) {
-        if (parseInt(minutes) === 0) {
-          clearInterval(countdown)
-        } else {
-          setMinutes(parseInt(minutes) - 1)
-          setSeconds(59)
-        }
-      }
-    }, 1000)
-    return () => clearInterval(countdown)
-    // }
-  }, [isVerifyClicked, minutes, seconds])
-
+  //  전화번호 인증 확인 메세지
+  const [isNumPosted, setisNumPosted] = useState('')
+  //  인증 성공 유무 메세지
+  const [isNumSuccessful, setisNumSuccessful] = useState('')
   // 인증번호 받기
   function VerifyVisible() {
     const userId = document.getElementById('userId').value
@@ -65,11 +81,14 @@ function Register() {
         return
       }
       setVisible(true)
-      setisVerifyClicked(true)
+      // setisVerifyClicked(true)
+      // CountDown()
+      // const cron = setInterval(CountDown, 10000)
       console.log(userId, userPhoneNumber)
       dispatch(GetPhoneVerifyNum(userId, userPhoneNumber))
         .then(e => {
           console.log(e)
+          setisNumPosted('인증번호가 전송되었습니다.')
         })
         .catch(e => {
           console.log(e)
@@ -81,14 +100,17 @@ function Register() {
   }
   // 인증번호 인증
   function Verifysubmit() {
+    const userId = document.getElementById('userId').value
     const Verifykey = document.getElementById('userPhoneVerify').value
-    console.log(Verifykey)
-    dispatch(PhoneVerify(Verifykey))
+    console.log(userId, Verifykey)
+    dispatch(PhoneVerify(userId, Verifykey))
       .then(e => {
         console.log(e)
+        setisNumSuccessful('인증성공')
       })
       .catch(e => {
         console.log(e)
+        setisNumSuccessful('인증번호가 틀렸습니다.')
       })
   }
 
@@ -270,10 +292,17 @@ function Register() {
                 <Input type="text" {...field} id="userPhoneNumber" placeholder="전화번호를 입력해주세요." />
               )}
             />
+            {errors.userPhoneNumber && <FormErrorMessage className="error" Message={errors.userPhoneNumber.message} />}
+          </div>
+          <div className="element">
             <Button type="primary" htmlType="button" onClick={VerifyVisible} block>
               인증번호 받기
             </Button>
-            {errors.userPhoneNumber && <FormErrorMessage className="error" Message={errors.userPhoneNumber.message} />}
+            {isNumPosted ? (
+              <FormErrorMessage className="error" Message={isNumPosted} />
+            ) : (
+              <FormErrorMessage className="error" Message={isNumPosted} />
+            )}
           </div>
           <div className="element">
             <Controller
@@ -289,13 +318,20 @@ function Register() {
                 />
               )}
             />
+            {errors.userVerifyNum && <FormErrorMessage className="error" Message={errors.userVerifyNum.message} />}
+          </div>
+          <div className="element">
             <p className="timer" style={isVisible}>
               유효시간 : {minutes}:{seconds < 10 ? `0${seconds}` : seconds}초
             </p>
             <Button type="primary" htmlType="button" style={isVisible} onClick={Verifysubmit} block>
               인증하기
             </Button>
-            {errors.userVerifyNum && <FormErrorMessage className="error" Message={errors.userVerifyNum.message} />}
+            {isNumSuccessful ? (
+              <FormErrorMessage className="error" Message={isNumSuccessful} />
+            ) : (
+              <FormErrorMessage className="error" Message={isNumSuccessful} />
+            )}
           </div>
           <div className="element">
             <Controller
