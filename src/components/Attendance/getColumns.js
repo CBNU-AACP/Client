@@ -1,3 +1,5 @@
+import courseDate from '../../utils/courseDateIdtoString'
+
 export default function getColumns(courseDates) {
   const columnsState = [
     {
@@ -16,8 +18,8 @@ export default function getColumns(courseDates) {
 
   for (let i = 0; i < courseDates.length; i += 1) {
     columnsState.push({
-      field: `${courseDates[i].courseDateId}`,
-      headerName: `${courseDates[i].courseDateId}`,
+      field: `${courseDate(courseDates, i)}`,
+      headerName: `${courseDate(courseDates, i)}`,
       width: 200,
       editable: true,
     })
