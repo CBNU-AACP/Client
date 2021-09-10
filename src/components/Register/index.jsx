@@ -22,52 +22,45 @@ function Register() {
   })
 
   const [successful, setSuccessful] = useState(false)
-
   const { message } = useSelector(state => state.message)
   const dispatch = useDispatch()
 
   const [visible, setVisible] = useState(false)
-  const [isVerifyClicked, setisVerifyClicked] = useState(false)
   const [minutes, setMinutes] = useState(parseInt(1))
   const [seconds, setSeconds] = useState(parseInt(0))
-  const [TIME, setTIME] = useState(parseInt(0))
-  // useEffect(() => {
-  //   const [countdown, setCountdown] = useState()
-  //   if (isVerifyClicked === true) {
-  //     setCountdown(
-  //       setInterval(() => {
-  //         if (parseInt(seconds) > 0) {
-  //           setSeconds(parseInt(seconds) - 1)
-  //         }
-  //         if (parseInt(seconds) === 0) {
-  //           if (parseInt(minutes) === 0) {
-  //             clearInterval(countdown)
-  //           } else {
-  //             setMinutes(parseInt(minutes) - 1)
-  //             setSeconds(59)
-  //           }
-  //         }
-  //       }, 1000),
-  //     )
-  //     return () => clearInterval(countdown)
-  //   }
-  //   // return () => clearInterval(countdown)
-  // }, [isVerifyClicked, minutes, seconds])
-  // const CountDown = () => {
-  //   const checkMinutes = Math.floor(TIME / 60)
-  //   const minutes = checkMinutes % 60
-  //   const seconds = TIME % 60
-  //   setMinutes(minutes)
-  //   setSeconds(seconds)
-  //   setTIME(TIME - 1)
-  // }
+  const [countdown, setCountdown] = useState(null)
+  const [isNumSuccessful, setisNumSuccessful] = useState('')
+
+  useEffect(() => {
+    if (visible && isNumSuccessful !== '인증성공') {
+      setCountdown(
+        setInterval(() => {
+          if (parseInt(seconds) > 0) {
+            setSeconds(parseInt(seconds) - 1)
+          }
+          if (parseInt(seconds) === 0) {
+            if (parseInt(minutes) === 0) {
+              clearInterval(countdown)
+            } else {
+              setMinutes(parseInt(minutes) - 1)
+              setSeconds(59)
+            }
+          }
+        }, 1000),
+      )
+    } else if (!visible && seconds !== 0 && isNumSuccessful === '인증성공') {
+      console.log('끝')
+      clearInterval(countdown)
+    }
+    return () => clearInterval(countdown)
+  }, [isNumSuccessful, visible, minutes, seconds])
 
   //  전화번호 인증 확인 메세지
   const [isNumPosted, setisNumPosted] = useState('')
   //  인증 성공 유무 메세지
-  const [isNumSuccessful, setisNumSuccessful] = useState('')
+
   // 인증번호 받기
-  function VerifyVisible() {
+  const VerifyVisible = () => {
     const userId = document.getElementById('userId').value
     const userPhoneNumber = document.getElementById('userPhoneNumber').value
 
@@ -77,18 +70,18 @@ function Register() {
     } else {
       if (userId !== checkUserId) {
         document.getElementById('userId').focus()
-        setdpIdcheck(dpIdcheck => ({ ...dpIdcheck, state: false, message: '중복확인을 해주세요.' }))
+        setdpIdcheck({ ...dpIdcheck, state: false, message: '중복확인을 해주세요.' })
         return
       }
       setVisible(true)
-      // setisVerifyClicked(true)
-      // CountDown()
-      // const cron = setInterval(CountDown, 10000)
       console.log(userId, userPhoneNumber)
-      dispatch(GetPhoneVerifyNum(userId, userPhoneNumber))
+      GetPhoneVerifyNum(userId, userPhoneNumber)
         .then(e => {
           console.log(e)
           setisNumPosted('인증번호가 전송되었습니다.')
+          setisNumSuccessful('')
+          setMinutes(parseInt(1))
+          setSeconds(parseInt(0))
         })
         .catch(e => {
           console.log(e)
@@ -103,7 +96,7 @@ function Register() {
     const userId = document.getElementById('userId').value
     const Verifykey = document.getElementById('userPhoneVerify').value
     console.log(userId, Verifykey)
-    dispatch(PhoneVerify(userId, Verifykey))
+    PhoneVerify(userId, Verifykey)
       .then(e => {
         console.log(e)
         setisNumSuccessful('인증성공')
@@ -131,12 +124,12 @@ function Register() {
   // 아이디 중복확인
   const VerifyId = () => {
     setcheckUserId(document.getElementById('userId').value)
-    setdpIdcheck(dpIdcheck => ({ ...dpIdcheck, state: true }))
+    setdpIdcheck({ ...dpIdcheck, state: true })
   }
   // 이메일 중복확인
   const VerifyEmail = () => {
     setcheckUserEmail(document.getElementById('userEmail').value)
-    setdpEmailcheck(dpIdcheck => ({ ...dpIdcheck, state: true }))
+    setdpEmailcheck({ ...dpIdcheck, state: true })
   }
   useEffect(() => {
     if (dpIdcheck.state === true) {
@@ -144,12 +137,12 @@ function Register() {
         .then(e => {
           // 중복이 없을 경우
           console.log(e)
-          setdpIdcheck(dpIdcheck => ({ ...dpIdcheck, message: '사용 가능한 아이디입니다.' }))
+          setdpIdcheck({ ...dpIdcheck, message: '사용 가능한 아이디입니다.' })
         })
         .catch(e => {
           // 중복이 있을 경우
           console.log(e)
-          setdpIdcheck(dpIdcheck => ({ ...dpIdcheck, message: '존재하는 아이디입니다.' }))
+          setdpIdcheck({ ...dpIdcheck, message: '존재하는 아이디입니다.' })
         })
     }
   }, [checkUserId, dpIdcheck.state])
@@ -160,12 +153,12 @@ function Register() {
         .then(e => {
           // 중복이 없을 경우
           console.log(e)
-          setdpEmailcheck(dpEmailcheck => ({ ...dpEmailcheck, message: '사용 가능한 이메일입니다.' }))
+          setdpEmailcheck({ ...dpEmailcheck, message: '사용 가능한 이메일입니다.' })
         })
         .catch(e => {
           // 중복이 있을 경우
           console.log(e)
-          setdpEmailcheck(dpEmailcheck => ({ ...dpEmailcheck, message: '이미 사용 중인 이메일입니다.' }))
+          setdpEmailcheck({ ...dpEmailcheck, message: '이미 사용 중인 이메일입니다.' })
         })
     }
   }, [checkUserEmail, dpEmailcheck.state])
@@ -182,7 +175,7 @@ function Register() {
     // }
     if (user.userEmail !== checkUserEmail) {
       document.getElementById('userEmail').focus()
-      setdpEmailcheck(dpEmailcheck => ({ ...dpEmailcheck, state: false, message: '중복확인을 해주세요.' }))
+      setdpEmailcheck({ ...dpEmailcheck, state: false, message: '중복확인을 해주세요.' })
     } else
       dispatch(RegisterUser(user))
         .then(e => {
@@ -220,11 +213,7 @@ function Register() {
             <Button variant="outlined" color="secondary" type="primary" onClick={VerifyId} block>
               중복확인
             </Button>
-            {dpIdcheck.state ? (
-              <FormErrorMessage className="error" Message={dpIdcheck.message} />
-            ) : (
-              <FormErrorMessage className="error" Message={dpIdcheck.message} />
-            )}
+            <FormErrorMessage className="error" Message={dpIdcheck.message} />
           </div>
           <div className="element">
             <label htmlFor="name">이름</label>
@@ -259,11 +248,7 @@ function Register() {
             <Button type="primary" onClick={VerifyEmail} block>
               중복확인
             </Button>
-            {dpEmailcheck.state ? (
-              <FormErrorMessage className="error" Message={dpEmailcheck.message} />
-            ) : (
-              <FormErrorMessage className="error" Message={dpEmailcheck.message} />
-            )}
+            <FormErrorMessage className="error" Message={dpEmailcheck.message} />
           </div>
           <div className="element">
             <label htmlFor="userPassword">비밀번호</label>
@@ -298,11 +283,7 @@ function Register() {
             <Button type="primary" htmlType="button" onClick={VerifyVisible} block>
               인증번호 받기
             </Button>
-            {isNumPosted ? (
-              <FormErrorMessage className="error" Message={isNumPosted} />
-            ) : (
-              <FormErrorMessage className="error" Message={isNumPosted} />
-            )}
+            <FormErrorMessage className="error" Message={isNumPosted} />
           </div>
           <div className="element">
             <Controller
@@ -321,17 +302,14 @@ function Register() {
             {errors.userVerifyNum && <FormErrorMessage className="error" Message={errors.userVerifyNum.message} />}
           </div>
           <div className="element">
+            {/* <Timer /> */}
             <p className="timer" style={isVisible}>
               유효시간 : {minutes}:{seconds < 10 ? `0${seconds}` : seconds}초
             </p>
             <Button type="primary" htmlType="button" style={isVisible} onClick={Verifysubmit} block>
               인증하기
             </Button>
-            {isNumSuccessful ? (
-              <FormErrorMessage className="error" Message={isNumSuccessful} />
-            ) : (
-              <FormErrorMessage className="error" Message={isNumSuccessful} />
-            )}
+            <FormErrorMessage className="error" Message={isNumSuccessful} />
           </div>
           <div className="element">
             <Controller
