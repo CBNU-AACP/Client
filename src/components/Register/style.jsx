@@ -36,6 +36,9 @@ const Register = styled(Form)`
         margin: 0;
         position: relative;
       }
+      .timer {
+        color: #1fbb00;
+      }
     }
   }
 `
