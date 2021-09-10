@@ -66,7 +66,7 @@ export const logout = () => dispatch => {
 }
 
 // 전화번호 인증번호 받기
-export const GetPhoneVerifyNum = (userId, userPhoneNumber) => async dispatch => {
+export const GetPhoneVerifyNum = async (userId, userPhoneNumber) => {
   try {
     console.log(userId, userPhoneNumber)
     const res = await AuthService.GetPhoneVerifyNum(userId, userPhoneNumber)
@@ -77,7 +77,7 @@ export const GetPhoneVerifyNum = (userId, userPhoneNumber) => async dispatch => 
 }
 
 // 전화번호 인증번호 입력
-export const PhoneVerify = (userId, Verifykey) => async dispatch => {
+export const PhoneVerify = async (userId, Verifykey) => {
   try {
     console.log(userId, Verifykey)
     const res = await AuthService.PhoneVerify(userId, Verifykey)
