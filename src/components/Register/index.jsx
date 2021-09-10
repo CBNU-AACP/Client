@@ -53,7 +53,7 @@ function Register() {
       clearInterval(countdown)
     }
     return () => clearInterval(countdown)
-  }, [isNumSuccessful, visible, minutes, seconds])
+  }, [isNumSuccessful, visible])
 
   //  전화번호 인증 확인 메세지
   const [isNumPosted, setisNumPosted] = useState('')
