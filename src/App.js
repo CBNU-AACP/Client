@@ -15,10 +15,10 @@ import Register from './components/Register'
 import Home from './components/content/home'
 import Profile from './components/profile'
 import Courses from './components/course'
-import StyledApp from './style'
+import StyledApp from './styles/AppStyle'
 
 import { clearMessage } from './actions/message'
-import { history } from './helpers/history'
+import { history } from './utils/history'
 import { Button } from 'antd'
 
 function App() {
