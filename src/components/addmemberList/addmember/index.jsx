@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 
 const Member = ({ member, removeMember }) => {
   Member.propTypes = {
-    member: PropTypes.func.isRequired,
+    member: PropTypes.objectOf(PropTypes.shape).isRequired,
     removeMember: PropTypes.func.isRequired,
   }
 

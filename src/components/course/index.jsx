@@ -12,7 +12,7 @@ import MemberList from '../addmemberList'
 import QrScanner from '../QrScanner'
 import Attendance from '../Attendance'
 import StyledCourse from './style'
-import { history } from '../../helpers/history'
+import { history } from '../../utils/history'
 
 function Courses({ cookies }) {
   Courses.propTypes = {

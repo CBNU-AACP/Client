@@ -78,17 +78,18 @@ function Attendance(props) {
   }, [courseId])
 
   useEffect(() => {
-    if (courseDates.length !== 0 && attendanceBook.length !== 0 && rows.length === 0 && columns.length === 0) {
+    console.log(1)
+    if (courseDates.length !== 0 && attendanceBook.length !== 0) {
       setColumns(getColumns(courseDates)) // columns 상태 저장
       setRows(getRows(courseDates, attendanceBook)) // rows 상태 저장
     }
-  }, [courseDates, attendanceBook])
+  }, [attendanceBook])
 
   return (
     <div>
       {userId && userId !== 'undefined' ? (
         <StyledAttendance>
-          {currentCourse.courseId !== null ? (
+          {currentCourse.courseId !== null && attendanceBook[0] ? (
             <div>
               <div>
                 <p>강좌명: {currentCourse.name}</p>
