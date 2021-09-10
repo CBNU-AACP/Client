@@ -7,14 +7,22 @@ const Attendance = styled.div`
       display: flex;
       height: 100%;
       width: 100%;
-      max-width: 30rem;
-      @media screen and (max-width: 30rem) {
-        flex-direction: column;
-        .gridparent {
-          flexgrow: 1;
-          width: 30rem;
+      max-width: 60rem;
+      .gridparent {
+        flexgrow: 1;
+        width: 40rem;
+        .grid {
+          padding: auto;
+          margin: auto;
         }
       }
+      //   @media screen and (max-width: 30rem) {
+      //     flex-direction: column;
+      //     .gridparent {
+      //       flexgrow: 1;
+      //       width: 30rem;
+      //     }
+      //   }
     }
   }
 `
