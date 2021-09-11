@@ -29,6 +29,10 @@ function Register() {
   const [minutes, setMinutes] = useState(parseInt(1))
   const [seconds, setSeconds] = useState(parseInt(0))
   const [countdown, setCountdown] = useState(null)
+
+  //  전화번호 인증 확인 메세지
+  const [isNumPosted, setisNumPosted] = useState('')
+  //  인증 성공 유무 메세지
   const [isNumSuccessful, setisNumSuccessful] = useState('')
 
   useEffect(() => {
@@ -48,16 +52,11 @@ function Register() {
           }
         }, 1000),
       )
-    } else if (!visible && seconds !== 0 && isNumSuccessful === '인증성공') {
-      console.log('끝')
+    } else if ((!visible && seconds !== 0) || isNumSuccessful === '인증성공') {
       clearInterval(countdown)
     }
     return () => clearInterval(countdown)
-  }, [isNumSuccessful, visible])
-
-  //  전화번호 인증 확인 메세지
-  const [isNumPosted, setisNumPosted] = useState('')
-  //  인증 성공 유무 메세지
+  }, [isNumSuccessful, visible, seconds, minutes])
 
   // 인증번호 받기
   const VerifyVisible = () => {
@@ -68,7 +67,7 @@ function Register() {
       document.getElementById('userPhoneNumber').focus()
       setVisible(false)
     } else {
-      if (userId !== checkUserId) {
+      if (userId !== checkUserId || userId === '') {
         document.getElementById('userId').focus()
         setdpIdcheck({ ...dpIdcheck, state: false, message: '중복확인을 해주세요.' })
         return
@@ -84,6 +83,7 @@ function Register() {
           setSeconds(parseInt(0))
         })
         .catch(e => {
+          setisNumPosted('인증 개수 초과입니다. 다른 아이디로 시도해주세요.')
           console.log(e)
         })
     }
@@ -169,10 +169,10 @@ function Register() {
     const { userId, userPassword, studentId, userEmail, userPhoneNumber, name } = data
     const user = { userId, userPassword, studentId, userEmail, userPhoneNumber, name }
     console.log(user)
-    // if (user.userId !== checkUserId) {
-    //   document.getElementById('userId').focus()
-    //   setdpIdcheck(dpIdcheck => ({ ...dpIdcheck, state: false, message: '중복확인을 해주세요.' }))
-    // }
+    if (user.userId !== checkUserId) {
+      document.getElementById('userId').focus()
+      setdpIdcheck(dpIdcheck => ({ ...dpIdcheck, state: false, message: '중복확인을 해주세요.' }))
+    }
     if (user.userEmail !== checkUserEmail) {
       document.getElementById('userEmail').focus()
       setdpEmailcheck({ ...dpEmailcheck, state: false, message: '중복확인을 해주세요.' })
