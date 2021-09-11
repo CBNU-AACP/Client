@@ -12,9 +12,8 @@ import StyledAddmemberModal from './style'
 import { createMemberlist, retrieveMemberlist, findMemberByName } from '../../../actions/memberlist'
 import { retrieveUsers, findUserByName } from '../../../actions/userlist'
 
-function getModalStyle() {
-  // 여기서부터 modal style
-  return {
+const useStyles = makeStyles(theme => ({
+  paper: {
     top: `50%`,
     left: `50%`,
     WebkitTransform: `translate(-50%, -50%)`,
@@ -22,18 +21,11 @@ function getModalStyle() {
     MozTransform: `translate(-50%, -50%)`,
     OTransform: `translate(-50%, -50%)`,
     transform: `translate(-50%, -50%)`,
-  }
-}
-
-const useStyles = makeStyles(theme => ({
-  paper: {
     position: 'absolute',
-    width: '80vw',
+    width: '60vw',
     maxWidth: '100%',
-    height: '42vh',
-    backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
-    boxShadow: theme.shadows[5],
+    height: '45vh',
+    backgroundColor: 'white',
     padding: theme.spacing(2, 4, 3),
   },
 }))
@@ -43,17 +35,26 @@ const columns = [
   {
     field: 'studentId',
     headerName: '학번',
-    // width: '20rem',
+    align: 'center',
+    headAlign: 'center',
+    editable: false,
+    width: 150,
   },
   {
     field: 'name',
     headerName: '이름',
-    // width: '20rem',
+    align: 'center',
+    headAlign: 'center',
+    editable: false,
+    width: 150,
   },
   {
     field: 'userId',
     headerName: '학생 ID',
-    // width: '20rem',
+    align: 'center',
+    headAlign: 'center',
+    editable: false,
+    width: 150,
   },
 ]
 
@@ -70,7 +71,6 @@ export default function AddmemberModal({ courseId, submitted, cookies }) {
   const [submitable, setSubmitable] = useState(false) // 멤버리스트 생성 준비 상태를 나타냄
 
   const classes = useStyles()
-  const [modalStyle] = useState(getModalStyle)
   const [open, setOpen] = useState(false)
 
   const dispatch = useDispatch()
@@ -88,8 +88,6 @@ export default function AddmemberModal({ courseId, submitted, cookies }) {
   useEffect(() => {
     console.log(rows)
   }, [rows])
-
-  // const userlist = useSelector(state => state.userlist[0]) // userlist 목록 가져온다.
 
   const userlistReducer = users => users.reduce((acc, cur, index) => [...acc, { id: index, ...cur }], []) // id 넘버를 포함한 객체 배열 반환
 
@@ -208,7 +206,7 @@ export default function AddmemberModal({ courseId, submitted, cookies }) {
     )
 
   const body = ( // 모달에 들어갈 내용
-    <div style={modalStyle} className={classes.paper}>
+    <div className="modal">
       <div className="col-md-8">
         <div className="input-group mb-3">
           <input
@@ -227,56 +225,53 @@ export default function AddmemberModal({ courseId, submitted, cookies }) {
       </div>
       <div style={{ height: '30vh', width: '100%' }}>
         {rows.length !== 0 ? (
-          <DataGrid
-            rows={rows}
-            columns={columns.map(column => ({
-              ...column,
-              sortable: false,
-            }))}
-            pageSize={pageSize}
-            onPageSizeChange={newPageSize => setPageSize(newPageSize)}
-            rowsPerPageOptions={[5, 10, 20]}
-            pagination
-            checkboxSelection
-            selectionModel={selectionModel}
-            onSelectionModelChange={e => {
-              console.log(reduxmemberList)
-              console.log(selectionModel)
-              onChangeCheck(e)
-            }}
-            disableSelectionOnClick
-          />
+          <div>
+            <DataGrid
+              rows={rows}
+              columns={columns.map(column => ({
+                ...column,
+                sortable: false,
+              }))}
+              pageSize={pageSize}
+              onPageSizeChange={newPageSize => setPageSize(newPageSize)}
+              pagination
+              autoHeight
+              disableColumnMenu
+              checkboxSelection
+              disableSelectionOnClick
+              selectionModel={selectionModel}
+              onSelectionModelChange={e => {
+                console.log(reduxmemberList)
+                console.log(selectionModel)
+                onChangeCheck(e)
+              }}
+            />
+            {submitable === true ? (
+              <button type="submit" onClick={saveMemberList} className="submit">
+                멤버 등록
+              </button>
+            ) : (
+              <div>수강생을 추가해주세요.</div>
+            )}
+          </div>
         ) : (
           <div>로딩 중..</div>
         )}
       </div>
-      {submitable === true ? (
-        <button type="submit" onClick={saveMemberList} className="btn btn-success">
-          멤버 등록
-        </button>
-      ) : (
-        <div>수강생을 추가해주세요.</div>
-      )}
     </div>
   )
 
   return (
     <StyledAddmemberModal>
-      <div>
-        <div className="plusdiv">
-          <button type="button" className="plusbutton" onClick={handleOpen}>
-            <FiPlusSquare className="plus" />
-          </button>
-          <p className="plustext">학생명단을 등록 및 수정하려면 버튼을 눌러주세요.</p>
-        </div>
-        <Modal
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description">
-          {body}
-        </Modal>
+      <div className="plusdiv">
+        <button type="button" className="plusbutton" onClick={handleOpen}>
+          <FiPlusSquare className="plus" />
+        </button>
+        <p className="plustext">학생명단을 등록 및 수정하려면 버튼을 눌러주세요.</p>
       </div>
+      <Modal open={open} onClose={handleClose}>
+        {body}
+      </Modal>
     </StyledAddmemberModal>
   )
 }
