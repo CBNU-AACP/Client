@@ -4,9 +4,20 @@ import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { withRouter, Redirect } from 'react-router-dom'
 import StyledAttendance from './style'
 import PropTypes from 'prop-types'
-import { DataGrid } from '@mui/x-data-grid'
+import {
+  DataGrid,
+  GridToolbarContainer,
+  GridToolbarColumnsButton,
+  GridToolbarExport,
+  useGridSlotComponentProps,
+} from '@mui/x-data-grid'
+import Pagination from '@material-ui/lab/Pagination/Pagination'
 
 import CourseDataService from '../../services/CourseService'
+import { getCourseDates, getAttendanceBook } from '../../actions/attendance'
+
+import getColumns from './getColumns'
+import getRows from './getRows'
 
 function Attendance(props) {
   Attendance.propTypes = {
@@ -30,8 +41,36 @@ function Attendance(props) {
   }
 
   const [currentCourse, setCurrentCourse] = useState(initialCourseState) // 현재 강좌 정보 저장
+  const [columns, setColumns] = useState([])
+  const [rows, setRows] = useState([])
+  const [page, setPage] = useState(0)
+  const courseId = props.match.params.id
 
   const dispatch = useDispatch()
+  const courseDates = useSelector(state => state.courseDates)
+  const attendanceBook = useSelector(state => state.attendanceBook)
+
+  function CustomToolbar() {
+    // 툴바 커스텀
+    return (
+      <GridToolbarContainer>
+        <GridToolbarColumnsButton />
+        <GridToolbarExport />
+      </GridToolbarContainer>
+    )
+  }
+
+  function CustomPagination() {
+    // 출석부 페이지네이션
+    const { state, apiRef } = useGridSlotComponentProps()
+    return (
+      <Pagination
+        count={state.pagination.pageCount}
+        page={state.pagination.page + 1}
+        onChange={(event, value) => apiRef.current.setPage(value - 1)}
+      />
+    )
+  }
 
   const getCourse = id => {
     // 현재 강좌를 찾는 함수
@@ -44,66 +83,76 @@ function Attendance(props) {
       })
   }
 
+  const getAttendanceInfo = id => {
+    dispatch(getCourseDates(id))
+      .then(data => {
+        console.log('2', data)
+        dispatch(getAttendanceBook(id))
+          .then(data => console.log('2', data))
+          .catch(e => {
+            console.log(e)
+          })
+      })
+      .catch(e => {
+        console.log(e)
+      })
+  }
+
   useEffect(() => {
     // router의 params가 바뀌면 실행
-    getCourse(props.match.params.id)
-  }, [props.match.params.id])
+    getCourse(courseId)
+    getAttendanceInfo(courseId)
+  }, [courseId])
 
-  const columns = [
-    {
-      field: '학번',
-      headerName: '학번',
-      width: 100,
-      editable: true,
-    },
-    {
-      field: '이름',
-      headerName: '학번',
-      width: 100,
-      editable: true,
-    },
-    {
-      field: '2021090613',
-      headerName: '2021090613',
-      type: 'number',
-      width: 200,
-      editable: true,
-    },
-  ]
-
-  const rows = [
-    { id: 1, 이름: 'Snow', 학번: 'Jon', 2021090613: 35 },
-    { id: 2, 이름: 'Lannister', 학번: 'Cersei', 2021090613: 42 },
-    { id: 3, 이름: 'Lannister', 학번: 'Jaime', 2021090613: 45 },
-    { id: 4, 이름: 'Stark', 학번: 'Arya', 2021090613: 16 },
-    { id: 5, 이름: 'Targaryen', 학번: 'Daenerys', 2021090613: null },
-    { id: 6, 이름: 'Melisandre', 학번: null, 2021090613: 150 },
-    { id: 7, 이름: 'Clifford', 학번: 'Ferrara', 2021090613: 44 },
-    { id: 8, 이름: 'Frances', 학번: 'Rossini', 2021090613: 36 },
-    { id: 9, 이름: 'Roxie', 학번: 'Harvey', 2021090613: 65 },
-  ]
+  useEffect(() => {
+    // 쓸데없이 두 번 렌더링됨
+    console.log(1)
+    if (courseDates.length !== 0 && attendanceBook.length !== 0) {
+      console.log(3)
+      setColumns(getColumns(courseDates)) // columns 상태 저장
+      setRows(getRows(courseDates, attendanceBook)) // rows 상태 저장
+    }
+  }, [attendanceBook])
 
   return (
     <div>
       {userId && userId !== 'undefined' ? (
         <StyledAttendance>
-          {currentCourse.courseId !== null ? (
+          {courseId !== null && attendanceBook[0] ? (
             <div>
               <div>
                 <p>강좌명: {currentCourse.name}</p>
                 <p>설명: {currentCourse.description}</p>
-                <p>총 학생수: 35명</p>
+                <p>학생수: {attendanceBook[0].length}명</p>
               </div>
 
               <div className="datagrid">
                 <div className="gridparent">
                   <DataGrid
+                    page={page}
+                    onPageChange={newPage => setPage(newPage)}
+                    localeText={{
+                      toolbarColumns: '열',
+                      columnsPanelTextFieldLabel: '열 찾기',
+                      columnsPanelTextFieldPlaceholder: '열 이름을 입력해주세요.',
+                      columnsPanelShowAllButton: '모든 열 보이기',
+                      columnsPanelHideAllButton: '모든 열 감추기',
+                      toolbarExport: '추출',
+                      toolbarExportCSV: 'CSV로 다운로드',
+                    }}
+                    components={{
+                      Toolbar: CustomToolbar,
+                      Pagination: CustomPagination,
+                    }}
+                    columnBuffer={10}
+                    pagenation
                     autoHeight
                     rows={rows}
                     columns={columns}
                     pageSize={10}
                     rowsPerPageOptions={[10]}
                     disableSelectionOnClick
+                    disableColumnMenu
                   />
                 </div>
               </div>
