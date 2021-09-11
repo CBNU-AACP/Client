@@ -44,7 +44,7 @@ function Attendance(props) {
   const [columns, setColumns] = useState([])
   const [rows, setRows] = useState([])
   const [page, setPage] = useState(0)
-  const { courseId } = currentCourse
+  const courseId = props.match.params.id
 
   const dispatch = useDispatch()
   const courseDates = useSelector(state => state.courseDates)
@@ -83,11 +83,11 @@ function Attendance(props) {
       })
   }
 
-  const getAttendanceInfo = () => {
-    dispatch(getCourseDates(courseId))
+  const getAttendanceInfo = id => {
+    dispatch(getCourseDates(id))
       .then(data => {
         console.log('2', data)
-        dispatch(getAttendanceBook(courseId))
+        dispatch(getAttendanceBook(id))
           .then(data => console.log('2', data))
           .catch(e => {
             console.log(e)
@@ -100,16 +100,15 @@ function Attendance(props) {
 
   useEffect(() => {
     // router의 params가 바뀌면 실행
-    getCourse(props.match.params.id)
-  }, [props.match.params.id])
-
-  useEffect(() => {
-    if (courseId) getAttendanceInfo()
+    getCourse(courseId)
+    getAttendanceInfo(courseId)
   }, [courseId])
 
   useEffect(() => {
+    // 쓸데없이 두 번 렌더링됨
     console.log(1)
     if (courseDates.length !== 0 && attendanceBook.length !== 0) {
+      console.log(3)
       setColumns(getColumns(courseDates)) // columns 상태 저장
       setRows(getRows(courseDates, attendanceBook)) // rows 상태 저장
     }
@@ -119,7 +118,7 @@ function Attendance(props) {
     <div>
       {userId && userId !== 'undefined' ? (
         <StyledAttendance>
-          {currentCourse.courseId !== null && attendanceBook[0] ? (
+          {courseId !== null && attendanceBook[0] ? (
             <div>
               <div>
                 <p>강좌명: {currentCourse.name}</p>
@@ -130,7 +129,6 @@ function Attendance(props) {
               <div className="datagrid">
                 <div className="gridparent">
                   <DataGrid
-                    className="grid"
                     page={page}
                     onPageChange={newPage => setPage(newPage)}
                     localeText={{
