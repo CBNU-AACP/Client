@@ -17,16 +17,19 @@ const Find = styled(Form)`
     border-radius: 20px;
     margin: 2.3rem auto;
     padding: 2.3rem;
-    .find-btn {
-      background-color: orange;
-      border: 1px solid orange;
-      border-radius: 5px;
-      margin-top: 0.5rem;
-      width: 100%;
+    .input-find {
+      margin: 0.5rem auto;
     }
-    .find-btn:hover {
-      background-color: #e98533;
+    .btn-find {
+      /* background-color: orange; */
+      border: 2px solid orange;
+      border-radius: 5px;
+      margin: 0 0.5rem;
       color: black;
+    }
+    .btn-find:hover {
+      background-color: #ff9844;
+      color: white;
     }
     #tabs {
       background-color: rgba(248, 135, 42, 0.918);
