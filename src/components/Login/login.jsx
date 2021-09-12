@@ -94,7 +94,7 @@ function Login(props, { match }) {
         setCookie('userId', user.userId, { path: '/' })
       })
       .catch(e => {
-        console.log('errer', e)
+        console.log('error', e)
         alert('아이디 또는 비밀번호를 다시 확인해주세요.')
       })
   }
@@ -177,7 +177,7 @@ function Login(props, { match }) {
           </div>
         </div>
       ) : (
-        <Redirect to="/qrgen" />
+        <Redirect to="/home" />
       )}
     </StyedLogin>
   )
