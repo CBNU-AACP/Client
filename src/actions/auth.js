@@ -45,12 +45,12 @@ export const LoginUser = user => async dispatch => {
     console.log(user)
     const res = await AuthService.login(user)
     console.log(res)
-    dispatch({
-      type: LOGIN_SUCCESS,
-      payload: res.data.data,
-    })
+    // dispatch({
+    //   type: LOGIN_SUCCESS,
+    //   payload: res.data.data.userId,
+    // })
 
-    return Promise.resolve(res.data.data)
+    return Promise.resolve(res.data.data.userId)
   } catch (err) {
     return Promise.reject(err)
   }
