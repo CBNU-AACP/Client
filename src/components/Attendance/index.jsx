@@ -11,7 +11,7 @@ import {
   GridToolbarExport,
   useGridSlotComponentProps,
 } from '@mui/x-data-grid'
-import Pagination from '@material-ui/lab/Pagination/Pagination'
+import Pagination from '@material-ui/lab/Pagination'
 
 import CourseDataService from '../../services/CourseService'
 import { getCourseDates, getAttendanceBook } from '../../actions/attendance'
