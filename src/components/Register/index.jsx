@@ -171,11 +171,11 @@ function Register() {
     console.log(user)
     if (user.userId !== checkUserId) {
       document.getElementById('userId').focus()
-      setdpIdcheck(dpIdcheck => ({ ...dpIdcheck, state: false, message: '중복확인을 해주세요.' }))
+      setdpIdcheck({ ...dpIdcheck, message: '중복확인을 해주세요.' })
     }
     if (user.userEmail !== checkUserEmail) {
       document.getElementById('userEmail').focus()
-      setdpEmailcheck({ ...dpEmailcheck, state: false, message: '중복확인을 해주세요.' })
+      setdpEmailcheck({ ...dpEmailcheck, message: '중복확인을 해주세요.' })
     } else
       dispatch(RegisterUser(user))
         .then(e => {
@@ -274,7 +274,7 @@ function Register() {
               name="userPhoneNumber"
               control={control}
               render={({ field }) => (
-                <Input type="text" {...field} id="userPhoneNumber" placeholder="전화번호를 입력해주세요." />
+                <Input type="text" {...field} id="userPhoneNumber" placeholder="'-'제외하고 숫자만 입력" />
               )}
             />
             {errors.userPhoneNumber && <FormErrorMessage className="error" Message={errors.userPhoneNumber.message} />}
