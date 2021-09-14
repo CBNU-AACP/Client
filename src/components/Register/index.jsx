@@ -12,7 +12,6 @@ import { Redirect } from 'react-router-dom'
 
 function Register() {
   const {
-    register,
     handleSubmit,
     formState: { errors },
     control,
@@ -67,7 +66,7 @@ function Register() {
       document.getElementById('userPhoneNumber').focus()
       setVisible(false)
     } else {
-      if (userId !== checkUserId || userId === '') {
+      if (userId !== dpIdcheck.userId || dpIdcheck.state === false) {
         document.getElementById('userId').focus()
         setdpIdcheck({ ...dpIdcheck, state: false, message: '중복확인을 해주세요.' })
         return
@@ -89,7 +88,7 @@ function Register() {
     }
   }
   const isVisible = {
-    visibility: visible ? 'visible' : 'hidden',
+    display: visible ? 'inline' : 'none',
   }
   // 인증번호 인증
   function Verifysubmit() {
@@ -109,31 +108,27 @@ function Register() {
 
   //  아이디 중복 체크
   const [dpIdcheck, setdpIdcheck] = useState({
+    userId: '',
     state: false,
     message: '',
   })
   //  이메일 중복 체크
   const [dpEmailcheck, setdpEmailcheck] = useState({
+    userEmail: '',
     state: false,
     message: '',
   })
-
-  const [checkUserId, setcheckUserId] = useState('')
-  const [checkUserEmail, setcheckUserEmail] = useState('')
-
   // 아이디 중복확인
   const VerifyId = () => {
-    setcheckUserId(document.getElementById('userId').value)
-    setdpIdcheck({ ...dpIdcheck, state: true })
+    setdpIdcheck({ ...dpIdcheck, state: true, userId: document.getElementById('userId').value })
   }
   // 이메일 중복확인
   const VerifyEmail = () => {
-    setcheckUserEmail(document.getElementById('userEmail').value)
-    setdpEmailcheck({ ...dpIdcheck, state: true })
+    setdpEmailcheck({ ...dpEmailcheck, state: true, userEmail: document.getElementById('userEmail').value })
   }
   useEffect(() => {
-    if (dpIdcheck.state === true) {
-      dispatch(DpUsercheck(checkUserId))
+    if (dpIdcheck.state === true && dpIdcheck.userId !== '') {
+      dispatch(DpUsercheck(dpIdcheck.userId))
         .then(e => {
           // 중복이 없을 경우
           console.log(e)
@@ -142,14 +137,14 @@ function Register() {
         .catch(e => {
           // 중복이 있을 경우
           console.log(e)
-          setdpIdcheck({ ...dpIdcheck, message: '존재하는 아이디입니다.' })
+          setdpIdcheck({ ...dpIdcheck, state: false, message: '존재하는 아이디입니다.' })
         })
     }
-  }, [checkUserId, dpIdcheck.state])
+  }, [dpIdcheck.state, dpIdcheck.userId])
 
   useEffect(() => {
-    if (dpEmailcheck.state === true) {
-      dispatch(DpUsercheck(checkUserEmail))
+    if (dpEmailcheck.state === true && dpEmailcheck.userEmail !== '') {
+      dispatch(DpUsercheck(dpEmailcheck.userEmail))
         .then(e => {
           // 중복이 없을 경우
           console.log(e)
@@ -158,10 +153,10 @@ function Register() {
         .catch(e => {
           // 중복이 있을 경우
           console.log(e)
-          setdpEmailcheck({ ...dpEmailcheck, message: '이미 사용 중인 이메일입니다.' })
+          setdpEmailcheck({ ...dpEmailcheck, state: false, message: '이미 사용 중인 이메일입니다.' })
         })
     }
-  }, [checkUserEmail, dpEmailcheck.state])
+  }, [dpEmailcheck.state, dpEmailcheck.userEmail])
 
   // 회원가입 버튼 클릭 시
   const handleRegister = data => {
@@ -169,11 +164,11 @@ function Register() {
     const { userId, userPassword, studentId, userEmail, userPhoneNumber, name } = data
     const user = { userId, userPassword, studentId, userEmail, userPhoneNumber, name }
     console.log(user)
-    if (user.userId !== checkUserId) {
+    if (user.userId !== dpIdcheck.userId) {
       document.getElementById('userId').focus()
       setdpIdcheck({ ...dpIdcheck, message: '중복확인을 해주세요.' })
     }
-    if (user.userEmail !== checkUserEmail) {
+    if (user.userEmail !== dpIdcheck.userEmail) {
       document.getElementById('userEmail').focus()
       setdpEmailcheck({ ...dpEmailcheck, message: '중복확인을 해주세요.' })
     } else
