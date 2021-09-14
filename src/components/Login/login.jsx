@@ -75,19 +75,19 @@ function Login(props, { match }) {
   const [cookies, setCookie, removeCookie] = useCookies(['userId'])
   const [cookieExpires] = useState({
     now: new Date(),
-    after1d: new Date(),
+    after1h: new Date(),
   })
 
   const handleLogin = data => {
     console.log('submit', data)
     const { userId, userPassword } = data
     const user = { userId, userPassword }
-    cookieExpires.after1d.setHours(cookieExpires.now.getHours() + 1)
-    console.log(cookieExpires.after1d)
+    cookieExpires.after1h.setHours(cookieExpires.now.getHours() + 1)
+    console.log(cookieExpires.after1h)
     dispatch(LoginUser(user))
       .then(e => {
         console.log(e)
-        setCookie('userId', user.userId, { path: '/', expires: cookieExpires.after1d })
+        setCookie('userId', user.userId, { path: '/', expires: cookieExpires.after1h })
       })
       .catch(e => {
         console.log('error', e)
