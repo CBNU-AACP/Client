@@ -43,6 +43,7 @@ function Attendance(props) {
   const [currentCourse, setCurrentCourse] = useState(initialCourseState) // 현재 강좌 정보 저장
   const [columns, setColumns] = useState([])
   const [rows, setRows] = useState([])
+  const [edit, setEdit] = useState({})
   const [page, setPage] = useState(0)
   const courseId = props.match.params.id
 
@@ -71,6 +72,15 @@ function Attendance(props) {
       />
     )
   }
+
+  const handleEdit = model => {
+    const updateEdit = { ...model }
+    setEdit(model)
+  }
+
+  useEffect(() => {
+    console.log(edit)
+  }, [edit])
 
   const getCourse = id => {
     // 현재 강좌를 찾는 함수
@@ -153,6 +163,8 @@ function Attendance(props) {
                     rowsPerPageOptions={[10]}
                     disableSelectionOnClick
                     disableColumnMenu
+                    editRowsModel={edit}
+                    onEditRowsModelChange={handleEdit}
                   />
                 </div>
               </div>
