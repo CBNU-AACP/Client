@@ -206,7 +206,7 @@ export default function AddmemberModal({ courseId, submitted, cookies }) {
     )
 
   const body = ( // 모달에 들어갈 내용
-    <div className="modal">
+    <div className={classes.paper}>
       <div className="col-md-8">
         <div className="input-group mb-3">
           <input
@@ -223,7 +223,7 @@ export default function AddmemberModal({ courseId, submitted, cookies }) {
           </div>
         </div>
       </div>
-      <div style={{ height: '30vh', width: '100%' }}>
+      <div style={{ width: '100%' }}>
         {rows.length !== 0 ? (
           <div>
             <DataGrid
@@ -269,7 +269,7 @@ export default function AddmemberModal({ courseId, submitted, cookies }) {
         </button>
         <p className="plustext">학생명단을 등록 및 수정하려면 버튼을 눌러주세요.</p>
       </div>
-      <Modal open={open} onClose={handleClose}>
+      <Modal className="frame" open={open} onClose={handleClose}>
         {body}
       </Modal>
     </StyledAddmemberModal>
