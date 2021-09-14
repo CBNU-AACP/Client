@@ -51,7 +51,7 @@ function Register() {
           }
         }, 1000),
       )
-    } else if ((!visible && seconds !== 0) || isNumSuccessful === '인증성공') {
+    } else if (isNumSuccessful === '인증성공') {
       clearInterval(countdown)
     }
     return () => clearInterval(countdown)
@@ -71,12 +71,12 @@ function Register() {
         setdpIdcheck({ ...dpIdcheck, state: false, message: '중복확인을 해주세요.' })
         return
       }
-      setVisible(true)
       console.log(userId, userPhoneNumber)
       GetPhoneVerifyNum(userId, userPhoneNumber)
         .then(e => {
           console.log(e)
           setisNumPosted('인증번호가 전송되었습니다.')
+          setVisible(true)
           setisNumSuccessful('')
           setMinutes(parseInt(1))
           setSeconds(parseInt(0))
@@ -88,7 +88,7 @@ function Register() {
     }
   }
   const isVisible = {
-    display: visible ? 'inline' : 'none',
+    display: visible ? 'block' : 'none',
   }
   // 인증번호 인증
   function Verifysubmit() {
@@ -297,13 +297,12 @@ function Register() {
             {errors.userVerifyNum && <FormErrorMessage className="error" Message={errors.userVerifyNum.message} />}
           </div>
           <div className="element">
-            {/* <Timer /> */}
-            <p className="timer" style={isVisible}>
-              유효시간 : {minutes}:{seconds < 10 ? `0${seconds}` : seconds}초
-            </p>
             <Button type="primary" htmlType="button" style={isVisible} onClick={Verifysubmit} block>
               인증하기
             </Button>
+            <p className="timer" style={isVisible}>
+              유효시간 : {minutes}:{seconds < 10 ? `0${seconds}` : seconds}초
+            </p>
             <FormErrorMessage className="error" Message={isNumSuccessful} />
           </div>
           <div className="element">
