@@ -140,7 +140,7 @@ function Register() {
           setdpIdcheck({ ...dpIdcheck, state: false, message: '존재하는 아이디입니다.' })
         })
     }
-  }, [dpIdcheck.state, dpIdcheck.userId])
+  }, [dpIdcheck.state])
 
   useEffect(() => {
     if (dpEmailcheck.state === true && dpEmailcheck.userEmail !== '') {
@@ -156,7 +156,7 @@ function Register() {
           setdpEmailcheck({ ...dpEmailcheck, state: false, message: '이미 사용 중인 이메일입니다.' })
         })
     }
-  }, [dpEmailcheck.state, dpEmailcheck.userEmail])
+  }, [dpEmailcheck.state])
 
   // 회원가입 버튼 클릭 시
   const handleRegister = data => {
@@ -168,7 +168,7 @@ function Register() {
       document.getElementById('userId').focus()
       setdpIdcheck({ ...dpIdcheck, message: '중복확인을 해주세요.' })
     }
-    if (user.userEmail !== dpIdcheck.userEmail) {
+    if (user.userEmail !== dpEmailcheck.userEmail) {
       document.getElementById('userEmail').focus()
       setdpEmailcheck({ ...dpEmailcheck, message: '중복확인을 해주세요.' })
     } else
