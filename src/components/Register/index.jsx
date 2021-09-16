@@ -12,7 +12,6 @@ import { Redirect } from 'react-router-dom'
 
 function Register() {
   const {
-    register,
     handleSubmit,
     formState: { errors },
     control,
@@ -52,7 +51,7 @@ function Register() {
           }
         }, 1000),
       )
-    } else if ((!visible && seconds !== 0) || isNumSuccessful === '인증성공') {
+    } else if (isNumSuccessful === '인증성공') {
       clearInterval(countdown)
     }
     return () => clearInterval(countdown)
@@ -60,24 +59,24 @@ function Register() {
 
   // 인증번호 받기
   const VerifyVisible = () => {
-    const userId = document.getElementById('userId').value
+    const getuserId = document.getElementById('userId').value
     const userPhoneNumber = document.getElementById('userPhoneNumber').value
 
     if (!userPhoneNumber) {
       document.getElementById('userPhoneNumber').focus()
       setVisible(false)
     } else {
-      if (userId !== checkUserId || userId === '') {
+      if (getuserId !== dpuserId || idstate === false) {
         document.getElementById('userId').focus()
-        setdpIdcheck({ ...dpIdcheck, state: false, message: '중복확인을 해주세요.' })
+        setdpIdcheck({ ...dpIdcheck, message: '중복확인을 해주세요.' })
         return
       }
-      setVisible(true)
-      console.log(userId, userPhoneNumber)
-      GetPhoneVerifyNum(userId, userPhoneNumber)
+      console.log(getuserId, userPhoneNumber)
+      GetPhoneVerifyNum(getuserId, userPhoneNumber)
         .then(e => {
           console.log(e)
           setisNumPosted('인증번호가 전송되었습니다.')
+          setVisible(true)
           setisNumSuccessful('')
           setMinutes(parseInt(1))
           setSeconds(parseInt(0))
@@ -89,7 +88,7 @@ function Register() {
     }
   }
   const isVisible = {
-    visibility: visible ? 'visible' : 'hidden',
+    display: visible ? 'block' : 'none',
   }
   // 인증번호 인증
   function Verifysubmit() {
@@ -109,31 +108,30 @@ function Register() {
 
   //  아이디 중복 체크
   const [dpIdcheck, setdpIdcheck] = useState({
-    state: false,
+    dpuserId: '',
+    idstate: false,
     message: '',
   })
   //  이메일 중복 체크
   const [dpEmailcheck, setdpEmailcheck] = useState({
-    state: false,
+    dpuserEmail: '',
+    emailstate: false,
     message: '',
   })
-
-  const [checkUserId, setcheckUserId] = useState('')
-  const [checkUserEmail, setcheckUserEmail] = useState('')
-
+  const { dpuserId, idstate } = dpIdcheck
+  const { dpuserEmail, emailstate } = dpEmailcheck
   // 아이디 중복확인
   const VerifyId = () => {
-    setcheckUserId(document.getElementById('userId').value)
-    setdpIdcheck({ ...dpIdcheck, state: true })
+    setdpIdcheck({ ...dpIdcheck, idstate: true, dpuserId: document.getElementById('userId').value })
+    console.log(dpuserId, idstate)
   }
   // 이메일 중복확인
   const VerifyEmail = () => {
-    setcheckUserEmail(document.getElementById('userEmail').value)
-    setdpEmailcheck({ ...dpIdcheck, state: true })
+    setdpEmailcheck({ ...dpEmailcheck, emailstate: true, dpuserEmail: document.getElementById('userEmail').value })
   }
   useEffect(() => {
-    if (dpIdcheck.state === true) {
-      dispatch(DpUsercheck(checkUserId))
+    if (dpuserId !== '') {
+      dispatch(DpUsercheck(dpuserId))
         .then(e => {
           // 중복이 없을 경우
           console.log(e)
@@ -142,14 +140,14 @@ function Register() {
         .catch(e => {
           // 중복이 있을 경우
           console.log(e)
-          setdpIdcheck({ ...dpIdcheck, message: '존재하는 아이디입니다.' })
+          setdpIdcheck({ ...dpIdcheck, idstate: false, message: '존재하는 아이디입니다.' })
         })
     }
-  }, [checkUserId, dpIdcheck.state])
+  }, [dpuserId])
 
   useEffect(() => {
-    if (dpEmailcheck.state === true) {
-      dispatch(DpUsercheck(checkUserEmail))
+    if (dpuserEmail !== '') {
+      dispatch(DpUsercheck(dpuserEmail))
         .then(e => {
           // 중복이 없을 경우
           console.log(e)
@@ -158,25 +156,24 @@ function Register() {
         .catch(e => {
           // 중복이 있을 경우
           console.log(e)
-          setdpEmailcheck({ ...dpEmailcheck, message: '이미 사용 중인 이메일입니다.' })
+          setdpEmailcheck({ ...dpEmailcheck, emailstate: false, message: '이미 사용 중인 이메일입니다.' })
         })
     }
-  }, [checkUserEmail, dpEmailcheck.state])
+  }, [dpuserEmail])
 
   // 회원가입 버튼 클릭 시
   const handleRegister = data => {
     setSuccessful(false)
     const { userId, userPassword, studentId, userEmail, userPhoneNumber, name } = data
-    const user = { userId, userPassword, studentId, userEmail, userPhoneNumber, name }
-    console.log(user)
-    if (user.userId !== checkUserId) {
+    if (userId !== dpuserId || idstate === false) {
       document.getElementById('userId').focus()
       setdpIdcheck({ ...dpIdcheck, message: '중복확인을 해주세요.' })
-    }
-    if (user.userEmail !== checkUserEmail) {
+    } else if (userEmail !== dpuserEmail || emailstate === false) {
       document.getElementById('userEmail').focus()
       setdpEmailcheck({ ...dpEmailcheck, message: '중복확인을 해주세요.' })
-    } else
+    } else {
+      const user = { userId, userPassword, studentId, userEmail, userPhoneNumber, name }
+      console.log(user)
       dispatch(RegisterUser(user))
         .then(e => {
           console.log(e)
@@ -186,6 +183,7 @@ function Register() {
           console.log(e)
           setSuccessful(false)
         })
+    }
   }
 
   return (
@@ -302,13 +300,12 @@ function Register() {
             {errors.userVerifyNum && <FormErrorMessage className="error" Message={errors.userVerifyNum.message} />}
           </div>
           <div className="element">
-            {/* <Timer /> */}
-            <p className="timer" style={isVisible}>
-              유효시간 : {minutes}:{seconds < 10 ? `0${seconds}` : seconds}초
-            </p>
             <Button type="primary" htmlType="button" style={isVisible} onClick={Verifysubmit} block>
               인증하기
             </Button>
+            <p className="timer" style={isVisible}>
+              유효시간 : {minutes}:{seconds < 10 ? `0${seconds}` : seconds}초
+            </p>
             <FormErrorMessage className="error" Message={isNumSuccessful} />
           </div>
           <div className="element">
