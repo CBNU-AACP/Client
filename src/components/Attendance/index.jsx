@@ -1,4 +1,3 @@
-/* eslint-disable prefer-const */
 /* eslint-disable react/destructuring-assignment */
 import { useDispatch, useSelector } from 'react-redux'
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
@@ -44,10 +43,10 @@ function Attendance(props) {
 
   const [currentCourse, setCurrentCourse] = useState(initialCourseState) // 현재 강좌 정보 저장
   const [columns, setColumns] = useState([])
-  const [apiend, setApiend] = useState(false)
+  const [apiend, setApiend] = useState(false) // 서버요청이 끝났는지 아닌지 여부
   const [rows, setRows] = useState([])
-  const [edit, setEdit] = useState([])
-  const [editList, setEditList] = useState([])
+  const [edit, setEdit] = useState([]) // 현재 수정 중인 셀을 담는 상태
+  const [editList, setEditList] = useState([]) // 수정하는 것들을 담는 상태
   const [message, setMessage] = useState('로딩 중..')
   const [page, setPage] = useState(0)
   const courseId = props.match.params.id
@@ -83,23 +82,14 @@ function Attendance(props) {
 
   const handleEdit = model => {
     setEdit(model)
-    const keys = +Object.keys(model)
-    console.log(keys, model[keys] !== undefined)
-    if (model[keys] !== undefined && model[keys] !== null)
-      Object.keys(model[keys]).forEach(v => {
-        coursedates.forEach((el, idx) => {
-          if (courseDate(coursedates, idx) === v)
-            setEditList([...editList, [attendance[0][keys - 1].userId, el.courseDateId, model[keys][v].value]])
-        })
+    const key = +Object.keys(model)
+    if (model[key] !== undefined && model[key] !== null) {
+      const v = String(Object.keys(model[key]))
+      coursedates.forEach((el, idx) => {
+        if (courseDate(coursedates, idx) === v)
+          setEditList([...editList, [attendance[0][key - 1].userId, el.courseDateId, model[key][v].value]])
       })
-    // Object.keys(model).forEach(key => {
-    //   Object.keys(model[key]).forEach(v => {
-    //     coursedates.forEach((el, idx) => {
-    //       if (courseDate(coursedates, idx) === v)
-    //         setEditList([...editList, [attendance[0][key - 1].userId, el.courseDateId, model[key][v].value]])
-    //     })
-    //   })
-    // })
+    }
   }
 
   useEffect(() => {
