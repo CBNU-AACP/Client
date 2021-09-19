@@ -86,8 +86,26 @@ function Attendance(props) {
     if (model[key] !== undefined && model[key] !== null) {
       const v = String(Object.keys(model[key]))
       coursedates.forEach((el, idx) => {
-        if (courseDate(coursedates, idx) === v)
-          setEditList([...editList, [attendance[0][key - 1].userId, el.courseDateId, model[key][v].value]])
+        if (courseDate(coursedates, idx) === v) {
+          const index = editList.findIndex((cur, id, arr) => {
+            // findIndex가 0을 반환하면 -1로 바꿈 그래서 0번 idx에서 찾아도 -1로 된다.
+            if (cur[0] === attendance[0][key - 1].userId && cur[1] === el.courseDateId) {
+              return id
+            }
+            return false
+          }) // editlist에 일치하는 배열이 있는지 확인
+          if (editList.length !== 0) {
+            if (index !== -1) {
+              // 일치하면
+              editList[index][2] = model[key][v].value // 상태 수정
+              setEditList([...editList]) // 상태 업데이트
+            } else {
+              setEditList([...editList, [attendance[0][key - 1].userId, el.courseDateId, model[key][v].value]])
+            }
+          } else {
+            setEditList([...editList, [attendance[0][key - 1].userId, el.courseDateId, model[key][v].value]])
+          }
+        }
       })
     }
   }
