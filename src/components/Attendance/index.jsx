@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 /* eslint-disable react/destructuring-assignment */
 import { useDispatch, useSelector } from 'react-redux'
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
@@ -18,6 +19,7 @@ import { getCourseDates, getAttendanceBook } from '../../actions/attendance'
 
 import getColumns from './getColumns'
 import getRows from './getRows'
+import courseDate from '../../utils/courseDateIdtoString'
 
 function Attendance(props) {
   Attendance.propTypes = {
@@ -42,14 +44,20 @@ function Attendance(props) {
 
   const [currentCourse, setCurrentCourse] = useState(initialCourseState) // 현재 강좌 정보 저장
   const [columns, setColumns] = useState([])
+  const [apiend, setApiend] = useState(false)
   const [rows, setRows] = useState([])
-  const [edit, setEdit] = useState({})
+  const [edit, setEdit] = useState([])
+  const [editList, setEditList] = useState([])
+  const [message, setMessage] = useState('로딩 중..')
   const [page, setPage] = useState(0)
   const courseId = props.match.params.id
 
+  let courseDates = []
+  let attendanceBook = []
+
   const dispatch = useDispatch()
-  const courseDates = useSelector(state => state.courseDates)
-  const attendanceBook = useSelector(state => state.attendanceBook)
+  const attendance = useSelector(state => state.attendanceBook)
+  const coursedates = useSelector(state => state.courseDates)
 
   function CustomToolbar() {
     // 툴바 커스텀
@@ -74,13 +82,29 @@ function Attendance(props) {
   }
 
   const handleEdit = model => {
-    const updateEdit = { ...model }
     setEdit(model)
+    const keys = +Object.keys(model)
+    console.log(keys, model[keys] !== undefined)
+    if (model[keys] !== undefined && model[keys] !== null)
+      Object.keys(model[keys]).forEach(v => {
+        coursedates.forEach((el, idx) => {
+          if (courseDate(coursedates, idx) === v)
+            setEditList([...editList, [attendance[0][keys - 1].userId, el.courseDateId, model[keys][v].value]])
+        })
+      })
+    // Object.keys(model).forEach(key => {
+    //   Object.keys(model[key]).forEach(v => {
+    //     coursedates.forEach((el, idx) => {
+    //       if (courseDate(coursedates, idx) === v)
+    //         setEditList([...editList, [attendance[0][key - 1].userId, el.courseDateId, model[key][v].value]])
+    //     })
+    //   })
+    // })
   }
 
   useEffect(() => {
-    console.log(edit)
-  }, [edit])
+    console.log(editList)
+  }, [editList])
 
   const getCourse = id => {
     // 현재 강좌를 찾는 함수
@@ -96,15 +120,22 @@ function Attendance(props) {
   const getAttendanceInfo = id => {
     dispatch(getCourseDates(id))
       .then(data => {
-        console.log('2', data)
+        courseDates = data
+        console.log('1', courseDates)
+        setColumns(getColumns(data)) // columns 상태 저장
         dispatch(getAttendanceBook(id))
-          .then(data => console.log('2', data))
+          .then(data => {
+            attendanceBook = data
+            console.log('2', attendanceBook)
+            setApiend(true)
+            setRows(getRows(courseDates, attendanceBook)) // rows 상태 저장
+          })
           .catch(e => {
-            console.log(e)
+            setMessage('등록한 학생이 없습니다.')
           })
       })
       .catch(e => {
-        console.log(e)
+        setMessage('리더기를 켜서 수업 날짜를 만들어주세요.')
       })
   }
 
@@ -114,63 +145,59 @@ function Attendance(props) {
     getAttendanceInfo(courseId)
   }, [courseId])
 
-  useEffect(() => {
-    // 쓸데없이 두 번 렌더링됨
-    console.log(1)
-    if (courseDates.length !== 0 && attendanceBook.length !== 0) {
-      console.log(3)
-      setColumns(getColumns(courseDates)) // columns 상태 저장
-      setRows(getRows(courseDates, attendanceBook)) // rows 상태 저장
-    }
-  }, [attendanceBook])
-
   return (
     <div>
       {userId && userId !== 'undefined' ? (
         <StyledAttendance>
-          {courseId !== null && attendanceBook[0] ? (
-            <div>
+          {courseId !== null && apiend !== false ? (
+            rows.length !== 0 ? (
               <div>
-                <p>강좌명: {currentCourse.name}</p>
-                <p>설명: {currentCourse.description}</p>
-                <p>학생수: {attendanceBook[0].length}명</p>
-              </div>
-
-              <div className="datagrid">
-                <div className="gridparent">
-                  <DataGrid
-                    page={page}
-                    onPageChange={newPage => setPage(newPage)}
-                    localeText={{
-                      toolbarColumns: '열',
-                      columnsPanelTextFieldLabel: '열 찾기',
-                      columnsPanelTextFieldPlaceholder: '열 이름을 입력해주세요.',
-                      columnsPanelShowAllButton: '모든 열 보이기',
-                      columnsPanelHideAllButton: '모든 열 감추기',
-                      toolbarExport: '추출',
-                      toolbarExportCSV: 'CSV로 다운로드',
-                    }}
-                    components={{
-                      Toolbar: CustomToolbar,
-                      Pagination: CustomPagination,
-                    }}
-                    columnBuffer={10}
-                    pagenation
-                    autoHeight
-                    rows={rows}
-                    columns={columns}
-                    pageSize={10}
-                    rowsPerPageOptions={[10]}
-                    disableSelectionOnClick
-                    disableColumnMenu
-                    editRowsModel={edit}
-                    onEditRowsModelChange={handleEdit}
-                  />
+                <div>
+                  <p>강좌명: {currentCourse.name}</p>
+                  <p>설명: {currentCourse.description}</p>
+                  <p>학생수: {rows.length}명</p>
                 </div>
+
+                <div className="datagrid">
+                  <div className="gridparent">
+                    <DataGrid
+                      page={page}
+                      onPageChange={newPage => setPage(newPage)}
+                      localeText={{
+                        toolbarColumns: '열',
+                        columnsPanelTextFieldLabel: '열 찾기',
+                        columnsPanelTextFieldPlaceholder: '열 이름을 입력해주세요.',
+                        columnsPanelShowAllButton: '모든 열 보이기',
+                        columnsPanelHideAllButton: '모든 열 감추기',
+                        toolbarExport: '추출',
+                        toolbarExportCSV: 'CSV로 다운로드',
+                      }}
+                      components={{
+                        Toolbar: CustomToolbar,
+                        Pagination: CustomPagination,
+                      }}
+                      columnBuffer={10}
+                      pagenation
+                      autoHeight
+                      rows={rows}
+                      columns={columns}
+                      pageSize={10}
+                      rowsPerPageOptions={[10]}
+                      disableSelectionOnClick
+                      disableColumnMenu
+                      isCellEditable={params => params}
+                      editRowsModel={edit}
+                      onEditRowsModelChange={handleEdit}
+                    />
+                  </div>
+                </div>
+                <button type="button">수정하기</button>
               </div>
-            </div>
+            ) : (
+              <div>{message}</div>
+            )
           ) : (
-            <div>로딩 중..</div>
+            <div>{message}</div>
           )}
         </StyledAttendance>
       ) : (
