@@ -94,15 +94,11 @@ function Attendance(props) {
             }
             return false
           }) // editlist에 일치하는 배열이 있는지 확인
-          if (editList.length !== 0) {
-            if (index !== -1) {
-              // 일치하면
-              editList[index][2] = model[key][v].value // 상태 수정
-              setEditList([...editList]) // 상태 업데이트
-            } else {
-              setEditList([...editList, [attendance[0][key - 1].userId, el.courseDateId, model[key][v].value]])
-            }
-          } else {
+          if (editList.length !== 0 && index !== -1) {
+            // 일치하면
+            editList[index][2] = model[key][v].value // 상태 수정
+            setEditList([...editList]) // 상태 업데이트
+          } else if (editList.length === 0 || index === -1) {
             setEditList([...editList, [attendance[0][key - 1].userId, el.courseDateId, model[key][v].value]])
           }
         }
