@@ -1,4 +1,4 @@
-import { GET_COURSEDATES, GET_ATTENDANCEBOOK, PUT_COURSEDATES, PUT_ATTENDANCEBOOK } from '../actions/types'
+import { GET_COURSEDATES, GET_ATTENDANCEBOOK, PUT_COURSEDATES } from '../actions/types'
 
 const courseState = []
 const attendanceState = []
@@ -23,9 +23,6 @@ export function attendanceBook(attendanceBook = attendanceState, action) {
 
   switch (type) {
     case GET_ATTENDANCEBOOK:
-      return [...payload]
-
-    case PUT_ATTENDANCEBOOK:
       return [...payload]
 
     default:
