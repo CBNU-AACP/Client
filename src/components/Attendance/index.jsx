@@ -14,7 +14,7 @@ import {
 import Pagination from '@material-ui/lab/Pagination'
 
 import CourseDataService from '../../services/CourseService'
-import { getCourseDates, getAttendanceBook } from '../../actions/attendance'
+import { getCourseDates, getAttendanceBook, putAttendanceBook } from '../../actions/attendance'
 
 import getColumns from './getColumns'
 import getRows from './getRows'
@@ -43,10 +43,11 @@ function Attendance(props) {
 
   const [currentCourse, setCurrentCourse] = useState(initialCourseState) // 현재 강좌 정보 저장
   const [columns, setColumns] = useState([])
-  const [apiend, setApiend] = useState(false) // 서버요청이 끝났는지 아닌지 여부
   const [rows, setRows] = useState([])
+  const [apiend, setApiend] = useState(false) // 서버요청이 끝났는지 아닌지 여부
   const [edit, setEdit] = useState([]) // 현재 수정 중인 셀을 담는 상태
   const [editList, setEditList] = useState([]) // 수정하는 것들을 담는 상태
+  const [onEdit, setOnEdit] = useState(false)
   const [message, setMessage] = useState('로딩 중..')
   const [page, setPage] = useState(0)
   const courseId = props.match.params.id
@@ -87,9 +88,10 @@ function Attendance(props) {
       const v = String(Object.keys(model[key]))
       coursedates.forEach((el, idx) => {
         if (courseDate(coursedates, idx) === v) {
+          setOnEdit(true)
           const index = editList.findIndex((cur, id, arr) => {
             // findIndex가 0을 반환하면 -1로 바꿈 그래서 0번 idx에서 찾아도 -1로 된다.
-            if (cur[0] === attendance[0][key - 1].userId && cur[1] === el.courseDateId) {
+            if (cur[0] === el.courseDateId && cur[1] === attendance[0][key - 1].userId) {
               return id
             }
             return false
@@ -99,7 +101,7 @@ function Attendance(props) {
             editList[index][2] = model[key][v].value // 상태 수정
             setEditList([...editList]) // 상태 업데이트
           } else if (editList.length === 0 || index === -1) {
-            setEditList([...editList, [attendance[0][key - 1].userId, el.courseDateId, model[key][v].value]])
+            setEditList([...editList, [el.courseDateId, attendance[0][key - 1].userId, model[key][v].value]])
           }
         }
       })
@@ -107,6 +109,7 @@ function Attendance(props) {
   }
 
   useEffect(() => {
+    setOnEdit(false)
     console.log(editList)
   }, [editList])
 
@@ -148,6 +151,21 @@ function Attendance(props) {
     getCourse(courseId)
     getAttendanceInfo(courseId)
   }, [courseId])
+
+  const handleUpdate = () => {
+    if (onEdit === false) {
+      editList.shift()
+      putAttendanceBook(editList)
+        .then(data => {
+          console.log(data)
+          // window.location.reload(false)
+          getAttendanceInfo(courseId)
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    }
+  }
 
   return (
     <div>
@@ -195,7 +213,9 @@ function Attendance(props) {
                     />
                   </div>
                 </div>
-                <button type="button">수정하기</button>
+                <button type="button" onClick={handleUpdate}>
+                  수정하기
+                </button>
               </div>
             ) : (
               <div>{message}</div>
