@@ -50,7 +50,7 @@ function Attendance(props) {
   const [onEdit, setOnEdit] = useState(false)
   const [message, setMessage] = useState('로딩 중..')
   const [page, setPage] = useState(0)
-  const courseId = props.match.params.id
+  const [courseId, setCourseId] = useState(props.match.params.id)
 
   let courseDates = []
   let attendanceBook = []
@@ -110,7 +110,6 @@ function Attendance(props) {
 
   useEffect(() => {
     setOnEdit(false)
-    console.log(editList)
   }, [editList])
 
   const getCourse = id => {
@@ -125,6 +124,7 @@ function Attendance(props) {
   }
 
   const getAttendanceInfo = id => {
+    setApiend(false) // 처음에 false로 초기화
     dispatch(getCourseDates(id))
       .then(data => {
         courseDates = data
@@ -148,8 +148,11 @@ function Attendance(props) {
 
   useEffect(() => {
     // router의 params가 바뀌면 실행
-    getCourse(courseId)
-    getAttendanceInfo(courseId)
+    if (courseId !== null) {
+      // null이 아니면
+      getCourse(courseId)
+      getAttendanceInfo(courseId)
+    } else setCourseId(props.match.params.id) // null이면 다시 courseId 세팅
   }, [courseId])
 
   const handleUpdate = () => {
@@ -157,9 +160,8 @@ function Attendance(props) {
       editList.shift()
       putAttendanceBook(editList)
         .then(data => {
-          console.log(data)
-          // window.location.reload(false)
-          getAttendanceInfo(courseId)
+          setCourseId(null) // 수정하고 새로고침
+          setMessage('로딩 중..')
         })
         .catch(e => {
           console.log(e)
