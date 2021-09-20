@@ -1,10 +1,8 @@
 import { REGISTER_SUCCESS, REGISTER_FAIL, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT } from '../actions/types'
 
-const user = JSON.parse(localStorage.getItem('user'))
-
 // const [cookies, getCookie] = useCookies(['user'])
 // const user = JSON.parse(getCookie('user'))
-const initialState = user ? { isLoggedIn: true, user } : { isLoggedIn: false, user: null }
+const initialState = { isLoggedIn: false, user: null }
 
 export default function (state = initialState, action) {
   const { type, payload } = action
@@ -24,7 +22,7 @@ export default function (state = initialState, action) {
       return {
         ...state,
         isLoggedIn: true,
-        user: payload.user,
+        user: payload,
       }
     case LOGIN_FAIL:
       return {

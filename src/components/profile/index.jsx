@@ -14,7 +14,7 @@ function Profile() {
             <strong>프로필</strong>
           </h3>
         </header>
-        <contains>
+        <section>
           <p>
             <strong>토큰:</strong>
           </p>
@@ -24,7 +24,7 @@ function Profile() {
           <p>
             <strong>Email:</strong>
           </p>
-        </contains>
+        </section>
       </div>
     </StyedProfile>
   )

@@ -15,10 +15,10 @@ import Register from './components/Register'
 import Home from './components/content/home'
 import Profile from './components/profile'
 import Courses from './components/course'
-import StyledApp from './style'
+import StyledApp from './styles/AppStyle'
 
 import { clearMessage } from './actions/message'
-import { history } from './helpers/history'
+import { history } from './utils/history'
 import { Button } from 'antd'
 
 function App() {
@@ -50,13 +50,13 @@ function App() {
       <BrowserRouter history={history}>
         {/* {!hasCookie ? <Redirect to="/login" /> : <Redirect to="QrScan" />} */}
         <Switch>
-          <Route exact path={['/', '/home']} component={Home} />
+          <Route exact path={['/', '/home']} render={props => <Home {...props} cookies={cookies} />} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/find" component={Find} />
-          <Route exact path="/profile" component={Profile} />
           <Route exact path="/register" component={Register} />
-          <Route exact path="/qrgen" component={QrGenerator} />
-          <Route exact path="/courses" component={Courses} />
+          <Route exact path="/profile" render={props => <Profile {...props} cookies={cookies} />} />
+          <Route exact path="/qrgen" render={props => <QrGenerator {...props} cookies={cookies} />} />
+          <Route exact path="/courses" render={props => <Courses {...props} cookies={cookies} />} />
         </Switch>
         {hasCookie ? (
           <div>

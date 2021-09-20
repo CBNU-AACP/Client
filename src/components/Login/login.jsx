@@ -54,15 +54,6 @@ function Login(props, { match }) {
     formState: { errors },
   } = useForm()
 
-  const [loading, setLoading] = useState(false)
-
-  const { isLoggedIn } = useSelector(state => state.auth)
-  const { message } = useSelector(state => state.message)
-
-  if (isLoggedIn) {
-    return <Redirect to="/profile" />
-  }
-
   const classes = useStyles()
   const [values, setValues] = useState({
     userId: '',
@@ -81,20 +72,26 @@ function Login(props, { match }) {
   const handleMouseDownPassword = event => {
     event.preventDefault()
   }
-  const [cookies, setCookie] = useCookies(['userId'])
+  const [cookies, setCookie, removeCookie] = useCookies(['userId'])
+  const [cookieExpires] = useState({
+    now: new Date(),
+    after1h: new Date(),
+  })
 
   const handleLogin = data => {
     console.log('submit', data)
     const { userId, userPassword } = data
     const user = { userId, userPassword }
-
+    cookieExpires.after1h.setHours(cookieExpires.now.getHours() + 1)
+    console.log(cookieExpires.after1h)
     dispatch(LoginUser(user))
       .then(e => {
         console.log(e)
-        setCookie('userId', user.userId, { path: '/' })
+        setCookie('userId', user.userId, { path: '/', expires: cookieExpires.after1h })
       })
       .catch(e => {
-        console.log('errer', e)
+        console.log('error', e)
+        removeCookie('userId')
         alert('아이디 또는 비밀번호를 다시 확인해주세요.')
       })
   }
@@ -158,7 +155,7 @@ function Login(props, { match }) {
               </FormControl>
             </div>
             <div className="element">
-              <Button value="Login" className="login-btn" disabled={loading} type="primary" htmlType="submit" block>
+              <Button value="Login" className="login-btn" type="primary" htmlType="submit" block>
                 로그인
               </Button>
             </div>
@@ -177,7 +174,7 @@ function Login(props, { match }) {
           </div>
         </div>
       ) : (
-        <Redirect to="/qrgen" />
+        <Redirect to="/home" />
       )}
     </StyedLogin>
   )

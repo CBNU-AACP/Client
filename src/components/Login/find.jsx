@@ -93,29 +93,32 @@ function Find() {
             </Tabs>
           </AppBar>
           <TabPanel value={value} index={0}>
-            <InputLabel htmlFor="standard-adornment-userid">아이디</InputLabel>
-            <Input
-              id="standard-adornment-userid"
-              className="input-login"
-              type="text"
-              value={values.userId || ''}
-              name="userId"></Input>
             <InputLabel htmlFor="standard-adornment-userphonenumber">전화번호</InputLabel>
             <Input
               id="standard-adornment-userphonenumber"
-              className="input-login"
+              className="input-find"
               type="text"
               value={values.userPhoneNumber || ''}
               name="userPhoneNumber"></Input>
+            <Button className="btn-find">인증하기</Button>
           </TabPanel>
           <TabPanel value={value} index={1}>
             <InputLabel htmlFor="standard-adornment-userid">아이디</InputLabel>
             <Input
               id="standard-adornment-userid"
-              className="input-login"
+              className="input-find"
               type="text"
               value={values.userId || ''}
               name="userid"></Input>
+            <InputLabel htmlFor="standard-adornment-userphonenumber">전화번호</InputLabel>
+            <Input
+              id="standard-adornment-userphonenumber"
+              className="input-find"
+              type="text"
+              value={values.userPhoneNumber || ''}
+              name="userPhoneNumber"></Input>
+            <Button className="btn-find">인증하기</Button>
+            <Button className="btn-find">비밀번호 찾기</Button>
           </TabPanel>
         </div>
       </div>

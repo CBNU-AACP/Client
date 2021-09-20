@@ -47,14 +47,10 @@ export const LoginUser = user => async dispatch => {
     console.log(res)
     // dispatch({
     //   type: LOGIN_SUCCESS,
-    //   payload: res.data.data,
-    // })
-    // dispatch({
-    //   type: SET_MESSAGE,
-    //   payload: res.data.message,
+    //   payload: res.data.data.userId,
     // })
 
-    return Promise.resolve(res.data.data)
+    return Promise.resolve(res.data.data.userId)
   } catch (err) {
     return Promise.reject(err)
   }
@@ -69,12 +65,23 @@ export const logout = () => dispatch => {
   })
 }
 
-// 전화번호 인증
-export const PhoneVerify = userPhoneVerify => async dispatch => {
+// 전화번호 인증번호 받기
+export const GetPhoneVerifyNum = async (userId, userPhoneNumber) => {
   try {
-    console.log(userPhoneVerify)
-    const res = await AuthService.phoneverify(userPhoneVerify)
-    return Promise.resolve(res.data.data)
+    console.log(userId, userPhoneNumber)
+    const res = await AuthService.GetPhoneVerifyNum(userId, userPhoneNumber)
+    return Promise.resolve(res.data.message)
+  } catch (err) {
+    return Promise.reject(err)
+  }
+}
+
+// 전화번호 인증번호 입력
+export const PhoneVerify = async (userId, Verifykey) => {
+  try {
+    console.log(userId, Verifykey)
+    const res = await AuthService.PhoneVerify(userId, Verifykey)
+    return Promise.resolve(res.data.message)
   } catch (err) {
     return Promise.reject(err)
   }

@@ -1,9 +1,11 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect } from 'react'
+import { Redirect } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { Input } from 'antd'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
+import PropTypes from 'prop-types'
 
 import { addschema } from './yup'
 import FormErrorMessage from '../../Register/FormErrorMessage'
@@ -13,7 +15,11 @@ import { createCourse } from '../../../actions/courses'
 import { GoBook, GoKeyboard } from 'react-icons/go'
 import { AiFillCheckCircle } from 'react-icons/ai'
 
-const AddCourse = () => {
+const AddCourse = ({ cookies }) => {
+  AddCourse.propTypes = {
+    cookies: PropTypes.objectOf(PropTypes.shape),
+  }
+  const { userId } = cookies
   const {
     handleSubmit,
     formState: { errors },
@@ -41,7 +47,7 @@ const AddCourse = () => {
   const saveCourse = data => {
     const { name, description } = data
     console.log(data)
-    dispatch(createCourse(name, description))
+    dispatch(createCourse(name, description, userId))
       .then(data => {
         setSubmitted(true)
         console.log(data.data)
@@ -64,69 +70,67 @@ const AddCourse = () => {
 
   return (
     <StyledCrCourse onSubmit={handleSubmit(saveCourse)}>
-      <div className="container">
-        {submitted ? (
-          <div>
-            <h4>성공적으로 등록되었습니다!</h4>
-            <button type="button" className="" onClick={newCourse}>
-              추가등록
-            </button>
-          </div>
-        ) : (
-          <div className="formGroup">
-            <div className="form">
-              <div className="icons">
-                <GoBook className="icon" />
-                <label htmlFor="name" className="label">
-                  강좌이름
-                </label>
-              </div>
-              <Controller
-                name="name"
-                control={control}
-                render={({ field }) => (
-                  <Input
-                    type="text"
-                    className="input"
-                    {...field}
-                    id="name"
-                    placeholder="강좌이름을 입력해주세요."
-                  />
-                )}
-              />
-              {errors.name && <FormErrorMessage className="error" Message={errors.name.message} />}
+      {userId && userId !== 'undefined' ? (
+        <div className="container">
+          {submitted ? (
+            <div>
+              <h4>성공적으로 등록되었습니다!</h4>
+              <button type="button" className="" onClick={newCourse}>
+                추가등록
+              </button>
             </div>
-
-            <div className="form">
-              <div className="icons">
-                <GoKeyboard className="icon" />
-                <label htmlFor="description" className="label">
-                  강좌설명
-                </label>
+          ) : (
+            <div className="formGroup">
+              <div className="form">
+                <div className="icons">
+                  <GoBook className="icon" />
+                  <label htmlFor="name" className="label">
+                    강좌이름
+                  </label>
+                </div>
+                <Controller
+                  name="name"
+                  control={control}
+                  render={({ field }) => (
+                    <Input type="text" className="input" {...field} id="name" placeholder="강좌이름을 입력해주세요." />
+                  )}
+                />
+                {errors.name && <FormErrorMessage className="error" Message={errors.name.message} />}
               </div>
-              <Controller
-                name="description"
-                control={control}
-                render={({ field }) => (
-                  <Input
-                    type="text"
-                    className="input"
-                    {...field}
-                    id="description"
-                    placeholder="강좌설명을 입력해주세요."
-                  />
-                )}
-              />
-              {errors.description && <FormErrorMessage className="error" Message={errors.description.message} />}
-            </div>
 
-            <button type="submit" className="submit">
-              <AiFillCheckCircle className="icon" />
-              <p className="label">강좌등록</p>
-            </button>
-          </div>
-        )}
-      </div>
+              <div className="form">
+                <div className="icons">
+                  <GoKeyboard className="icon" />
+                  <label htmlFor="description" className="label">
+                    강좌설명
+                  </label>
+                </div>
+                <Controller
+                  name="description"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      type="text"
+                      className="input"
+                      {...field}
+                      id="description"
+                      placeholder="강좌설명을 입력해주세요."
+                    />
+                  )}
+                />
+                {errors.description && <FormErrorMessage className="error" Message={errors.description.message} />}
+              </div>
+
+              <button type="submit" className="submit">
+                <AiFillCheckCircle className="icon" />
+                <p className="label">강좌등록</p>
+              </button>
+            </div>
+          )}
+        </div>
+      ) : (
+        <Redirect to="/login" />
+      )}
     </StyledCrCourse>
   )
 }

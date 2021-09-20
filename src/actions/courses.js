@@ -2,9 +2,9 @@ import { CREATE_COURSE, RETRIEVE_COURSES, UPDATE_COURSE, DELETE_COURSE, DELETE_A
 
 import CourseDataService from '../services/CourseService'
 
-export const createCourse = (name, description) => async dispatch => {
+export const createCourse = (name, description, userId) => async dispatch => {
   try {
-    const res = await CourseDataService.create({ name, description })
+    const res = await CourseDataService.create({ name, description }, userId)
     console.log(res.data.data)
     dispatch({
       type: CREATE_COURSE,
@@ -17,9 +17,9 @@ export const createCourse = (name, description) => async dispatch => {
   }
 }
 
-export const retrieveCourses = () => async dispatch => {
+export const retrieveCourses = userId => async dispatch => {
   try {
-    const res = await CourseDataService.getAll()
+    const res = await CourseDataService.getAll(userId)
     console.log(res.data.data)
     dispatch({
       type: RETRIEVE_COURSES,
@@ -57,9 +57,9 @@ export const deleteCourse = id => async dispatch => {
   }
 }
 
-export const deleteAllCourses = () => async dispatch => {
+export const deleteAllCourses = userId => async dispatch => {
   try {
-    const res = await CourseDataService.removeAll()
+    const res = await CourseDataService.removeAll(userId)
     console.log(res.data.data)
     dispatch({
       type: DELETE_ALL_COURSES,
@@ -72,9 +72,9 @@ export const deleteAllCourses = () => async dispatch => {
   }
 }
 
-export const findCoursesByName = name => async dispatch => {
+export const findCoursesByName = (name, userId) => async dispatch => {
   try {
-    const res = await CourseDataService.findByName(name)
+    const res = await CourseDataService.findByName(name, userId)
     console.log(res.data.data)
     dispatch({
       type: RETRIEVE_COURSES,

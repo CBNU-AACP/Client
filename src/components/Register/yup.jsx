@@ -23,5 +23,8 @@ export const schema = yup.object({
     .string()
     .required('비밀번호를 확인해주세요.')
     .oneOf([yup.ref('userPassword'), null], '비밀번호가 일치하지 않습니다.'),
+  // .notOneOf([yup.ref('userPassword'), null], '일치'),
+  userPhoneNumber: yup.number().required('전화번호를 입력해주세요.').typeError('전화번호를 올바르게 입력해주세요.'),
+  userVerifyNum: yup.number().required('인증번호를 입력해주세요.').typeError('인증번호를 올바르게 입력해주세요.'),
   term: yup.boolean().oneOf([true], '약관에 동의해주세요.'),
 })
