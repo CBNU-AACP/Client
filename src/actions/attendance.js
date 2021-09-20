@@ -1,4 +1,4 @@
-import { GET_COURSEDATES, GET_ATTENDANCEBOOK, PUT_COURSEDATES, PUT_ATTENDANCEBOOK } from './types'
+import { GET_COURSEDATES, GET_ATTENDANCEBOOK, PUT_COURSEDATES } from './types'
 
 import AttendanceService from '../services/AttendanceService'
 
@@ -44,14 +44,10 @@ export const putCourseDates = courseDateId => async dispatch => {
   }
 }
 
-export const putAttendanceBook = courseDateId => async dispatch => {
+export const putAttendanceBook = async attendanceBook => {
   try {
-    const res = await AttendanceService.put(courseDateId)
-    dispatch({
-      type: PUT_ATTENDANCEBOOK,
-      payload: res.data.data,
-    })
-    return Promise.resolve(res.data.data)
+    const res = await AttendanceService.putAttendanceBook({ attendanceBook })
+    return Promise.resolve(res.data.success)
   } catch (err) {
     return Promise.reject(err)
   }

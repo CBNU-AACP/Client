@@ -6,7 +6,6 @@ const initialState = { isLoggedIn: false, user: null }
 
 export default function (state = initialState, action) {
   const { type, payload } = action
-  console.log(type, payload)
 
   switch (type) {
     case REGISTER_SUCCESS:
