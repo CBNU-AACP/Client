@@ -92,7 +92,7 @@ function QrGenerator({ cookies }) {
         <StyledQrGen>
           <div className="box">
             <div className={`qrcode ${blocking === true ? 'blur' : ''}`}>
-              <QR value={`{"userId": "test2", "validNum": "${validNum}"}`} />
+              <QR value={`{"userId": "${userId}", "validNum": "${validNum}"}`} />
             </div>
             <div className="desc">
               <p className="info">{`"${userId}"`} 님의 출석 QR 코드</p>
