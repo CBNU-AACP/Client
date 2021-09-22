@@ -9,7 +9,7 @@ import { GiArchiveResearch } from 'react-icons/gi'
 import { BsFillPersonFill } from 'react-icons/bs'
 
 import QrGenerator from './components/QrGenerator'
-import Login from './components/Login/login'
+import Login from './components/Login'
 import Find from './components/Login/find'
 import Register from './components/Register'
 import Home from './components/content/home'
