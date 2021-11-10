@@ -1,7 +1,6 @@
 ## ⚡ Quick Start
 
 ### Client
-
 ```
 cd client
 npm install
